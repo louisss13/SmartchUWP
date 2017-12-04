@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using Model;
 using DataAccess;
 
-namespace ViewModel
+namespace smartchUWP.ViewModel
 {
-    class ClubsViewModel : ViewModelBase
+    public class ClubsViewModel : ViewModelBase
     {
         private ObservableCollection<Club> _clubs = null;
         public ClubsViewModel()
@@ -45,6 +45,7 @@ namespace ViewModel
             var service = new ClubsServices();
             var clubs = await service.GetClubs();
             Clubs = new ObservableCollection<Club>(clubs);
+            
         }
     }
 }

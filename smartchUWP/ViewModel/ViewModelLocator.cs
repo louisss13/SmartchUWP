@@ -1,13 +1,14 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using Microsoft.Practices.ServiceLocation;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModel
+namespace smartchUWP.ViewModel
 {
     public class ViewModelLocator
     {
@@ -19,10 +20,10 @@ namespace ViewModel
 
             NavigationService navigationPages = new NavigationService();
             SimpleIoc.Default.Register<INavigationService>(() => navigationPages);
-            navigationPages.Configure("MainPage", typeof(Clubs));
+            navigationPages.Configure("Clubs",  typeof(Clubs));
 
         }
-        public MainViewModel Main { get { return ServiceLocator.Current.GetInstance<MainViewModel>(); } }
+        public ClubsViewModel Clubs { get { return ServiceLocator.Current.GetInstance<ClubsViewModel>(); } }
 
     }
 }

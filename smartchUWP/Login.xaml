@@ -17,6 +17,7 @@
             <PasswordBox x:Name="Password" Header="Password" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="Password" />
             <Button Content="Log in " Margin="0,24" Click="Login_Click"/>
             <Button Content="Register" Margin="0,24" Click="Register_Click"/>
+            <Button Content="TEst" Margin="0,24" Click="Test_Click"/>
         </StackPanel>
     </Grid>
 </Page>

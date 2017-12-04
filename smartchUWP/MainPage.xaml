@@ -7,33 +7,66 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-            <TextBlock Text="User enregistré" Name="messageOk" Visibility="Collapsed"/>
-            <TextBlock Text="Error" Name="messageNotOk" Visibility="Collapsed"/>
-            <TextBlock Text="New Customer" Style="{StaticResource TitleTextBlockStyle}"/>
-            <TextBox x:Name="Email" Header="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
-            <PasswordBox x:Name="Password" Header="Password" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="Password" />
-            <PasswordBox x:Name="ConfirmPassword" Header="Confirm Password" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="Password" />
-            <!-- 
-            <TextBox x:Name="FirstName" Header= "Firstname" Margin="0,24,0,0" MaxLength="32" Width="400" HorizontalAlignment="Left" InputScope="PersonalFullName"/>
-            <TextBox x:Name="Name" Header= "Name" Margin="0,24,0,0" MaxLength="32" Width="400" HorizontalAlignment="Left" InputScope="PersonalFullName"/>
-            <TextBox x:Name="PhoneNumber" Header="Phone Number" Margin="0,24,0,0" MaxLength="15" Width="400" HorizontalAlignment="Left" InputScope="TelephoneNumber" />
-            <TextBox x:Name="Email" Header="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
-            <TextBox x:Name="Address" Header="Address" PlaceholderText="Address" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
-            <TextBox x:Name="Address2" Margin="0,24,0,0" PlaceholderText="Address 2" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
-            <RelativePanel>
-                <TextBox x:Name="City" PlaceholderText="City" Margin="0,24,0,0" MaxLength="50" Width="200" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
-                <ComboBox x:Name="State" PlaceholderText="State" Margin="24,24,0,0"  Width="100" RelativePanel.RightOf="City">
-                    <x:String>WA</x:String>
-                </ComboBox>
-            </RelativePanel>
-            <TextBox x:Name="ZipCode" PlaceholderText="Zip Code" Margin="0,24,0,0" MaxLength="6" Width="100" HorizontalAlignment="Left" InputScope="Number" />
-            -->
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Save" Margin="0,24" Click="SaveButton_Click"/>
-                <Button Content="Clear" Margin="24" Click="CancelButton_Click"/>
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+    <NavigationView x:Name="NavView"
+                    ItemInvoked="NavView_ItemInvoked"
+                    SelectionChanged="NavView_SelectionChanged"
+                    Loaded="NavView_Loaded">
+
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Home" Tag="home">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE10F;"/>
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItemSeparator/>
+            
+            <NavigationViewItem Icon="Audio" Content="Mes clubs" Tag="clubs"/>
+            <NavigationViewItem Icon="People" Content="Membres" Tag="apps"/>
+            <NavigationViewItem Icon="Video" Content="Tournois" Tag="games"/>
+            <NavigationViewItem Icon="Audio" Content="Spectateur" Tag="music"/>
+        </NavigationView.MenuItems>
+
+        <NavigationView.AutoSuggestBox>
+            <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
+        </NavigationView.AutoSuggestBox>
+
+        <NavigationView.HeaderTemplate>
+            <DataTemplate>
+                <Grid Margin="24,24,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+                           FontSize="28"
+                           VerticalAlignment="Center"
+                           Text="Welcome"/>
+                    <CommandBar Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            DefaultLabelPosition="Right"
+                            Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+                        <AppBarButton Label="Refresh" Icon="Refresh"/>
+                        <AppBarButton Label="Import" Icon="Import"/>
+                    </CommandBar>
+                </Grid>
+            </DataTemplate>
+        </NavigationView.HeaderTemplate>
+
+        <NavigationView.PaneFooter>
+            <HyperlinkButton x:Name="MoreInfoBtn"
+                             Content="More info"
+                             
+                             Margin="12,0"/>
+        </NavigationView.PaneFooter>
+
+        <Frame x:Name="ContentFrame" Margin="24">
+            <Frame.ContentTransitions>
+                <TransitionCollection>
+                    <NavigationThemeTransition/>
+                </TransitionCollection>
+            </Frame.ContentTransitions>
+        </Frame>
+
+    </NavigationView>
 </Page>

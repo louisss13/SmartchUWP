@@ -120,6 +120,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{206b7ec8-a9fc-4890-954f-472c0f54bd0e}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{fc99ed5d-09b4-4ca7-8f2f-84a4257b857a}</Project>
       <Name>Model</Name>

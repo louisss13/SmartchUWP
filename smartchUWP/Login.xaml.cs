@@ -19,20 +19,25 @@ namespace smartchUWP
         }
         public async void Login_Click(object sender, RoutedEventArgs e)
         {
-            UsersServices userService = new UsersServices();
+            AccountsServices accountsServices = new AccountsServices();
 
-            ResponseObject response = await userService.LogIn(Email.Text, Password.Password);
+            ResponseObject response = await accountsServices.LogIn(Email.Text, Password.Password);
 
             if (response.Success) {
                 ApiAccess.Instance.Token = ((JObject)response.Content)["access_token"].Value<String>();
                 TextErreur.Text += response.Content.ToString();
-
+                this.Frame.Navigate(typeof(MainPage));
             }
             TextErreur.Visibility = Visibility.Visible;
 
 
         }
         public void Register_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MainPage));
+        }
+
+        private void Test_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage));
         }

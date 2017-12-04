@@ -4,7 +4,7 @@ namespace Model
 {
     public class Account
     {
-        public String UserName;
+        public String Email;
         public String Password;
     }
 }

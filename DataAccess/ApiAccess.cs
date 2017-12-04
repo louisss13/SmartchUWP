@@ -12,6 +12,7 @@ namespace DataAccess
         public static readonly String UsersUrl = Url + "users";
         public static readonly String AccountUrl = Url + "account";
         public static readonly String LogInUrl = Url + "jwt";
+        public static readonly string ClubUrl = Url + "clubs";
 
         public String Token { get; set; }
         
@@ -25,6 +26,8 @@ namespace DataAccess
                 return _lazyInstance.Value;
             }
         }
+
+        
 
         private ApiAccess()
         {

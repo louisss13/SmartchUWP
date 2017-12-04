@@ -1,57 +1,105 @@
-﻿using DataAccess;
-using Model;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace smartchUWP
 {
-    /// <summary>
-    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         public MainPage()
         {
             this.InitializeComponent();
         }
-        private async void SaveButton_Click(object sender, RoutedEventArgs e)
+
+        private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
-            UsersServices userService = new UsersServices();
-            User newUser = new User() { Name = "de Mahieu", FirstName = "Louis", Password = "Coucou-123", Email="Louisss13@gmail.com"};
-            ResponseObject AddedUser = await userService.AddUser(newUser);
-            if (AddedUser.Success)
+            // you can also add items in code behind
+            NavView.MenuItems.Add(new NavigationViewItemSeparator());
+            NavView.MenuItems.Add(new NavigationViewItem()
+            { Content = "My content", Icon = new SymbolIcon(Symbol.Folder), Tag = "content" });
+
+            // set the initial SelectedItem 
+            foreach (NavigationViewItemBase item in NavView.MenuItems)
             {
-                messageOk.Visibility = Visibility.Visible;
-                messageNotOk.Visibility = Visibility.Collapsed;
+                if (item is NavigationViewItem && item.Tag.ToString() == "apps")
+                {
+                    NavView.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+
+        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            if (args.IsSettingsInvoked)
+            {
+                ContentFrame.Navigate(typeof(Login));
             }
             else
             {
-                messageOk.Visibility = Visibility.Collapsed;
-                messageNotOk.Text += AddedUser.Content;
-                messageNotOk.Visibility = Visibility.Visible;
+                switch (args.InvokedItem)
+                {
+                    case "Home":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
 
+                    case "Apps":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+
+                    case "Games":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+
+                    case "Music":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+
+                    case "My content":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+                }
             }
-            //this.Frame.Navigate(typeof(Page2));
         }
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+
+        private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            //this.Frame.Navigate(typeof(Page2));
+            if (args.IsSettingsSelected)
+            {
+                ContentFrame.Navigate(typeof(Login));
+            }
+            else
+            {
+
+                NavigationViewItem item = args.SelectedItem as NavigationViewItem;
+
+                switch (item.Tag)
+                {
+                    case "home":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+
+                    case "apps":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+
+                    case "games":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+
+                    case "music":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+
+                    case "content":
+                        ContentFrame.Navigate(typeof(Login));
+                        break;
+                }
+            }
         }
     }
 }
