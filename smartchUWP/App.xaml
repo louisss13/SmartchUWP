@@ -7,9 +7,10 @@
     RequestedTheme="Light">
     <Application.Resources>
         <vm1:ViewModelLocator x:Key="Locator" xmlns:vm="using:smartchUWP.ViewModel"/>
-        <DataTemplate x:Key="WeatherTemplate1">
-           
-         
+        <DataTemplate x:Key="ClubsList">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Center"/>
+            </Grid>
         </DataTemplate>
     </Application.Resources>
     

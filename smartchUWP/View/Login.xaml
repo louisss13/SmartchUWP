@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="smartchUWP.Login"
+    x:Class="smartchUWP.View.Login"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:smartchUWP"
@@ -13,8 +13,8 @@
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Login" Style="{StaticResource TitleTextBlockStyle}"/>
             <TextBlock Name="TextErreur" Text="Erreur lors de la connexion" Visibility="Collapsed" />
-            <TextBox x:Name="Email" Header="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
-            <PasswordBox x:Name="Password" Header="Password" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="Password" />
+            <TextBox x:Name="Email" Header="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" Text="louisss13@gmail.com" />
+            <PasswordBox x:Name="Password" Header="Password" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="Password" Password="Coucou-123" />
             <Button Content="Log in " Margin="0,24" Click="Login_Click"/>
             <Button Content="Register" Margin="0,24" Click="Register_Click"/>
             <Button Content="TEst" Margin="0,24" Click="Test_Click"/>

@@ -1,0 +1,38 @@
+﻿<Page
+    x:Class="smartchUWP.View.Membres.Membres"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:smartchUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding Source={StaticResource Locator},Path=Membres}"
+    mc:Ignorable="d">
+
+    <Grid  HorizontalAlignment="Stretch" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Tous les membres de mes clubs" Style="{StaticResource TitleTextBlockStyle}"/>
+        <Button Grid.Column="1" HorizontalAlignment="Right" Content="Ajouter" Click="AddMembre_Click"/>
+        <ListView ItemsSource="{Binding Users}" Name="ListeClub" ItemTemplate="{StaticResource ClubsList}" Grid.Row="1" Width="200" Padding="20" Margin="0,30,0,0"/>
+        <StackPanel Orientation="Vertical"  Grid.Column="1" Grid.Row="1" DataContext="{Binding ElementName=ListeClub,Path=SelectedItem}" Padding="20" Margin="0,30,0,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Nom : "/>
+                <TextBlock  Text="{Binding Name}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Email de contact : "/>
+                <TextBlock Text="{Binding Email}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Téléphone : "/>
+                <TextBlock Text="{Binding Phone}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

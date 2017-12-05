@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace smartchUWP
+namespace smartchUWP.View
 {
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
@@ -33,7 +33,7 @@ namespace smartchUWP
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             AccountsServices accountsServices = new AccountsServices();
-            Account newUser = new Account() { Password = "Coucou-123", Email="Louisss13@gmail.com"};
+            Account newUser = new Account() { Password = Password.Password, Email=Email.Text};
             ResponseObject AddedUser = await accountsServices.AddUser(newUser);
             if (AddedUser.Success)
             {

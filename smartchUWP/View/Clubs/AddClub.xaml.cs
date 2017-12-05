@@ -10,11 +10,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 
-namespace smartchUWP
+namespace smartchUWP.View.Clubs
 {
-    public sealed partial class Clubs : Page 
+    public sealed partial class AddClub : Page 
     {
-        public Clubs()
+        public AddClub()
         {
             this.InitializeComponent();
         }

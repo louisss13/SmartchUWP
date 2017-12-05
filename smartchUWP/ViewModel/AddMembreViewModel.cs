@@ -1,27 +1,27 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DataAccess;
+using GalaSoft.MvvmLight;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Model;
-using DataAccess;
 
 namespace smartchUWP.ViewModel
 {
-    public class ClubsViewModel : ViewModelBase
+    public class AddMembreViewModel : ViewModelBase
     {
         private ObservableCollection<Club> _clubs = null;
-        public ClubsViewModel()
+        public AddMembreViewModel()
         {
             if (IsInDesignMode)
             {
-                _clubs =   new ObservableCollection<Club>{ new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
+                _clubs = new ObservableCollection<Club> { new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
             }
             else
             {
-               InitializeAsync();
+                InitializeAsync();
             }
         }
         public ObservableCollection<Club> Clubs
@@ -45,7 +45,7 @@ namespace smartchUWP.ViewModel
             var service = new ClubsServices();
             var clubs = await service.GetClubs();
             Clubs = new ObservableCollection<Club>(clubs);
-            
+
         }
     }
 }

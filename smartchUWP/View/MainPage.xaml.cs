@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace smartchUWP
+
+namespace smartchUWP.View
 {
     public sealed partial class MainPage : Page
     {
@@ -18,14 +19,14 @@ namespace smartchUWP
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
             // you can also add items in code behind
-            NavView.MenuItems.Add(new NavigationViewItemSeparator());
-            NavView.MenuItems.Add(new NavigationViewItem()
-            { Content = "My content", Icon = new SymbolIcon(Symbol.Folder), Tag = "content" });
+           // NavView.MenuItems.Add(new NavigationViewItemSeparator());
+            //NavView.MenuItems.Add(new NavigationViewItem()
+            //{ Content = "My content", Icon = new SymbolIcon(Symbol.Folder), Tag = "content" });
 
             // set the initial SelectedItem 
             foreach (NavigationViewItemBase item in NavView.MenuItems)
             {
-                if (item is NavigationViewItem && item.Tag.ToString() == "apps")
+                if (item is NavigationViewItem && item.Tag.ToString() == "Home")
                 {
                     NavView.SelectedItem = item;
                     break;
@@ -47,20 +48,20 @@ namespace smartchUWP
                         ContentFrame.Navigate(typeof(Login));
                         break;
 
-                    case "Apps":
+                    case "members":
+                        ContentFrame.Navigate(typeof(Membres.Membres));
+                        break;
+
+                    case "tournaments":
                         ContentFrame.Navigate(typeof(Login));
                         break;
 
-                    case "Games":
+                    case "spectators":
                         ContentFrame.Navigate(typeof(Login));
                         break;
 
-                    case "Music":
-                        ContentFrame.Navigate(typeof(Login));
-                        break;
-
-                    case "My content":
-                        ContentFrame.Navigate(typeof(Login));
+                    case "clubs":
+                        ContentFrame.Navigate(typeof(Clubs.Clubs));
                         break;
                 }
             }
@@ -83,19 +84,19 @@ namespace smartchUWP
                         ContentFrame.Navigate(typeof(Login));
                         break;
 
-                    case "apps":
+                    case "members":
+                        ContentFrame.Navigate(typeof(Membres.Membres));
+                        break;
+
+                    case "clubs":
+                        ContentFrame.Navigate(typeof(Clubs.Clubs));
+                        break;
+
+                    case "spectators":
                         ContentFrame.Navigate(typeof(Login));
                         break;
 
-                    case "games":
-                        ContentFrame.Navigate(typeof(Login));
-                        break;
-
-                    case "music":
-                        ContentFrame.Navigate(typeof(Login));
-                        break;
-
-                    case "content":
+                    case "tournaments":
                         ContentFrame.Navigate(typeof(Login));
                         break;
                 }

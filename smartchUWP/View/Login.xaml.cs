@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace smartchUWP
+namespace smartchUWP.View
 {
     public sealed partial class Login : Page
     {
@@ -34,7 +34,7 @@ namespace smartchUWP
         }
         public void Register_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.Navigate(typeof(Register));
         }
 
         private void Test_Click(object sender, RoutedEventArgs e)

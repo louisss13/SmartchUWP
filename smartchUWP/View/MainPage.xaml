@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="smartchUWP.MainPage"
+    x:Class="smartchUWP.View.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:smartchUWP"
@@ -21,9 +21,9 @@
             <NavigationViewItemSeparator/>
             
             <NavigationViewItem Icon="Audio" Content="Mes clubs" Tag="clubs"/>
-            <NavigationViewItem Icon="People" Content="Membres" Tag="apps"/>
-            <NavigationViewItem Icon="Video" Content="Tournois" Tag="games"/>
-            <NavigationViewItem Icon="Audio" Content="Spectateur" Tag="music"/>
+            <NavigationViewItem Icon="People" Content="Membres" Tag="members"/>
+            <NavigationViewItem Icon="Video" Content="Tournois" Tag="tournaments"/>
+            <NavigationViewItem Icon="Audio" Content="Spectateur" Tag="spectators"/>
         </NavigationView.MenuItems>
 
         <NavigationView.AutoSuggestBox>

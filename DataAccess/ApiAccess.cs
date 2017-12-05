@@ -9,7 +9,7 @@ namespace DataAccess
     public sealed class ApiAccess
     {
         private static readonly String Url = "http://localhost:49391/api/";
-        public static readonly String UsersUrl = Url + "users";
+        public static readonly String UsersUrl = Url + "userinfo";
         public static readonly String AccountUrl = Url + "account";
         public static readonly String LogInUrl = Url + "jwt";
         public static readonly string ClubUrl = Url + "clubs";
