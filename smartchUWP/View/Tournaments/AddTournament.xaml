@@ -5,6 +5,7 @@
     xmlns:local="using:smartchUWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding Source={StaticResource Locator}, Path=AddTournament}"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -17,6 +18,8 @@
                     <TextBox Name="Name" Header="Nom du tournois" Text="Tournois"/>
                     <DatePicker Name="DateDebut" Header="Date de début" />
                     <DatePicker Name="DateFin" Header="Date de Fin"/>
+                    <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" DisplayMemberPath="Value" SelectedValuePath="Key"/>
+                    <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="Id"/>
                     <TextBox Name="Etat" Header="Etat"/>
                     <TextBox Name="Club" Header="Club"/>
                 </StackPanel>
@@ -26,6 +29,9 @@
             </PivotItem>
             <PivotItem Header="Participants">
 
+            </PivotItem>
+            <PivotItem Header="Terrain">
+                
             </PivotItem>
             <PivotItem Header="Match">
                 

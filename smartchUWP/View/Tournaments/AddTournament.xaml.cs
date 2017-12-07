@@ -30,7 +30,7 @@ namespace smartchUWP.View.Tournaments
                 Name = Name.Text,
                 BeginDate = DateDebut.Date.DateTime,
                 EndDate = DateFin.Date.DateTime,
-                State = 0,
+                Etat = 0,
                 Club = null,
                 Participants = null, 
                 Admins = null

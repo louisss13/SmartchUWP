@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\AddTournamentViewModel.cs" />
     <Compile Include="ViewModel\TournamentViewModel.cs" />
     <Compile Include="ViewModel\AddMembreViewModel.cs" />
     <Compile Include="ViewModel\MembresModelView.cs" />
