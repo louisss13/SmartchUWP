@@ -53,7 +53,7 @@ namespace smartchUWP.View
                         break;
 
                     case "tournaments":
-                        ContentFrame.Navigate(typeof(Login));
+                        ContentFrame.Navigate(typeof(Tournaments.Tournaments));
                         break;
 
                     case "spectators":
@@ -97,7 +97,7 @@ namespace smartchUWP.View
                         break;
 
                     case "tournaments":
-                        ContentFrame.Navigate(typeof(Login));
+                        ContentFrame.Navigate(typeof(Tournaments.Tournaments));
                         break;
                 }
             }

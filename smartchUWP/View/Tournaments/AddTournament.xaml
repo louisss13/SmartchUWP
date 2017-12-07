@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="smartchUWP.View.Tournaments.AddTournament"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:smartchUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Pivot>
+            <Pivot.RightHeader>
+                <Button Content="Enregister" Click="AddTournament_Click"/>
+            </Pivot.RightHeader>
+            <PivotItem Header="Info générales">
+                <StackPanel>
+                    <TextBox Name="Name" Header="Nom du tournois" Text="Tournois"/>
+                    <DatePicker Name="DateDebut" Header="Date de début" />
+                    <DatePicker Name="DateFin" Header="Date de Fin"/>
+                    <TextBox Name="Etat" Header="Etat"/>
+                    <TextBox Name="Club" Header="Club"/>
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="Adresse">
+                <Frame x:Name="AdresseForm"/>
+            </PivotItem>
+            <PivotItem Header="Participants">
+
+            </PivotItem>
+            <PivotItem Header="Match">
+                
+            </PivotItem>
+        </Pivot>
+        
+    </Grid>
+</Page>

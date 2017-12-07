@@ -1,0 +1,72 @@
+﻿<Page
+    x:Class="smartchUWP.View.Tournaments.Tournaments"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:smartchUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding Source={StaticResource Locator},Path=Tournaments}"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <SolidColorBrush Color="#cc6600" x:Key="border"/>
+        </Grid.Resources>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Ajouter" Click="AjouterTournament_Click"/>
+        </StackPanel>
+        <ListView Grid.Row="1" ItemsSource="{Binding Tournaments}">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="{StaticResource border}" BorderThickness="0,0,0,2">
+                        <Grid >
+                            
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="Nom" />
+                            <Border Grid.Column="1" BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
+                                <TextBlock  Text="Etat"/>
+                            </Border>
+                            <TextBlock Grid.Column="2" Text="DateDebut"/>
+                            <Border Grid.Column="3" BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
+                                <TextBlock Grid.Column="3" Text="DateFin"/>
+                            </Border>
+                            <TextBlock Grid.Column="4" Text="Nombre joueur" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate  >
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Name }"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Etat}"/>
+                        <TextBlock Grid.Column="2" Text="{Binding BeginDate}"/>
+                        <TextBlock Grid.Column="3" Text="{Binding EndDate}"/>
+                        <TextBlock Grid.Column="4" Text="{Binding Participant.Count}" />
+                    </Grid>
+               
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+            
+        
+    </Grid>
+</Page>

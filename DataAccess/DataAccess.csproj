@@ -111,6 +111,7 @@
     <Compile Include="AuthHttpClient.cs" />
     <Compile Include="ClubsServices.cs" />
     <Compile Include="Dao\LogInDAO.cs" />
+    <Compile Include="TournamentsServices.cs" />
     <Compile Include="UsersServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\DataAccess.rd.xml" />

@@ -1,0 +1,19 @@
+﻿<Page
+    x:Class="smartchUWP.View.AdresseForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:smartchUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel >
+        <TextBlock Text="Adresse"/>
+        <TextBox Header="Rue" Name="Street" Text="Rue de la gendarmerie"/>
+        <TextBox Header="Numéro" Name="Number" Text="34"/>
+        <TextBox Header="Boite" Name="Box" />
+        <TextBox Header="Ville" Name="City" Text="Lasne"/>
+        <TextBox Header="Code Postal" Name="Zipcode" Text="1380"/>
+
+    </StackPanel>
+</Page>

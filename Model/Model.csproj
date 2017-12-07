@@ -111,6 +111,7 @@
     <Compile Include="Club.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="ResponseObject.cs" />
+    <Compile Include="Tournament.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Model.rd.xml" />
