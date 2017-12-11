@@ -22,8 +22,8 @@ namespace DataAccess
             {
                 Id = d["id"].Value<int>(),
                 Name = d["name"].Value<String>(),
-                BeginDate = d["begindate"].Value<DateTime>(),
-                EndDate = d["enddate"].Value<DateTime>()
+                BeginDate = d["beginDate"].Value<DateTime>(),
+                EndDate = d["endDate"].Value<DateTime>()
             });
             return tournaments;
 

@@ -26,7 +26,7 @@ namespace smartchUWP.View
             if (response.Success) {
                 ApiAccess.Instance.Token = ((JObject)response.Content)["access_token"].Value<String>();
                 TextErreur.Text += response.Content.ToString();
-                this.Frame.Navigate(typeof(MainPage));
+                this.Frame.Navigate(typeof(Clubs.Clubs));
             }
             TextErreur.Visibility = Visibility.Visible;
 

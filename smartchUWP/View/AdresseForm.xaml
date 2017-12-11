@@ -5,15 +5,17 @@
     xmlns:local="using:smartchUWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    
+    >
 
     <StackPanel >
         <TextBlock Text="Adresse"/>
-        <TextBox Header="Rue" Name="Street" Text="Rue de la gendarmerie"/>
-        <TextBox Header="Numéro" Name="Number" Text="34"/>
-        <TextBox Header="Boite" Name="Box" />
-        <TextBox Header="Ville" Name="City" Text="Lasne"/>
-        <TextBox Header="Code Postal" Name="Zipcode" Text="1380"/>
+        <TextBox Header="Rue" Name="Street" Text="{Binding Street, Mode=TwoWay}"/>
+        <TextBox Header="Numéro" Name="Number" Text="{Binding Number, Mode=TwoWay}"/>
+        <TextBox Header="Boite" Name="Box" Text="{Binding Box, Mode=TwoWay}" />
+        <TextBox Header="Ville" Name="City" Text="{Binding City , Mode=TwoWay}"/>
+        <TextBox Header="Code Postal" Name="Zipcode" Text="{Binding Zipcode, Mode=TwoWay}"/>
 
     </StackPanel>
 </Page>

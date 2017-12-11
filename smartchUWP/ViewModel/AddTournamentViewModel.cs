@@ -1,6 +1,10 @@
 ﻿using DataAccess;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using Model;
+using smartchUWP.Observable;
+using smartchUWP.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,13 +14,18 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddTournamentViewModel : ViewModelBase
+    public class AddTournamentViewModel : MainPageViewModel
     {
         private ObservableCollection<Club> _clubs = null;
-        private ObservableCollection<KeyValuePair<TournamentState, string>> _tournamentStates = null;
         
-        public AddTournamentViewModel()
+        private ObservableTournament _tournament = new ObservableTournament( new Tournament() { Address = new Address() { Street = "rue de la loi" } });
+        private ObservableCollection<KeyValuePair<TournamentState, string>> _tournamentStates = null;
+
+        public RelayCommand CommandAddTournament { get; private set; }
+
+        public AddTournamentViewModel(INavigationService navigationService):base(navigationService)
         {
+            CommandAddTournament = new RelayCommand( AddTournament);
             if (IsInDesignMode)
             {
                 _clubs = new ObservableCollection<Club> { new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
@@ -55,14 +64,45 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("Clubs");
             }
         }
+        public ObservableTournament OTournament
+        {
+            get
+            {
+                return _tournament;
+            }
+            set
+            {
+                if (_tournament == value)
+                {
+                    return;
+                }
+                _tournament = value;
+                RaisePropertyChanged("Tournament");
+            }
+        }
+
+
+        public async void AddTournament()
+        {
+            Tournament tournament = OTournament;
+            tournament.Admins = null;
+            tournament.Club = null;
+
+            TournamentsServices tournamentsServices = new TournamentsServices();
+            ResponseObject response = await tournamentsServices.AddTournamentAsync(tournament);
+            if (response.Success)
+            {
+                MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListTournament));
+            }
+        }
+
         public async Task InitializeAsync()
         {
-            var service = new ClubsServices();
-            var clubs = await service.GetClubs();
-            Clubs = new ObservableCollection<Club>(clubs);
+            SetClubList();
             TournamentStates = getTournamentState();
 
         }
+        //TODO A mettre dans un converter plutot
         private ObservableCollection<KeyValuePair<TournamentState, string>> getTournamentState()
         {
             var stateDictionary = new ObservableCollection<KeyValuePair<TournamentState, string>>() ;
@@ -91,6 +131,21 @@ namespace smartchUWP.ViewModel
             }
             
             return stateDictionary;
+        }
+        private void MessageReceiver(NotificationMessage message)
+        {
+            switch (message.VariableType)
+            {
+                case NotificationMessageType.ListTournament:
+                    SetClubList();
+                    break;
+            }
+        }
+        private async void SetClubList()
+        {
+            var service = new ClubsServices();
+            var clubs = await service.GetClubs();
+            Clubs = new ObservableCollection<Club>(clubs);
         }
     }
 }

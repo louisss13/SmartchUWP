@@ -14,16 +14,16 @@ namespace Model
         public Club Club { get; set; }
         public Address Address { get; set; }
 
-        public DateTime BeginDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime BeginDate { get; set; } = DateTime.Now;
+        public DateTime EndDate { get; set; } = DateTime.Now;
         public TournamentState Etat { get; set; }
 
-        public ICollection<User> Participants { get; set; }
-        public ICollection<User> Admins { get; set; }
+        public ICollection<User> Participants { get; set; } = new List<User>();
+        public ICollection<Account> Admins { get; set; } = new List<Account>();
 
-           // public ICollection<Match> Matches { get; set; }
+        // public ICollection<Match> Matches { get; set; }
 
 
-        
+
     }
 }

@@ -7,7 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     DataContext="{Binding Source={StaticResource Locator},Path=Tournaments}"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <Thickness  x:Key="paddingListTournament" >20,10,0,10</Thickness>
+    </Page.Resources>
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -16,15 +19,35 @@
         <Grid.Resources>
             <SolidColorBrush Color="#cc6600" x:Key="border"/>
         </Grid.Resources>
-        <StackPanel Orientation="Horizontal">
-            <Button Content="Ajouter" Click="AjouterTournament_Click"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <CommandBar  >
+                <AppBarButton Icon="Add" Label="Ajouter" Command="{Binding NavigateCommand}"/>
+                <AppBarButton Icon="Edit" Label="Edit"/>
+                <AppBarButton Icon="Target" Label="Info"/>
+    
+            </CommandBar>
+            
         </StackPanel>
-        <ListView Grid.Row="1" ItemsSource="{Binding Tournaments}">
+        <ListView Grid.Row="1" ItemsSource="{Binding Tournaments}" HorizontalAlignment="Stretch">
+
+            <ListView.ItemContainerStyle>
+
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Stretch"></Setter>
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Stretch"></Setter>
+                    <Setter Property="Margin"
+                            Value="0,0,0,0"></Setter>
+                    <Setter Property="Padding"
+                            Value="0,0,0,0"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <Border BorderBrush="{StaticResource border}" BorderThickness="0,0,0,2">
                         <Grid >
-                            
+                           
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -33,22 +56,24 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="Nom" />
+                            <TextBlock Grid.Column="0" Text="Nom" Padding="{StaticResource paddingListTournament}"/>
                             <Border Grid.Column="1" BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
-                                <TextBlock  Text="Etat"/>
+                                <TextBlock  Text="Etat" Padding="{StaticResource paddingListTournament}"/>
                             </Border>
-                            <TextBlock Grid.Column="2" Text="DateDebut"/>
+                            <TextBlock Grid.Column="2" Text="DateDebut" Padding="{StaticResource paddingListTournament}"/>
                             <Border Grid.Column="3" BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
-                                <TextBlock Grid.Column="3" Text="DateFin"/>
+                                <TextBlock Grid.Column="3" Text="DateFin" Padding="{StaticResource paddingListTournament}"/>
                             </Border>
-                            <TextBlock Grid.Column="4" Text="Nombre joueur" />
+                            <TextBlock Grid.Column="4" Text="Nombre joueur" Padding="{StaticResource paddingListTournament}"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </ListView.HeaderTemplate>
+            
             <ListView.ItemTemplate  >
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch">
+                    
+                    <Grid  >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
@@ -56,13 +81,17 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Name }"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Etat}"/>
-                        <TextBlock Grid.Column="2" Text="{Binding BeginDate}"/>
-                        <TextBlock Grid.Column="3" Text="{Binding EndDate}"/>
-                        <TextBlock Grid.Column="4" Text="{Binding Participant.Count}" />
+                        <TextBlock Grid.Column="0" Text="{Binding Name }" Padding="{StaticResource paddingListTournament}"/>
+                        <Border Grid.Column="1" BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0" >
+                            <TextBlock Text="{Binding Etat}" Padding="{StaticResource paddingListTournament}"/>
+                        </Border>
+                        <TextBlock Grid.Column="2" Text="{Binding BeginDate, Converter={StaticResource DateTimeToDateConverter}}" Padding="{StaticResource paddingListTournament}"/>
+                        <Border Grid.Column="3" BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
+                            <TextBlock Text="{Binding EndDate, Converter={StaticResource DateTimeToDateConverter}}" Padding="{StaticResource paddingListTournament}"/>
+                        </Border>
+                        <TextBlock Grid.Column="4" Text="{Binding Participants.Count, TargetNullValue=0 }" Padding="{StaticResource paddingListTournament}"/>
                     </Grid>
-               
+                   
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

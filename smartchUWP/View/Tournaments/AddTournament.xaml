@@ -2,33 +2,33 @@
     x:Class="smartchUWP.View.Tournaments.AddTournament"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:smartchUWP"
+    xmlns:local="using:smartchUWP.View.Tournaments"
+    xmlns:view="using:smartchUWP.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     DataContext="{Binding Source={StaticResource Locator}, Path=AddTournament}"
     mc:Ignorable="d">
-
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Pivot>
             <Pivot.RightHeader>
-                <Button Content="Enregister" Click="AddTournament_Click"/>
+                <Button Content="Enregister" Command="{Binding CommandAddTournament}" />
             </Pivot.RightHeader>
             <PivotItem Header="Info générales">
-                <StackPanel>
-                    <TextBox Name="Name" Header="Nom du tournois" Text="Tournois"/>
-                    <DatePicker Name="DateDebut" Header="Date de début" />
-                    <DatePicker Name="DateFin" Header="Date de Fin"/>
-                    <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" DisplayMemberPath="Value" SelectedValuePath="Key"/>
-                    <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="Id"/>
-                    <TextBox Name="Etat" Header="Etat"/>
-                    <TextBox Name="Club" Header="Club"/>
+                <StackPanel >
+                    <TextBox Name="Name" Header="Nom du tournois" Text="{Binding OTournament.Name, Mode=TwoWay}"/>
+                    <DatePicker Name="DateDebut" Header="Date de début" Date="{Binding OTournament.BeginDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
+                    <DatePicker Name="DateFin" Header="Date de Fin" Date="{Binding OTournament.EndDate, Mode=TwoWay , Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
+                    <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedItem="{Binding OTournament.Etat, Mode=TwoWay}"/>
+                    <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding OTournament.Club, Mode=TwoWay}" />
+                   
                 </StackPanel>
             </PivotItem>
-            <PivotItem Header="Adresse">
-                <Frame x:Name="AdresseForm"/>
+            <PivotItem Header="Adresse" >
+                <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding OTournament.Adresse, Mode=TwoWay}"/>
             </PivotItem>
-            <PivotItem Header="Participants">
-
+            <PivotItem Header="Participants"  >
+                
             </PivotItem>
             <PivotItem Header="Terrain">
                 

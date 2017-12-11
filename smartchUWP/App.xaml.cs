@@ -27,6 +27,8 @@ namespace smartchUWP
         /// Initialise l'objet d'application de singleton.  Il s'agit de la première ligne du code créé
         /// à être exécutée. Elle correspond donc à l'équivalent logique de main() ou WinMain().
         /// </summary>
+        /// 
+
         public App()
         {
             this.InitializeComponent();
@@ -40,16 +42,16 @@ namespace smartchUWP
         /// <param name="e">Détails concernant la requête et le processus de lancement.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            MainPage MainPage = Window.Current.Content as MainPage;
 
             // Ne répétez pas l'initialisation de l'application lorsque la fenêtre comporte déjà du contenu,
             // assurez-vous juste que la fenêtre est active
-            if (rootFrame == null)
+            if (MainPage == null)
             {
                 // Créez un Frame utilisable comme contexte de navigation et naviguez jusqu'à la première page
-                rootFrame = new Frame();
+                MainPage = new MainPage();
 
-                rootFrame.NavigationFailed += OnNavigationFailed;
+                MainPage.AppFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -57,19 +59,20 @@ namespace smartchUWP
                 }
 
                 // Placez le frame dans la fenêtre active
-                Window.Current.Content = rootFrame;
+                Window.Current.Content = MainPage;
             }
 
             if (e.PrelaunchActivated == false)
             {
-                if (rootFrame.Content == null)
+                if (MainPage.AppFrame.Content == null)
                 {
                     // Quand la pile de navigation n'est pas restaurée, accédez à la première page,
                     // puis configurez la nouvelle page en transmettant les informations requises en tant que
                     // paramètre
-                    rootFrame.Navigate(typeof(Login), e.Arguments);
+                    MainPage.AppFrame.Navigate(typeof(Login), e.Arguments);
                 }
                 // Vérifiez que la fenêtre actuelle est active
+
                 Window.Current.Activate();
             }
         }

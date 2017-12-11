@@ -3,10 +3,14 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:smartchUWP"
+    xmlns:conv="using:smartchUWP.Converters" 
     xmlns:vm1="using:smartchUWP.ViewModel"
     RequestedTheme="Light">
     <Application.Resources>
+        <conv:DateTimeConverter x:Name="DateTimeToDateConverter"/>
+        <conv:DateTimeToDateTimeOffsetConverter x:Name="DateTimeToDateTimeOffsetConverter"/>
         <vm1:ViewModelLocator x:Key="Locator" xmlns:vm="using:smartchUWP.ViewModel"/>
+        
         <DataTemplate x:Key="ClubsList">
             <Grid>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Center"/>

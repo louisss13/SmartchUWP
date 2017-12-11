@@ -1,9 +1,13 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace smartchUWP.View.Tournaments
 {
@@ -12,12 +16,16 @@ namespace smartchUWP.View.Tournaments
         public Tournaments()
         {
             InitializeComponent();
+            //Messenger.Default.Register<void>(this, AjouterTournament);
         }
 
-        public void AjouterTournament_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public void AjouterTournament()
         {
             this.Frame.Navigate(typeof(AddTournament));
         }
+
+      
+
 
 
     }

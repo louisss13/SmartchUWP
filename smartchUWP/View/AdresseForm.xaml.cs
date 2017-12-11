@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 
@@ -15,6 +16,17 @@ namespace smartchUWP.View
         {
             this.InitializeComponent();
         }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+
+        {
+
+            Frame frame = sender as Frame;
+
+            (frame.Content as AdresseForm).DataContext = frame.DataContext;
+
+        }
+
         public Address GetAddress() {
             Address address = new Address()
             {

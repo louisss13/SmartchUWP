@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Model;
+using smartchUWP.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +15,20 @@ namespace smartchUWP.View.Tournaments
     public sealed partial class AddTournament : Page
     {
         public AddTournament() {
-            this.InitializeComponent();
-            
-            AdresseForm.Navigate(typeof(AdresseForm));
-            
-            
+            this.InitializeComponent();          
             
         }
         private async void AddTournament_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            Address adresse = ((View.AdresseForm)AdresseForm.Content).GetAddress();
+
+            Tournament tournament = GetTournamentFromForm();
+           // ((AddTournamentViewModel)DataContext).AddTournament(tournament);
+            
+            // this.Frame.Navigate(typeof(AddTournament));
+        }
+        public Tournament GetTournamentFromForm()
+        {
+            Address adresse = null; //((View.AdresseForm)AdresseForm.Content).GetAddress();
             Tournament tournament = new Tournament()
             {
                 Address = adresse,
@@ -32,13 +37,11 @@ namespace smartchUWP.View.Tournaments
                 EndDate = DateFin.Date.DateTime,
                 Etat = 0,
                 Club = null,
-                Participants = null, 
+                Participants = null,
                 Admins = null
 
             };
-            TournamentsServices tournamentsServices = new TournamentsServices();
-            ResponseObject response = await tournamentsServices.AddTournamentAsync(tournament);
-            // this.Frame.Navigate(typeof(AddTournament));
+            return tournament;
         }
     }
 }
