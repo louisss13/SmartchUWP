@@ -24,7 +24,7 @@ namespace smartchUWP.View.Tournaments
             this.Frame.Navigate(typeof(AddTournament));
         }
 
-      
+        
 
 
 

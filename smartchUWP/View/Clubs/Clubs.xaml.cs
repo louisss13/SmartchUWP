@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace smartchUWP.View.Clubs
 {
@@ -18,5 +20,6 @@ namespace smartchUWP.View.Clubs
         {
             this.Frame.Navigate(typeof(AddClub));
         }
+        
     }
 }

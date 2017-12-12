@@ -9,6 +9,7 @@
     <Application.Resources>
         <conv:DateTimeConverter x:Name="DateTimeToDateConverter"/>
         <conv:DateTimeToDateTimeOffsetConverter x:Name="DateTimeToDateTimeOffsetConverter"/>
+        <conv:TournamentStatesConverter x:Name="TournamentStatesConverter"/>
         <vm1:ViewModelLocator x:Key="Locator" xmlns:vm="using:smartchUWP.ViewModel"/>
         
         <DataTemplate x:Key="ClubsList">

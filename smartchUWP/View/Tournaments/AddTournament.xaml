@@ -19,7 +19,7 @@
                     <TextBox Name="Name" Header="Nom du tournois" Text="{Binding OTournament.Name, Mode=TwoWay}"/>
                     <DatePicker Name="DateDebut" Header="Date de début" Date="{Binding OTournament.BeginDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
                     <DatePicker Name="DateFin" Header="Date de Fin" Date="{Binding OTournament.EndDate, Mode=TwoWay , Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
-                    <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedItem="{Binding OTournament.Etat, Mode=TwoWay}"/>
+                    <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedItem="{Binding OTournament.Etat, Mode=TwoWay, Converter={StaticResource TournamentStatesConverter}}"/>
                     <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding OTournament.Club, Mode=TwoWay}" />
                    
                 </StackPanel>

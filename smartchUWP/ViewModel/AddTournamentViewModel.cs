@@ -22,7 +22,7 @@ namespace smartchUWP.ViewModel
         private ObservableCollection<KeyValuePair<TournamentState, string>> _tournamentStates = null;
 
         public RelayCommand CommandAddTournament { get; private set; }
-
+        
         public AddTournamentViewModel(INavigationService navigationService):base(navigationService)
         {
             CommandAddTournament = new RelayCommand( AddTournament);
@@ -86,7 +86,7 @@ namespace smartchUWP.ViewModel
         {
             Tournament tournament = OTournament;
             tournament.Admins = null;
-            tournament.Club = null;
+            //tournament.Club = null;
 
             TournamentsServices tournamentsServices = new TournamentsServices();
             ResponseObject response = await tournamentsServices.AddTournamentAsync(tournament);

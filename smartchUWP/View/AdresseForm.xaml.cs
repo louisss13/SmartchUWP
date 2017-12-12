@@ -17,6 +17,7 @@ namespace smartchUWP.View
             this.InitializeComponent();
         }
 
+        // initialize le datacontext
         private void OnLoaded(object sender, RoutedEventArgs e)
 
         {

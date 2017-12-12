@@ -10,7 +10,7 @@
     DataContext="{Binding Source={StaticResource Locator} , Path=MainPage}"
     mc:Ignorable="d">
 
-    <NavigationView x:Name="NavView" Loaded="NavView_Loaded">
+    <NavigationView x:Name="NavView" >
         <interactivity:Interaction.Behaviors>
             <core:EventTriggerBehavior EventName="ItemInvoked">
                 <core:InvokeCommandAction Command="{Binding CommandInvokedMenu}" />

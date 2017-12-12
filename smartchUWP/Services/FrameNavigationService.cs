@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -21,9 +22,23 @@ namespace smartchUWP.Services
 
         public FrameNavigationService() {
             
+            SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested;
         }
+        private void App_BackRequested(object sender,BackRequestedEventArgs e)
+        {
+            if (CurrentFrame.CanGoBack)
+            {
+                CurrentFrame.GoBack();
+                SetAppBarBackButtonVisibility();
+            }
+        }
+        private void SetAppBarBackButtonVisibility()
+        {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = (CurrentFrame.CanGoBack) ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+        }
+        
 
-        private void SetRootFrame()
+            private void SetRootFrame()
         {
             if (Window.Current.Content is IRootFrame)
             {
@@ -57,6 +72,8 @@ namespace smartchUWP.Services
             {
                 SetRootFrame();
             }
+
+            
             if (this.Configuration.ContainsKey(pageKey))
             {
                 Type pageType = this.Configuration[pageKey];
@@ -69,6 +86,8 @@ namespace smartchUWP.Services
             }
             else
                 Console.WriteLine("Key "+ pageKey + " unknow");
+
+            SetAppBarBackButtonVisibility();
         }
     }
 }
