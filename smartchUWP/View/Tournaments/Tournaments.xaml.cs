@@ -19,10 +19,7 @@ namespace smartchUWP.View.Tournaments
             //Messenger.Default.Register<void>(this, AjouterTournament);
         }
 
-        public void AjouterTournament()
-        {
-            this.Frame.Navigate(typeof(AddTournament));
-        }
+       
 
         
 

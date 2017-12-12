@@ -13,7 +13,6 @@ namespace smartchUWP.ViewModel
 {
     public class MainPageViewModel : ViewModelBase
     {
-        private ObservableCollection<ViewModelBase> _contentPage = new ObservableCollection<ViewModelBase> { new AddMembreViewModel()};
         public RelayCommand<Object> CommandSelectChangeMenu { get; private set; }
         public RelayCommand<Object> CommandInvokedMenu { get; private set; }
         private readonly INavigationService _navigationService;
@@ -38,22 +37,7 @@ namespace smartchUWP.ViewModel
             
 
         }
-        public ObservableCollection<ViewModelBase> ContentPage
-        {
-            get
-            {
-                return _contentPage;
-            }
-            set
-            {
-                if (_contentPage == value)
-                {
-                    return;
-                }
-                _contentPage = value;
-                RaisePropertyChanged("ContentPage");
-            }
-        }
+        
         public void SelectionChanged(Object args)
         {
             NavigationViewSelectionChangedEventArgs navigationItem = (NavigationViewSelectionChangedEventArgs)args;

@@ -1,6 +1,10 @@
 ﻿using DataAccess;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using Model;
+using smartchUWP.Observable;
+using smartchUWP.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,40 +16,57 @@ namespace smartchUWP.ViewModel
 {
     public class AddMembreViewModel : ViewModelBase
     {
-        private ObservableCollection<Club> _clubs = null;
-        public AddMembreViewModel()
+        public RelayCommand CommandAddMember { get; private set; }
+
+        private INavigationService _navigationService;
+        private ObservableUserInfo _user = new ObservableUserInfo();
+
+        public ObservableUserInfo User
         {
+            get
+            {
+                return _user;
+            }
+            set
+            {
+                _user = value;
+                RaisePropertyChanged("User");
+            }
+        }
+
+        public AddMembreViewModel(INavigationService navigationService)
+        {
+            _navigationService = navigationService;
+
+            CommandAddMember = new RelayCommand(AddMembre);
             if (IsInDesignMode)
             {
-                _clubs = new ObservableCollection<Club> { new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
+                
             }
             else
             {
                 InitializeAsync();
             }
         }
-        public ObservableCollection<Club> Clubs
-        {
-            get
-            {
-                return _clubs;
-            }
-            set
-            {
-                if (_clubs == value)
-                {
-                    return;
-                }
-                _clubs = value;
-                RaisePropertyChanged("Clubs");
-            }
-        }
+        
         public async Task InitializeAsync()
         {
-            var service = new ClubsServices();
-            var clubs = await service.GetClubs();
-            Clubs = new ObservableCollection<Club>(clubs);
+            
 
+        }
+        private async void AddMembre()
+        {
+            UsersServices usersServices = new UsersServices();
+            ResponseObject response = await usersServices.AddUser(User);
+            if (response.Success)
+            {
+                _navigationService.NavigateTo("Membres");
+                MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListUser));
+            }
+            else
+            {
+
+            }
         }
     }
 }

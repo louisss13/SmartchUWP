@@ -16,31 +16,7 @@ namespace smartchUWP.View.Membres
         public AddMembre() {
             this.InitializeComponent(); 
         }
-        private async void AjouterMembre_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            UsersServices usersServices = new UsersServices();
-
-            Address address = new Address()
-            {
-                Street = Street.Text,
-                Number = Number.Text,
-                City = City.Text,
-                Zipcode = Zipcode.Text,
-                Box = Box.Text
-            };
-            User user = new User()
-            {
-                Name = Name.Text,
-                FirstName = FirstName.Text,
-                Email = Email.Text,
-                Phone = Phone.Text,
-                Birthday = Birthday.Date.DateTime,
-                Adresse = address
-
-            };
-            ResponseObject response = await usersServices.AddUser(user);
-            this.Frame.Navigate(typeof(Membres));
-        }
+        
         
 
 

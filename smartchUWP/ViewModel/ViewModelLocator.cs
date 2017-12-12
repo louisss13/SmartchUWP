@@ -18,23 +18,29 @@ namespace smartchUWP.ViewModel
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+            SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<MainPageViewModel>();
             SimpleIoc.Default.Register<ClubsViewModel>();
             SimpleIoc.Default.Register<AddMembreViewModel>();
             SimpleIoc.Default.Register<MembresModelView>();
             SimpleIoc.Default.Register<TournamentViewModel>();
             SimpleIoc.Default.Register<AddTournamentViewModel>();
+            SimpleIoc.Default.Register<AddClubViewModel>();
 
 
-            
+
             FrameNavigationService navigationPages = new FrameNavigationService();
-            
-          
+
+
+            navigationPages.Configure("Home", typeof(View.Clubs.Clubs));
             navigationPages.Configure("Clubs",  typeof(View.Clubs.Clubs));
+            navigationPages.Configure("AddClub", typeof(View.Clubs.AddClub));
             navigationPages.Configure("Membres", typeof(View.Membres.Membres));
+            navigationPages.Configure("AddMembre", typeof(View.Membres.AddMembre));
             navigationPages.Configure("Tournaments", typeof(View.Tournaments.Tournaments));
             navigationPages.Configure("AddTournament", typeof(View.Tournaments.AddTournament));
             navigationPages.Configure("Login", typeof(View.Login));
+            navigationPages.Configure("Register", typeof(View.Register));
             SimpleIoc.Default.Register<INavigationService>(() => navigationPages);
 
 
@@ -45,6 +51,8 @@ namespace smartchUWP.ViewModel
         public MembresModelView Membres { get { return ServiceLocator.Current.GetInstance<MembresModelView>(); } }
         public TournamentViewModel Tournaments { get { return ServiceLocator.Current.GetInstance<TournamentViewModel>(); } }
         public AddTournamentViewModel AddTournament { get { return ServiceLocator.Current.GetInstance<AddTournamentViewModel>(); } }
+        public AddClubViewModel AddClub { get { return ServiceLocator.Current.GetInstance<AddClubViewModel>(); } }
+        public LoginViewModel Login { get { return ServiceLocator.Current.GetInstance<LoginViewModel>(); } }
 
     }
 }

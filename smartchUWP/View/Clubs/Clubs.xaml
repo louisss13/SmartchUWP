@@ -9,33 +9,23 @@
     mc:Ignorable="d">
 
    
-        <Grid  HorizontalAlignment="Stretch" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Mes Clubs" />
-            <Button Grid.Column="1" HorizontalAlignment="Right" Content="Ajouter" Click="AddClub_Click"/>
-            <ListView ItemsSource="{Binding Clubs}" Name="ListeClub" ItemTemplate="{StaticResource ClubsList}" Grid.Row="1" Width="200" Padding="20" Margin="0,30,0,0"/>
-            <StackPanel Orientation="Vertical"  Grid.Column="1" Grid.Row="1" DataContext="{Binding ElementName=ListeClub,Path=SelectedItem}" Padding="20" Margin="0,30,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Nom : "/>
-                    <TextBlock  Text="{Binding Name}"/> 
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Email de contact : "/>
-                    <TextBlock Text="{Binding Email}" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Téléphone : "/>
-                    <TextBlock Text="{Binding Phone}"/>
-                </StackPanel>
-            </StackPanel>
-        </Grid>
+    <Grid  HorizontalAlignment="Stretch" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Mes Clubs" />
+        <Button Grid.Column="1" HorizontalAlignment="Right" Content="Ajouter" Command="{Binding CmdNavigateAddClub}" />
+        <ListView ItemsSource="{Binding Clubs}" Name="ListeClub" ItemTemplate="{StaticResource ClubsList}" Grid.Row="1"  Margin="0,0,30,0"/>
+        <StackPanel Orientation="Vertical"  Grid.Column="1" Grid.Row="1" DataContext="{Binding ElementName=ListeClub,Path=SelectedItem}" >
+       
+        </StackPanel>
+
+    </Grid>
         
     
 </Page>

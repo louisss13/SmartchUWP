@@ -6,18 +6,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    
+    DataContext="{Binding Source={StaticResource Locator} , Path=Login}"
     >
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Login" Style="{StaticResource TitleTextBlockStyle}"/>
             <TextBlock Name="TextErreur" Text="Erreur lors de la connexion" Visibility="Collapsed" />
-            <TextBox x:Name="Email" Header="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" Text="louisss13@gmail.com" />
-            <PasswordBox x:Name="Password" Header="Password" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="Password" Password="Coucou-123" />
-            <Button Content="Log in " Margin="0,24" Click="Login_Click"/>
-            <Button Content="Register" Margin="0,24" Click="Register_Click"/>
-            <Button Content="TEst" Margin="0,24" Click="Test_Click"/>
+            <TextBox x:Name="Email" Header="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" Text="{Binding Email}" />
+            <PasswordBox x:Name="Password" Header="Password" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="Password" Password="{Binding Password}" />
+            <Button Content="Log in " Margin="0,24" Command="{Binding CommandLogin}"/>
+            <Button Content="Register" Margin="0,24" Command="{Binding CommandNavigateRegister}"/>
+           
         </StackPanel>
     </Grid>
 </Page>

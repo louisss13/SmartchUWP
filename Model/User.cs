@@ -15,8 +15,9 @@ namespace Model
         public String FirstName { get; set; }
 
         public String Phone { get; set; }
-        public Address Adresse { get; set; }
+        public Address Adresse { get; set; } = new Address();
         public DateTime Birthday { get; set; }
         
+       
     }
 }

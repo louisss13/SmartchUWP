@@ -14,7 +14,7 @@ namespace Model
         public String Phone { get; set; }
         public IEnumerable<User> Membres { get; set; }
         public IEnumerable<Account> Admins { get; set; }
-        //public Address Address { get; set; }
+        public Address Address { get; set; } = new Address();
         //public Tournois tournois { get; set; }
      }
 }

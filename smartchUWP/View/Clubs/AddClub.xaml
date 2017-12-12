@@ -3,25 +3,41 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:smartchUWP"
+    xmlns:view="using:smartchUWP.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    
+    DataContext="{Binding Source={StaticResource Locator}, Path=AddClub}"
     >
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-        
-        
-
-
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Ajouter un club" Style="{StaticResource TitleTextBlockStyle}"/>
-            <TextBlock Name="TextErreur" Text="Erreur lors de la création" Visibility="Collapsed" />
-            <TextBox x:Name="ClubName" Header="Name" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left"  />
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Ajouter un club" Style="{StaticResource TitleTextBlockStyle}"/>
+                <Button Grid.Column="1" Content="Ajouter" Margin="0,24" Command="{Binding CommandAddClub}"/>
+            </Grid>
             
-            <Button Content="Ajouter" Margin="0,24" Click="AddClub_click"/>
-            
+            <Pivot >
+                <PivotItem Header="Info générales">
+                    <StackPanel >
+                        
+                        <TextBlock Name="TextErreur" Text="Erreur lors de la création" Visibility="Collapsed" />
+                        <TextBox Header="Nom du Club" Text="{Binding Club.Name, Mode=TwoWay}" />
+                        <TextBox Header="Email de contact" Text="{Binding Club.Email, Mode=TwoWay}"/>
+                        <TextBox Header="Téléphone" Text="{Binding Club.Phone, Mode=TwoWay}"/>
+                    </StackPanel>
+                </PivotItem>
+                <PivotItem Header="Adresse">
+                    <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding Club.Address, Mode=TwoWay}"/>
+                </PivotItem>
+                <PivotItem Header="Membres">
+
+                </PivotItem>
+            </Pivot>
         </StackPanel>
     </Grid>
 </Page>

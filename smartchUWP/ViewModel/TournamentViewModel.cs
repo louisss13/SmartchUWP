@@ -25,7 +25,7 @@ namespace smartchUWP.ViewModel
         {
 
             _navigationService = navigationService;
-            NavigateCommand = new RelayCommand(ClickAddTournament);
+            NavigateCommand = new RelayCommand(NavigateToAddTournament);
             MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
 
             if (IsInDesignMode)
@@ -37,10 +37,11 @@ namespace smartchUWP.ViewModel
                 InitializeAsync();
             }
         }
-        private void ClickAddTournament()
+        private void NavigateToAddTournament()
         {
             INavigationService navigationService = ServiceLocator.Current.GetInstance<INavigationService>();
             navigationService.NavigateTo("AddTournament");
+
         }
         public ObservableCollection<Tournament> Tournaments
         {

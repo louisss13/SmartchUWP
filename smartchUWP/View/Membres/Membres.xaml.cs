@@ -15,10 +15,7 @@ namespace smartchUWP.View.Membres
         {
             this.InitializeComponent();
         }
-        private void AddMembre_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(AddMembre));
-        }
+        
         
     }
 }

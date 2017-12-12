@@ -1,5 +1,7 @@
 ﻿using DataAccess;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -12,9 +14,14 @@ namespace smartchUWP.ViewModel
 {
     public class MembresModelView : ViewModelBase
     {
+        public RelayCommand CmdNavigateAddMembre { get; private set; }
+
+        private INavigationService _navigationService;
         private ObservableCollection<User> _users = null;
-        public MembresModelView()
+        public MembresModelView(INavigationService navigationService)
         {
+            _navigationService = navigationService;
+            CmdNavigateAddMembre = new RelayCommand(NavigateToAddMembre);
             if (IsInDesignMode)
             {
                 _users = new ObservableCollection<User> { new User() { Name = "Nom1" }, new User() { Name = "Nm2" } };
@@ -23,6 +30,10 @@ namespace smartchUWP.ViewModel
             {
                 InitializeAsync();
             }
+        }
+        private void NavigateToAddMembre()
+        {
+            _navigationService.NavigateTo("AddMembre");
         }
         public ObservableCollection<User> Users
         {

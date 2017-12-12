@@ -19,30 +19,6 @@ namespace smartchUWP.View
         {
             this.InitializeComponent();
         }
-        public async void Login_Click(object sender, RoutedEventArgs e)
-        {
-            AccountsServices accountsServices = new AccountsServices();
-
-            ResponseObject response = await accountsServices.LogIn(Email.Text, Password.Password);
-
-            if (response.Success) {
-                ApiAccess.Instance.Token = ((JObject)response.Content)["access_token"].Value<String>();
-                TextErreur.Text += response.Content.ToString();
-                this.Frame.Navigate(typeof(Clubs.Clubs));
-            }
-            TextErreur.Visibility = Visibility.Visible;
-
-
-        }
-        public void Register_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Register));
-        }
-
-        private void Test_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(MainPage));
-        }
-        
+          
     }
 }

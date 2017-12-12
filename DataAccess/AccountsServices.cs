@@ -29,6 +29,8 @@ namespace DataAccess
                 case HttpStatusCode.OK:
 
                     contentResponse.Content = JObject.Parse(content);
+                    ApiAccess.Instance.Token = ((JObject)contentResponse.Content)["access_token"].Value<String>();
+
                     contentResponse.Success = true;
                     break;
                 case HttpStatusCode.Unauthorized:

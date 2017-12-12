@@ -20,21 +20,7 @@ namespace smartchUWP.View.Clubs
             this.InitializeComponent();
         }
 
-        public async void AddClub_click(object sender, RoutedEventArgs e) {
-            ClubsServices clubsServices = new ClubsServices();
-            
-            Club club = new Club() { Name = ClubName.Text };
-            ResponseObject response = await clubsServices.AddClub(club);
-
-            if (response.Success)
-            {
-                
-
-            }
-            else
-                TextErreur.Visibility = Visibility.Visible;
-
-        }
+        
        
     }
 }
