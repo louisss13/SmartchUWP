@@ -110,7 +110,12 @@
     <Compile Include="Address.cs" />
     <Compile Include="Club.cs" />
     <Compile Include="Country.cs" />
+    <Compile Include="Match.cs" />
+    <Compile Include="MatchsPhases.cs" />
+    <Compile Include="MatchState.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="ResponseObject.cs" />
+    <Compile Include="Score.cs" />
     <Compile Include="Tournament.cs" />
     <Compile Include="TournamentState.cs" />
     <Compile Include="User.cs" />

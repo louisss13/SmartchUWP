@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
+using smartchUWP.Interfaces;
 using smartchUWP.Observable;
 using smartchUWP.Services;
 using System;
@@ -14,18 +15,26 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddTournamentViewModel : MainPageViewModel
+    public class AddTournamentViewModel : ViewModelBase, IListeMembreViewModel
     {
+        private INavigationService _navigationService;
         private ObservableCollection<Club> _clubs = null;
-        
+        private ObservableCollection<User> _allMembers;
+        private ObservableCollection<User> _selectedAllMembers = new ObservableCollection<User>();
+        private ObservableCollection<User> _selectedMembersEntity = new ObservableCollection<User>();
+
         private ObservableTournament _tournament = new ObservableTournament( new Tournament() { Address = new Address() { Street = "rue de la loi" } });
         private ObservableCollection<KeyValuePair<TournamentState, string>> _tournamentStates = null;
 
         public RelayCommand CommandAddTournament { get; private set; }
-        
-        public AddTournamentViewModel(INavigationService navigationService):base(navigationService)
+        public RelayCommand CommandAddMember { get; private set; }
+        public RelayCommand CommandDelMember { get; private set; }
+
+        public AddTournamentViewModel(INavigationService navigationService)
         {
             CommandAddTournament = new RelayCommand( AddTournament);
+            CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
+            CommandDelMember = new RelayCommand(DelMembre, IsParameterDel);
             if (IsInDesignMode)
             {
                 _clubs = new ObservableCollection<Club> { new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
@@ -81,6 +90,86 @@ namespace smartchUWP.ViewModel
             }
         }
 
+        public ObservableCollection<User> MembersEntity
+        {
+            get
+            {
+                return new ObservableCollection<User>(OTournament.Participants);
+            }
+            set
+            {
+                OTournament.Participants = value;
+                RaisePropertyChanged("MembersEntity");
+            }
+        }
+        public ObservableCollection<User> AllMembers
+        {
+            get
+            {
+                return _allMembers;
+            }
+            set
+            {
+                _allMembers = value;
+                RaisePropertyChanged("AllMembers");
+            }
+        }
+        public ObservableCollection<User> SelectedMembersEntity
+        {
+            get
+            {
+                return _selectedMembersEntity;
+            }
+            set
+            {
+                _selectedMembersEntity = value;
+                CommandDelMember.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedMembersEntity");
+            }
+        }
+        public ObservableCollection<User> SelectedAllMembers
+        {
+            get
+            {
+                return _selectedAllMembers;
+            }
+            set
+            {
+                _selectedAllMembers = value;
+                CommandAddMember.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedAllMembers");
+            }
+        }
+
+        public bool IsParameterAdd()
+        {
+            return SelectedAllMembers.Count > 0;
+        }
+        public bool IsParameterDel()
+        {
+            return SelectedMembersEntity.Count > 0;
+        }
+        public void AddMembre()
+        {
+
+            MembersEntity = new ObservableCollection<User>(MembersEntity.Concat(SelectedAllMembers));
+            AllMembers = new ObservableCollection<User>(AllMembers.Except(SelectedAllMembers));
+
+        }
+        public void DelMembre()
+        {
+            AllMembers = new ObservableCollection<User>(AllMembers.Concat(SelectedMembersEntity));
+            MembersEntity = new ObservableCollection<User>(MembersEntity.Except(SelectedMembersEntity));
+        }
+        public async void SetMembers()
+        {
+            UsersServices usersServices = new UsersServices();
+            var users = await usersServices.GetUsers();
+            AllMembers = new ObservableCollection<User>(users.Except(OTournament.Participants));
+            MembersEntity = new ObservableCollection<User>(OTournament.Participants);
+
+        }
+
 
         public async void AddTournament()
         {
@@ -100,7 +189,7 @@ namespace smartchUWP.ViewModel
         {
             SetClubList();
             TournamentStates = getTournamentState();
-
+            SetMembers();
         }
         //TODO A mettre dans un converter plutot
         private ObservableCollection<KeyValuePair<TournamentState, string>> getTournamentState()

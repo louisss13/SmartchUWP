@@ -16,8 +16,8 @@ namespace smartchUWP.Observable
         {
             base.ClubId = club.ClubId;
             base.Admins = club.Admins;
-            base.Email = club.Email;
-            base.Membres = club.Membres;
+            base.ContactMail = club.ContactMail;
+            base.Members = club.Members;
             base.Name = club.Name;
             base.Phone = club.Phone;
 

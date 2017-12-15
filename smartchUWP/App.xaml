@@ -21,7 +21,6 @@
 
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Center" Padding="0,0,10,0"/>
                 
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding FirstName}" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
     </Application.Resources>

@@ -22,7 +22,7 @@ namespace DataAccess
             {
                 ClubId = d["clubId"].Value<int>(),
                 Name = d["name"].Value<String>(),
-                Email = d["contactMail"].Value<String>(),
+                ContactMail = d["contactMail"].Value<String>(),
                 Phone = d["phone"].Value<string>()
             });
             return clubs;

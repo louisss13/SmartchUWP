@@ -26,6 +26,7 @@ namespace smartchUWP.ViewModel
             SimpleIoc.Default.Register<TournamentViewModel>();
             SimpleIoc.Default.Register<AddTournamentViewModel>();
             SimpleIoc.Default.Register<AddClubViewModel>();
+            SimpleIoc.Default.Register<MatchsViewModel>();
 
 
 
@@ -39,6 +40,7 @@ namespace smartchUWP.ViewModel
             navigationPages.Configure("AddMembre", typeof(View.Membres.AddMembre));
             navigationPages.Configure("Tournaments", typeof(View.Tournaments.Tournaments));
             navigationPages.Configure("AddTournament", typeof(View.Tournaments.AddTournament));
+            navigationPages.Configure("SelectTournament", typeof(View.Tournaments.Matchs));
             navigationPages.Configure("Login", typeof(View.Login));
             navigationPages.Configure("Register", typeof(View.Register));
             SimpleIoc.Default.Register<INavigationService>(() => navigationPages);
@@ -53,6 +55,7 @@ namespace smartchUWP.ViewModel
         public AddTournamentViewModel AddTournament { get { return ServiceLocator.Current.GetInstance<AddTournamentViewModel>(); } }
         public AddClubViewModel AddClub { get { return ServiceLocator.Current.GetInstance<AddClubViewModel>(); } }
         public LoginViewModel Login { get { return ServiceLocator.Current.GetInstance<LoginViewModel>(); } }
+        public MatchsViewModel Matchs { get { return ServiceLocator.Current.GetInstance<MatchsViewModel>(); } }
 
     }
 }

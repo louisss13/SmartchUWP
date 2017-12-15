@@ -20,13 +20,13 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <CommandBar  >
                 <AppBarButton Icon="Add" Label="Ajouter" Command="{Binding NavigateCommand}"/>
-                <AppBarButton Icon="Edit" Label="Edit"/>
-                <AppBarButton Icon="Target" Label="Info"/>
+                <AppBarButton Icon="Edit" Label="Edit" Command="{Binding CommandNavigateModification}"/>
+                <AppBarButton Icon="Target" Label="Info" Command="{Binding CommandNavigateSelect}"/>
     
             </CommandBar>
             
         </StackPanel>
-        <ListView Grid.Row="1" ItemsSource="{Binding Tournaments}" HorizontalAlignment="Stretch">
+        <ListView Grid.Row="1" ItemsSource="{Binding Tournaments}" HorizontalAlignment="Stretch" SelectedItem="{Binding SelectedTournament, Mode=TwoWay}">
 
             <ListView.ItemContainerStyle>
 

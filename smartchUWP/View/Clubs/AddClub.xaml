@@ -27,15 +27,15 @@
                         
                         <TextBlock Name="TextErreur" Text="Erreur lors de la création" Visibility="Collapsed" />
                         <TextBox Header="Nom du Club" Text="{Binding Club.Name, Mode=TwoWay}" />
-                        <TextBox Header="Email de contact" Text="{Binding Club.Email, Mode=TwoWay}"/>
+                        <TextBox Header="Email de contact" Text="{Binding Club.ContactMail, Mode=TwoWay}"/>
                         <TextBox Header="Téléphone" Text="{Binding Club.Phone, Mode=TwoWay}"/>
                     </StackPanel>
                 </PivotItem>
                 <PivotItem Header="Adresse">
-                    <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding Club.Address, Mode=TwoWay}"/>
+                    <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding Club.Adresse, Mode=TwoWay}"/>
                 </PivotItem>
                 <PivotItem Header="Membres">
-
+                    <Frame  SourcePageType="view:MemberSelection" DataContext="{Binding Source={StaticResource Locator}, Path=AddClub}"/>
                 </PivotItem>
             </Pivot>
         </StackPanel>

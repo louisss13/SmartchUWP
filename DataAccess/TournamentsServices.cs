@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using DataAccess.Dao;
+using Model;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,19 @@ namespace DataAccess
                 Id = d["id"].Value<int>(),
                 Name = d["name"].Value<String>(),
                 BeginDate = d["beginDate"].Value<DateTime>(),
-                EndDate = d["endDate"].Value<DateTime>(), 
-                Etat = (TournamentState)d["etat"].Value<int>()
+                EndDate = d["endDate"].Value<DateTime>(),
+                Etat = (TournamentState)d["etat"].Value<int>(),
+                Participants = d.SelectToken("participantsId").Children().Select(l => new User() { Id = l.Value<int>()}).ToList(),
+                Address = (d["address"].Value<Object>() != null) ? new Address()
+                {
+                    Street = (String)d.SelectToken("address.street"),
+                    Box = (String)d.SelectToken("address.box"),
+                    City = (String)d.SelectToken("address.city"),
+                    //Country = (Country)d.SelectToken("adresse.street"),
+                    Number = (String)d.SelectToken("address.number"),
+                    Zipcode = (String)d.SelectToken("address.zipCode"),
+                } : null,
+
             });
             return tournaments;
 
@@ -32,7 +44,8 @@ namespace DataAccess
 
         public async Task<ResponseObject> AddTournamentAsync(Tournament tournament)
         {
-            HttpContent postContent = new StringContent(JObject.FromObject(tournament).ToString());
+            TournamentListDAO tournamentListDAO = new TournamentListDAO(tournament);
+            HttpContent postContent = new StringContent(JObject.FromObject(tournamentListDAO).ToString());
 
             postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var wc = new AuthHttpClient();

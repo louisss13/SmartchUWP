@@ -15,17 +15,39 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class TournamentViewModel : MainPageViewModel
+    public class TournamentViewModel : ViewModelBase
     {
         private readonly INavigationService _navigationService;
-        public RelayCommand NavigateCommand { get; private set; }
-
         private ObservableCollection<Tournament> _tournaments = null;
-        public TournamentViewModel(INavigationService navigationService):base(navigationService)
+        private Tournament _selectedTournament;
+
+        public RelayCommand NavigateCommand { get; private set; }
+        public RelayCommand CommandNavigateSelect { get; private set; }
+        public RelayCommand CommandNavigateModification { get; private set; }
+
+        public Tournament SelectedTournament
+        {
+            get
+            {
+                return _selectedTournament;
+            }
+            set
+            {
+                _selectedTournament = value;
+                CommandNavigateSelect.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedTournament");
+            }
+        }
+
+
+        public TournamentViewModel(INavigationService navigationService)
         {
 
             _navigationService = navigationService;
             NavigateCommand = new RelayCommand(NavigateToAddTournament);
+            CommandNavigateSelect = new RelayCommand(NavigateToSelectTournament, IsSelected);
+            CommandNavigateModification = new RelayCommand(NavigateToSelectTournament);
+
             MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
 
             if (IsInDesignMode)
@@ -37,10 +59,22 @@ namespace smartchUWP.ViewModel
                 InitializeAsync();
             }
         }
+        private bool IsSelected()
+        {
+            return SelectedTournament != null;
+        }
+        
+    private void NavigateToSelectTournament()
+        {
+            
+            _navigationService.NavigateTo("SelectTournament");
+            MessengerInstance.Send(new NotificationMessage(NotificationMessageType.Tournament, SelectedTournament));
+
+        }
         private void NavigateToAddTournament()
         {
-            INavigationService navigationService = ServiceLocator.Current.GetInstance<INavigationService>();
-            navigationService.NavigateTo("AddTournament");
+            
+            _navigationService.NavigateTo("AddTournament");
 
         }
         public ObservableCollection<Tournament> Tournaments

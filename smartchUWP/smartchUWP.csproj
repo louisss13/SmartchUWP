@@ -99,6 +99,7 @@
     <Compile Include="Converters\DateTimeToAgeConverter.cs" />
     <Compile Include="Converters\DateTimeToDateTimeOffsetConverter.cs" />
     <Compile Include="Converters\TournamentStatesConverter.cs" />
+    <Compile Include="Interfaces\IListeMembreViewModel.cs" />
     <Compile Include="Observable\ObservableAddress.cs" />
     <Compile Include="Observable\ObservableClub.cs" />
     <Compile Include="Observable\ObservableProperty.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="ViewModel\AddTournamentViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
+    <Compile Include="ViewModel\MatchsViewModel.cs" />
     <Compile Include="ViewModel\TournamentViewModel.cs" />
     <Compile Include="ViewModel\AddMembreViewModel.cs" />
     <Compile Include="ViewModel\MembresModelView.cs" />
@@ -128,6 +130,9 @@
     </Compile>
     <Compile Include="View\Clubs\AddClub.xaml.cs">
       <DependentUpon>AddClub.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MemberSelection.xaml.cs">
+      <DependentUpon>MemberSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Membres\AddMembre.xaml.cs">
       <DependentUpon>AddMembre.xaml</DependentUpon>
@@ -146,6 +151,9 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Tournaments\AddTournament.xaml.cs">
       <DependentUpon>AddTournament.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Tournaments\Matchs.xaml.cs">
+      <DependentUpon>Matchs.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Tournaments\Tournaments.xaml.cs">
       <DependentUpon>Tournaments.xaml</DependentUpon>
@@ -216,6 +224,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\MemberSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Membres\AddMembre.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +245,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Tournaments\AddTournament.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Tournaments\Matchs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -262,6 +278,7 @@
       <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

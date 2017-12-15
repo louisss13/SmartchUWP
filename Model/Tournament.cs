@@ -21,7 +21,7 @@ namespace Model
         public ICollection<User> Participants { get; set; } = new List<User>();
         public ICollection<Account> Admins { get; set; } = new List<Account>();
 
-        // public ICollection<Match> Matches { get; set; }
+        public ICollection<MatchsPhase> Matches { get; set; }
 
 
 

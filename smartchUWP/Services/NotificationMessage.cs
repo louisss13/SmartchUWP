@@ -9,11 +9,17 @@ namespace smartchUWP.Services
     public class NotificationMessage
     {
         public NotificationMessageType VariableType { get; set; }
-        public ENotificationMessageAction ActionType { get; set; }
+        public Object Variable { get; set; }
 
-        public NotificationMessage(NotificationMessageType variable )
+        public NotificationMessage(NotificationMessageType variableType)
         {
-            VariableType = variable;
+            VariableType = variableType;
+            Variable = null;
+        }
+        public NotificationMessage(NotificationMessageType variableType , Object variable)
+        {
+            VariableType = variableType;
+            Variable = variable;
         }
     }
 }

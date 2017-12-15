@@ -28,7 +28,7 @@
                 <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding OTournament.Adresse, Mode=TwoWay}"/>
             </PivotItem>
             <PivotItem Header="Participants"  >
-                
+                <Frame  SourcePageType="view:MemberSelection" DataContext="{Binding Source={StaticResource Locator}, Path=AddTournament}"/>
             </PivotItem>
             <PivotItem Header="Terrain">
                 

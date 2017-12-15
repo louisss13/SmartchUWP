@@ -16,8 +16,10 @@ namespace smartchUWP.Observable
         public ObservableTournament(Tournament tournament) : base()
         {
             Adresse = new ObservableAddress(tournament.Address);
+            base.Address = tournament.Address;
             base.Address = Adresse;
             Admins = new ObservableCollection<Account>(tournament.Admins);
+            base.Admins = tournament.Admins;
             base.BeginDate = (tournament.BeginDate == null)?new DateTime(): tournament.BeginDate;
             base.Club = tournament.Club;
             base.EndDate = (tournament.EndDate == null) ? new DateTime() : tournament.EndDate; ;
@@ -25,13 +27,26 @@ namespace smartchUWP.Observable
             base.Id = tournament.Id;
             base.Name = tournament.Name;
             Participants = new ObservableCollection<User>(tournament.Participants);
+            base.Participants = tournament.Participants;
             
         }
         private ObservableAddress _address = new ObservableAddress() { Street = "coucou"};
-
+        private ObservableCollection<User> _participants;
 
         public new ObservableCollection<Account> Admins { get; set; }
-        public new ObservableCollection<User> Participants { get; set; }
+        public new ObservableCollection<User> Participants
+        {
+            get
+            {
+                return _participants;
+            }
+            set
+            {
+                _participants = value;
+                base.Participants = _participants;
+                RaisePropertyChanged("Participants");
+            }
+        }
         public ObservableAddress Adresse
         {
             get
