@@ -20,6 +20,8 @@
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Button Command="{Binding CommandGenereMatch}" Content="Générer aléatoirement les matchs"/>
+        <Button Command="{Binding CommandEnregistrerTournament}" Content="Enregistrer"/>
+        
         <Pivot ItemsSource="{Binding MatchsPhases, Mode=TwoWay}"  HeaderTemplate="{StaticResource HeaderTemplatePivot}" SelectedItem="{Binding SelectedPhase, Mode=TwoWay}">
             <Pivot.ItemTemplate>
                 <DataTemplate >
@@ -29,7 +31,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Border BorderBrush="{StaticResource border}" BorderThickness="2,0,0,0">
+                            <Border  BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
                                 <ListView Header="Matchs" ItemsSource="{Binding Matchs}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
@@ -76,9 +78,7 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
                             </Border>
-                            <ListView ItemsSource="" Header="Liste des participants qui ne sont pas dans un match">
-                                
-                            </ListView>
+                            <ListView Grid.Column="1" ItemsSource="" Header="Liste des participants qui ne sont pas dans un match"/>
                         </Grid>
                     </StackPanel>
                 </DataTemplate>

@@ -12,6 +12,7 @@ namespace DataAccess
         //private static readonly String Url = "http://localhost:49391/api/";
         private static readonly String Url = "http://smartch.azurewebsites.net/api/";
         public static readonly String UsersUrl = Url + "userinfo";
+        public static readonly String UsersAccountUrl = Url + "userinfo/account";
         public static readonly String AccountUrl = Url + "account";
         public static readonly String LogInUrl = Url + "jwt";
         public static readonly string ClubUrl = Url + "clubs";
@@ -36,9 +37,6 @@ namespace DataAccess
         {
             Token = null;
         }
-        
 
-
-       
     }
 }

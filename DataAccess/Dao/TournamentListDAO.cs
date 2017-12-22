@@ -27,6 +27,7 @@ namespace DataAccess.Dao
         {
             Id = tournament.Id;
             Name = tournament.Name;
+            if(tournament.Club != null)
             ClubId = tournament.Club.ClubId;
 
             Address = tournament.Address;

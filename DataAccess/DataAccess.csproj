@@ -111,7 +111,9 @@
     <Compile Include="AuthHttpClient.cs" />
     <Compile Include="ClubsServices.cs" />
     <Compile Include="Dao\LogInDAO.cs" />
+    <Compile Include="Dao\MatchDAO.cs" />
     <Compile Include="Dao\TournamentListDAO.cs" />
+    <Compile Include="Dao\TournamentDAO.cs" />
     <Compile Include="TournamentsServices.cs" />
     <Compile Include="UsersServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

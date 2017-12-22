@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DataAccess;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
@@ -20,6 +21,7 @@ namespace smartchUWP.ViewModel
 
 
         public RelayCommand CommandGenereMatch { get; private set; }
+        public RelayCommand CommandEnregistrerTournament { get; private set; }
 
         public Tournament SelectedTournament
         {
@@ -64,7 +66,8 @@ namespace smartchUWP.ViewModel
             _navigationService = navigationService;
             MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
             CommandGenereMatch = new RelayCommand(GenereMatches, IsSelectedPhase);
-            
+            CommandEnregistrerTournament = new RelayCommand(RegisterTournamentAsync);
+
         }
 
         private void GenereMatches()
@@ -104,6 +107,12 @@ namespace smartchUWP.ViewModel
         private bool IsSelectedPhase()
         {
             return SelectedPhase != null;
+        }
+
+        private async void RegisterTournamentAsync()
+        {
+            TournamentsServices tournamentsServices = new TournamentsServices();
+            ResponseObject response = await tournamentsServices.UpdateAsync(SelectedTournament);
         }
 
         public void MessageReceiver(NotificationMessage message)

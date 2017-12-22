@@ -66,5 +66,30 @@ namespace DataAccess
             }
             return contentResponse;
         }
+
+        public async Task<ResponseObject> UpdateAsync(Tournament selectedTournament)
+        {
+            TournamentDAO tournamentDAO = new TournamentDAO(selectedTournament);
+            HttpContent putContent = new StringContent(JObject.FromObject(tournamentDAO).ToString());
+
+            putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var wc = new AuthHttpClient();
+            var response = await wc.PutAsync(new Uri(ApiAccess.TournamentUrl+"/"+selectedTournament.Id), putContent);
+
+            ResponseObject contentResponse = new ResponseObject();
+            String jstr = response.Content.ReadAsStringAsync().Result;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                contentResponse.Content = JObject.Parse(jstr);
+                contentResponse.Success = true;
+            }
+            else
+            {
+                contentResponse.Content = JArray.Parse(jstr);
+                contentResponse.Success = false;
+            }
+            return contentResponse;
+        }
     }
 }
