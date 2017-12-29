@@ -35,5 +35,46 @@ namespace DataAccess
             Matches = MatchDAO.getListMatchDAO(tournament.Matches);
 
         }
+
+        public Tournament GetTournament()
+        {
+            return new Tournament()
+            {
+                Id = Id,
+                Name = Name,
+                Club = Club,
+                Address = Address,
+                BeginDate = BeginDate,
+                EndDate = EndDate,
+                Etat = Etat,
+                Participants = Participants,
+                Admins = Admins,
+                Matches = MatcshDAOToMatchs()
+            };
+        }
+
+        private ICollection<MatchsPhase> MatcshDAOToMatchs()
+        {
+            List<MatchsPhase> listMatch = new List<MatchsPhase>();
+            foreach(MatchDAO matchDao in Matches)
+            {
+                MatchsPhase matchsPhase = listMatch.Find(m => m.NumPhase == matchDao.Phase);
+                if (matchsPhase != null)
+                {
+                    matchsPhase.Matchs.Add(matchDao.GetMatch());
+                }
+                else
+                {
+                    matchsPhase = new MatchsPhase()
+                    {
+                        NumPhase = matchDao.Phase,
+                        Matchs = new List<Match>() { matchDao.GetMatch() }
+                    };
+                    listMatch.Add(matchsPhase);
+                }
+                return listMatch;
+            }
+            return listMatch;
+        }
     }
 }

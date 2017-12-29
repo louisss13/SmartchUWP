@@ -51,6 +51,22 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             var reponse = await wc.GetStringAsync(new Uri(ApiAccess.UsersUrl));
             var rawUsers = JArray.Parse(reponse);
+            var users = RawToUsers(rawUsers);
+
+            return users;
+
+        }
+        public async Task<IEnumerable<User>> GetUsersWithAccount()
+        {
+            var wc = new AuthHttpClient();
+            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.UsersAccountUrl));
+            var rawUsers = JArray.Parse(reponse);
+            var users = RawToUsers(rawUsers);
+           
+            return users;
+        }
+        public static IEnumerable<User> RawToUsers(JArray rawUsers)
+        {
             var users = rawUsers.Children().Select(d => new User()
             {
                 Id = d["id"].Value<int>(),
@@ -59,16 +75,17 @@ namespace DataAccess
                 Email = d["email"].Value<String>(),
                 Phone = d["phone"].Value<string>(),
                 Birthday = d["birthday"].Value<DateTime>(),
-                Adresse = (d["adresse"].Value<Object>() != null) ? new Address() {
+                Adresse = (d["adresse"].Value<Object>() != null) ? new Address()
+                {
                     Street = (String)d.SelectToken("adresse.street"),
                     Box = (String)d.SelectToken("adresse.box"),
                     City = (String)d.SelectToken("adresse.city"),
                     //Country = (Country)d.SelectToken("adresse.street"),
-                    Number = (String) d.SelectToken("adresse.number"),
-                    Zipcode = (String) d.SelectToken("adresse.zipCode"),
+                    Number = (String)d.SelectToken("adresse.number"),
+                    Zipcode = (String)d.SelectToken("adresse.zipCode"),
 
                 } : null
-                
+
             });
             return users;
         }

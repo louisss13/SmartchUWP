@@ -9,6 +9,18 @@ namespace Model
     public class MatchsPhase
     {
         public int NumPhase { get; set; }
-        public IEnumerable<Match> Matchs { get; set; }
+        public ICollection<Match> Matchs { get; set; } = new List<Match>();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is MatchsPhase && obj != null)
+                return (obj as MatchsPhase).NumPhase == NumPhase;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return -47539090 + NumPhase.GetHashCode();
+        }
     }
 }

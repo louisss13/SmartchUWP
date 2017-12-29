@@ -13,6 +13,7 @@ namespace smartchUWP.Services
         Club,
         ListClub,
         User,
-        ListUser
+        ListUser,
+        AddTournament
     }
 }

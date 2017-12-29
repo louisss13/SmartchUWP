@@ -15,12 +15,16 @@ namespace smartchUWP.ViewModel
 {
     public class MatchsViewModel : ViewModelBase
     {
+       
         private INavigationService _navigationService;
         private Tournament _selectedTournament = null;
         private MatchsPhase _selectedPhase;
+        private Match _selectedMatch;
 
 
+        public RelayCommand CommandNavigateAddMatch { get; private set; }
         public RelayCommand CommandGenereMatch { get; private set; }
+        public RelayCommand CommandEditMatch { get; private set; }
         public RelayCommand CommandEnregistrerTournament { get; private set; }
 
         public Tournament SelectedTournament
@@ -48,11 +52,26 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("SelectedPhase");
             }
         }
+        public Match SelectedMatch
+        {
+            get
+            {
+                return _selectedMatch;
+            }
+            set
+            {
+                _selectedMatch = value;
+                CommandEditMatch.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedMatch");
+            }
+        }
         public ObservableCollection<MatchsPhase> MatchsPhases
         {
             get
             {
-                return new ObservableCollection<MatchsPhase>(SelectedTournament.Matches);
+                if(SelectedTournament != null && SelectedTournament.Matches != null) 
+                    return new ObservableCollection<MatchsPhase>(SelectedTournament.Matches);
+                return new ObservableCollection<MatchsPhase>(new List<MatchsPhase>());
             }
             set
             {
@@ -65,7 +84,10 @@ namespace smartchUWP.ViewModel
         {
             _navigationService = navigationService;
             MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
+
+            CommandNavigateAddMatch = new RelayCommand(NavigateToAddMatch);
             CommandGenereMatch = new RelayCommand(GenereMatches, IsSelectedPhase);
+            CommandEditMatch = new RelayCommand(NavigateToEditMatch, IsSelectedMatch);
             CommandEnregistrerTournament = new RelayCommand(RegisterTournamentAsync);
 
         }
@@ -108,6 +130,24 @@ namespace smartchUWP.ViewModel
         {
             return SelectedPhase != null;
         }
+        private bool IsSelectedMatch()
+        {
+            return SelectedMatch != null;
+        }
+
+        private void NavigateToEditMatch()
+        {
+            _navigationService.NavigateTo("AddMatch");
+            NotificationMessage message = new NotificationMessage(NotificationMessageType.AddTournament, new List<Object>() { SelectedTournament, SelectedPhase.NumPhase, SelectedMatch });
+            MessengerInstance.Send(message);
+        }
+        private void NavigateToAddMatch()
+        {
+            _navigationService.NavigateTo("AddMatch");
+            NotificationMessage message = new NotificationMessage(NotificationMessageType.AddTournament, new List<Object>() { SelectedTournament, SelectedPhase.NumPhase });
+            MessengerInstance.Send(message);
+        }
+        
 
         private async void RegisterTournamentAsync()
         {
@@ -115,21 +155,23 @@ namespace smartchUWP.ViewModel
             ResponseObject response = await tournamentsServices.UpdateAsync(SelectedTournament);
         }
 
-        public void MessageReceiver(NotificationMessage message)
+        public async void MessageReceiver(NotificationMessage message)
         {
             switch (message.VariableType)
             {
                 case NotificationMessageType.Tournament:
                     SelectedTournament = (Tournament)message.Variable;
+                    TournamentsServices tournamentsServices = new TournamentsServices();
+                    Tournament tournament = await tournamentsServices.GetTournament(SelectedTournament.Id);
                     if (SelectedTournament.Matches == null)
                     {
                         SelectedTournament.Matches = new List<MatchsPhase>()
-                    {
-                        new MatchsPhase(){
-                            NumPhase = 1,
-                            Matchs = new List<Match>()
-                        }
-                    };
+                        {
+                            new MatchsPhase(){
+                                NumPhase = 1,
+                                Matchs = new List<Match>()
+                            }
+                        };
 
                     }
                     break;

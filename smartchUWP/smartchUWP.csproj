@@ -112,6 +112,7 @@
     <Compile Include="Services\NotificationMessage.cs" />
     <Compile Include="Services\ObservableProperty.cs" />
     <Compile Include="ViewModel\AddClubViewModel.cs" />
+    <Compile Include="ViewModel\AddMatchViewModel.cs" />
     <Compile Include="ViewModel\AddTournamentViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
@@ -149,6 +150,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ClubsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Tournaments\AddMatch.xaml.cs">
+      <DependentUpon>AddMatch.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Tournaments\AddTournament.xaml.cs">
       <DependentUpon>AddTournament.xaml</DependentUpon>
     </Compile>
@@ -241,6 +245,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Tournaments\AddMatch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

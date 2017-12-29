@@ -42,6 +42,15 @@ namespace DataAccess
 
         }
 
+        public async Task<Tournament> GetTournament(long idTournament)
+        {
+            var wc = new AuthHttpClient();
+            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.TournamentUrl + "/" + idTournament ));
+            var rawTournament = JObject.Parse(reponse);
+            var Tournament = rawTournament.ToObject<TournamentDAO>();
+            return Tournament.GetTournament();
+        }
+
         public async Task<ResponseObject> AddTournamentAsync(Tournament tournament)
         {
             TournamentListDAO tournamentListDAO = new TournamentListDAO(tournament);
@@ -90,6 +99,17 @@ namespace DataAccess
                 contentResponse.Success = false;
             }
             return contentResponse;
+        }
+
+        public async Task<IEnumerable<User>> GetParticipants(long idTournament)
+        {
+            var wc = new AuthHttpClient();
+            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.TournamentUrl+"/"+ idTournament+"/participants"));
+            var rawUsers = JArray.Parse(reponse);
+            var users = UsersServices.RawToUsers(rawUsers);
+
+            return users;
+
         }
     }
 }

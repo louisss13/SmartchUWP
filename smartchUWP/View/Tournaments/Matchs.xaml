@@ -20,8 +20,12 @@
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Button Command="{Binding CommandGenereMatch}" Content="Générer aléatoirement les matchs"/>
-        <Button Command="{Binding CommandEnregistrerTournament}" Content="Enregistrer"/>
         
+        <CommandBar>
+            <AppBarButton Icon="Add" Label="Ajouter" Command="{Binding CommandNavigateAddMatch}"/>
+            <AppBarButton Icon="Edit" Label="Edit" Command="{Binding CommandEditMatch}" />
+            <AppBarButton Icon="Save" Label="Save" Command="{Binding CommandEnregistrerTournament}"/>
+        </CommandBar>
         <Pivot ItemsSource="{Binding MatchsPhases, Mode=TwoWay}"  HeaderTemplate="{StaticResource HeaderTemplatePivot}" SelectedItem="{Binding SelectedPhase, Mode=TwoWay}">
             <Pivot.ItemTemplate>
                 <DataTemplate >
@@ -32,7 +36,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Border  BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
-                                <ListView Header="Matchs" ItemsSource="{Binding Matchs}">
+                                <ListView Header="Matchs" ItemsSource="{Binding Matchs}"  SelectionChanged="MatchsListView_SelectionChanged">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>

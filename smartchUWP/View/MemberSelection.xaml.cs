@@ -41,15 +41,12 @@ namespace smartchUWP.View
         {
 
             ListView listView = sender as ListView;
-
-
             ObservableCollection<User> list = new ObservableCollection<User>();
-
 
             foreach (User item in listView.SelectedItems)
             {
                 list.Add(item);
-            };
+            }
 
             ((IListeMembreViewModel)DataContext).SelectedMembersEntity = list;
 
