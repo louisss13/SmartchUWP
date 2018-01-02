@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Model;
 using smartchUWP.Services;
 using System;
@@ -18,11 +19,13 @@ namespace smartchUWP.ViewModel
         private User _selectedJoueur2;
         private Account _selectedArbitre;
         private TimeSpan _heurePrevue = new TimeSpan(12, 0, 0);
+        private String _lieuMatch;
         private ObservableCollection<User> _allUsers = new ObservableCollection<User>();
         private ObservableCollection<User> _joueur1Liste = new ObservableCollection<User>();
         private ObservableCollection<User> _joueur2Liste = new ObservableCollection<User>();
         private ObservableCollection<User> _listeArbitre = new ObservableCollection<User>();
-        private Tournament _tournament;
+
+        public RelayCommand CommandAjouterMatch { get; private set; }
 
         public Match Match
         {
@@ -52,14 +55,8 @@ namespace smartchUWP.ViewModel
             set
             {
                 _selectedJoueur1 = value;
-                int idJoueur = (SelectedJoueur2 != null)?SelectedJoueur2.Id:0;
-                _joueur2Liste = new ObservableCollection<User>( AllUsers.ToList());
-                _joueur2Liste.Remove(value);
-
                 RaisePropertyChanged("SelectedJoueur1");
-                
-                
-
+                CommandAjouterMatch.RaiseCanExecuteChanged();
             }
         }
         public User SelectedJoueur2
@@ -71,17 +68,8 @@ namespace smartchUWP.ViewModel
             set
             {
                 _selectedJoueur2 = value;
-                int idJoueur = (SelectedJoueur1 != null) ? SelectedJoueur1.Id : 0;
-                _joueur1Liste = new ObservableCollection<User>(AllUsers.ToList());
-                _joueur1Liste.Remove(value);
-                
-                if (idJoueur > 0)
-                    _selectedJoueur1 = _joueur1Liste.Where(u => u.Id == idJoueur).First();
                 RaisePropertyChanged("SelectedJoueur2");
-
-                
-                RaisePropertyChanged("SelectedJoueur1");
-
+                CommandAjouterMatch.RaiseCanExecuteChanged();
             }
         }
         public Account SelectedArbitre
@@ -94,6 +82,7 @@ namespace smartchUWP.ViewModel
             {
                 _selectedArbitre = value;
                 RaisePropertyChanged("SelectedArbitre");
+                CommandAjouterMatch.RaiseCanExecuteChanged();
             }
         }
         public TimeSpan HeurePrevue
@@ -106,6 +95,19 @@ namespace smartchUWP.ViewModel
             {
                 _heurePrevue = value;
                 RaisePropertyChanged("HeurePrevue");
+            }
+        }
+        public String LieuMatch
+        {
+            get
+            {
+                return _lieuMatch;
+            }
+            set
+            {
+                _lieuMatch = value;
+                RaisePropertyChanged("LieuMatch");
+                CommandAjouterMatch.RaiseCanExecuteChanged();
             }
         }
         public ObservableCollection<User> AllUsers
@@ -132,6 +134,7 @@ namespace smartchUWP.ViewModel
             {
                 _joueur1Liste = value;
                 RaisePropertyChanged("ListeJoueur1");
+                
             }
         }
         public ObservableCollection<User> ListeJoueur2
@@ -164,12 +167,39 @@ namespace smartchUWP.ViewModel
 
         public AddMatchViewModel()
         {
-            
+            CommandAjouterMatch = new RelayCommand(EnregistrerMatch, CanEnregistrerMatch);
             InitializeAsync();
             
         }
         
-
+        private async void EnregistrerMatch()
+        {
+            TournamentsServices tournamentsServices = new TournamentsServices();
+            Match.Arbitre = SelectedArbitre;
+            Match.Emplacement = LieuMatch;
+            Match.Player1 = SelectedJoueur1;
+            Match.Player2 = SelectedJoueur2;
+            Match.Time = HeurePrevue;
+            
+            if(Match.Id > 0)
+            {
+                bool isUpdate = await tournamentsServices.UpdateMatch(Tournament, Match, NumPhase.GetValueOrDefault());
+            }
+            else
+            {
+                ResponseObject response = await tournamentsServices.AddMatch(Tournament, Match, NumPhase.GetValueOrDefault());
+            }
+            
+        }
+        private Boolean CanEnregistrerMatch()
+        {
+            if( SelectedArbitre == null || SelectedJoueur1 == null ||
+                SelectedJoueur2 == null || LieuMatch == null || LieuMatch.Length <=0)
+            {
+                return false;
+            }
+            return true;
+        }
         private void MessageReceiver(NotificationMessage message)
         {
             switch (message.VariableType)
@@ -180,24 +210,46 @@ namespace smartchUWP.ViewModel
                         List<Object> variables = message.Variable as List<Object>;
                         Tournament = variables[0] as Tournament;
                         NumPhase = variables[1] as int?;
-                        Match = variables[2] as Match;
+                        if (variables.Count() > 2)
+                            Match = variables[2] as Match;
+                        else
+                            Match = new Match();
                     }
                     else
                         Tournament = message.Variable as Tournament;
+                    ChargeVar();
                 break;
             }
         }
 
-        public async void InitializeAsync()
+        public void InitializeAsync()
+        {
+            AllArbitre = new ObservableCollection<User>(new List<User>());
+            AllUsers = new ObservableCollection<User>(new List<User>());
+            
+            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
+        }
+        public async void  ChargeVar()
         {
             UsersServices usersServices = new UsersServices();
             TournamentsServices tournamentsServices = new TournamentsServices();
-            var users = await tournamentsServices.GetParticipants(1);
+            long idTounrnament = Tournament.Id;
+            var users = await tournamentsServices.GetParticipants(idTounrnament);
             var arbitres = await usersServices.GetUsersWithAccount();
             AllArbitre = new ObservableCollection<User>(arbitres);
             AllUsers = new ObservableCollection<User>(users);
-            SelectedJoueur1 = AllUsers[0];
-            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
+            //if(Match.Arbitre != null)
+            //    SelectedArbitre = AllArbitre.Where(a => a.Id == Match.Arbitre.Id);
+            if (Match.Player1 != null)
+            {
+                SelectedJoueur1 = AllUsers.Where(u => u.Id == Match.Player1.Id).First();
+            }
+            if (Match.Player2 != null)
+            {
+                SelectedJoueur2 = AllUsers.Where(u => u.Id == Match.Player2.Id).First();
+            }
+            HeurePrevue = Match.Time;
+            LieuMatch = Match.Emplacement;
         }
 
     }

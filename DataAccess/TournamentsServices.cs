@@ -111,5 +111,50 @@ namespace DataAccess
             return users;
 
         }
+
+        public async Task<Boolean> UpdateMatch(Tournament tournament, Match match, int phase)
+        {
+            MatchDAO matchDAO = new MatchDAO(match, phase);
+            HttpContent putContent = new StringContent(JObject.FromObject(matchDAO).ToString());
+
+            putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var wc = new AuthHttpClient();
+            var response = await wc.PutAsync(ApiAccess.GetMatchUrl(tournament.Id, match.Id), putContent);
+
+            String jstr = response.Content.ReadAsStringAsync().Result;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public async Task<ResponseObject> AddMatch(Tournament tournament, Match match, int phase)
+        {
+            MatchDAO matchDAO = new MatchDAO(match, phase);
+            HttpContent putContent = new StringContent(JObject.FromObject(matchDAO).ToString());
+
+            putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var wc = new AuthHttpClient();
+            var response = await wc.PostAsync(ApiAccess.GetMatchUrl(tournament.Id, match.Id), putContent);
+
+            ResponseObject contentResponse = new ResponseObject();
+            String jstr = response.Content.ReadAsStringAsync().Result;
+            if (response.StatusCode == HttpStatusCode.Created)
+            {
+                contentResponse.Content = JObject.Parse(jstr);
+                contentResponse.Success = true;
+            }
+            else
+            {
+                contentResponse.Content = JArray.Parse(jstr);
+                contentResponse.Success = false;
+            }
+            return contentResponse;
+        }
     }
 }

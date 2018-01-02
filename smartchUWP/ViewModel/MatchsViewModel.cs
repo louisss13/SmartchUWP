@@ -37,6 +37,7 @@ namespace smartchUWP.ViewModel
             {
                 _selectedTournament = value;
                 RaisePropertyChanged("SelectedTournament");
+                RaisePropertyChanged("MatchsPhases");
             }
         }
         public MatchsPhase SelectedPhase
@@ -89,7 +90,7 @@ namespace smartchUWP.ViewModel
             CommandGenereMatch = new RelayCommand(GenereMatches, IsSelectedPhase);
             CommandEditMatch = new RelayCommand(NavigateToEditMatch, IsSelectedMatch);
             CommandEnregistrerTournament = new RelayCommand(RegisterTournamentAsync);
-
+           
         }
 
         private void GenereMatches()
@@ -162,8 +163,8 @@ namespace smartchUWP.ViewModel
                 case NotificationMessageType.Tournament:
                     SelectedTournament = (Tournament)message.Variable;
                     TournamentsServices tournamentsServices = new TournamentsServices();
-                    Tournament tournament = await tournamentsServices.GetTournament(SelectedTournament.Id);
-                    if (SelectedTournament.Matches == null)
+                    SelectedTournament = await tournamentsServices.GetTournament(SelectedTournament.Id);
+                    if (SelectedTournament.Matches == null || SelectedTournament.Matches.Count() <= 0)
                     {
                         SelectedTournament.Matches = new List<MatchsPhase>()
                         {
@@ -174,6 +175,9 @@ namespace smartchUWP.ViewModel
                         };
 
                     }
+                    SelectedPhase = MatchsPhases.Where(m => m.NumPhase == 1).First();
+
+
                     break;
             }
         }

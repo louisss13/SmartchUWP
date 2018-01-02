@@ -10,83 +10,117 @@
     >
     <Page.Resources>
         <DataTemplate x:Key="HeaderTemplatePivot">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="pivotX"/>
-                <TextBlock Text="{Binding NumPhase}"/>
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="pivot "/>
+                <TextBlock Text="{Binding NumPhase}" Grid.Column="1"/>
+            </Grid>
+            
         </DataTemplate>
-      
+        <DataTemplate x:Key="ListMatchTemplate">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="{StaticResource border}" BorderThickness="0,0,0,2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Player1.Name}" Margin="0,0,15,0"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Player1.FirstName}"/>
+                        </Grid>
+                    </Border>
+                    <Border BorderBrush="{StaticResource border}" Grid.Column="1" BorderThickness="0,0,0,2">
+                        <TextBlock Text="0"/>
+                    </Border>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Player2.Name}" Margin="0,0,15,0"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Player2.FirstName}"/>
+                    </Grid>
+                    <TextBlock Text="0" Grid.Column="1" Grid.Row="1"/>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Terrain 6"/>
+                    <TextBlock Text="En Cours" Grid.Row="1"/>
+                    <TextBlock Text="12h00" Grid.Row="2"/>
+                </Grid>
+                <Grid Grid.Column="2">
+                    <TextBlock Text="{Binding Arbitre.Name}"/>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="PivotTemplate">
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border  BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0" >
+                    <ListView Header="Matchs" 
+                              ItemsSource="{Binding Matchs}"  
+                              SelectionChanged="MatchsListView_SelectionChanged"
+                              ScrollViewer.IsVerticalRailEnabled="True"
+                              ItemTemplate="{StaticResource ListMatchTemplate}" 
+                              HorizontalAlignment="Stretch"
+                              HorizontalContentAlignment="Stretch">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Border>
+                <ListView Grid.Column="1" ItemsSource="" Header="Liste des participants qui ne sont pas dans un match"/>
+            </Grid>
+
+        </DataTemplate>
     </Page.Resources>
 
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button Command="{Binding CommandGenereMatch}" Content="Générer aléatoirement les matchs"/>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         
-        <CommandBar>
+        <Button Command="{Binding CommandGenereMatch}" 
+                Content="Générer aléatoirement les matchs"
+                Grid.Row="0"/>
+        <CommandBar Grid.Row="1">
             <AppBarButton Icon="Add" Label="Ajouter" Command="{Binding CommandNavigateAddMatch}"/>
             <AppBarButton Icon="Edit" Label="Edit" Command="{Binding CommandEditMatch}" />
             <AppBarButton Icon="Save" Label="Save" Command="{Binding CommandEnregistrerTournament}"/>
         </CommandBar>
-        <Pivot ItemsSource="{Binding MatchsPhases, Mode=TwoWay}"  HeaderTemplate="{StaticResource HeaderTemplatePivot}" SelectedItem="{Binding SelectedPhase, Mode=TwoWay}">
-            <Pivot.ItemTemplate>
-                <DataTemplate >
-                    <StackPanel>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Border  BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
-                                <ListView Header="Matchs" ItemsSource="{Binding Matchs}"  SelectionChanged="MatchsListView_SelectionChanged">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
-                                                    <Border BorderBrush="{StaticResource border}" BorderThickness="0,0,0,2">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding Player1.Name}"/>
-                                                            <TextBlock Text="{Binding Player1.FirstName}"/>
-                                                        </StackPanel>
-
-                                                    </Border>
-                                                    <Border BorderBrush="{StaticResource border}" Grid.Column="1" BorderThickness="0,0,0,2">
-                                                        <TextBlock Text="0"/>
-                                                    </Border>
-
-                                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                                        <TextBlock Text="{Binding Player2.Name}"/>
-                                                        <TextBlock Text="{Binding Player2.FirstName}"/>
-                                                    </StackPanel>
-                                                    <TextBlock Text="0" Grid.Column="1" Grid.Row="1"/>
-                                                </Grid>
-                                                <StackPanel Grid.Column="1">
-                                                    <TextBlock Text="Terrain 6"/>
-                                                    <TextBlock Text="En Cours"/>
-                                                    <TextBlock Text="12h00"/>
-                                                </StackPanel>
-                                                <TextBlock Text="éliminatoire" Grid.Column="2"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Border>
-                            <ListView Grid.Column="1" ItemsSource="" Header="Liste des participants qui ne sont pas dans un match"/>
-                        </Grid>
-                    </StackPanel>
-                </DataTemplate>
-            </Pivot.ItemTemplate>
-        </Pivot>
-    </StackPanel>
+        <Pivot ItemsSource="{Binding MatchsPhases, Mode=TwoWay}"  
+               HeaderTemplate="{StaticResource HeaderTemplatePivot}" 
+               SelectedItem="{Binding SelectedPhase, Mode=TwoWay}"
+               ItemTemplate="{StaticResource PivotTemplate}"
+               Grid.Row="2"/>
+    </Grid>
 </Page>

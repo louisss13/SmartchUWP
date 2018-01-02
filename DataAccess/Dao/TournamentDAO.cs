@@ -19,8 +19,12 @@ namespace DataAccess
         public ICollection<User> Participants { get; set; } = new List<User>();
         public ICollection<Account> Admins { get; set; } = new List<Account>();
 
-        public ICollection<MatchDAO> Matches { get; set; }
-
+        public ICollection<MatchDAO> Matches
+        {
+            get;
+            set;
+        }
+        public TournamentDAO() { }
         public TournamentDAO(Tournament tournament)
         {
             Id = tournament.Id;
@@ -55,10 +59,10 @@ namespace DataAccess
 
         private ICollection<MatchsPhase> MatcshDAOToMatchs()
         {
-            List<MatchsPhase> listMatch = new List<MatchsPhase>();
+            List<MatchsPhase> listMatchphase = new List<MatchsPhase>();
             foreach(MatchDAO matchDao in Matches)
             {
-                MatchsPhase matchsPhase = listMatch.Find(m => m.NumPhase == matchDao.Phase);
+                MatchsPhase matchsPhase = listMatchphase.Find(m => m.NumPhase == matchDao.Phase);
                 if (matchsPhase != null)
                 {
                     matchsPhase.Matchs.Add(matchDao.GetMatch());
@@ -70,11 +74,11 @@ namespace DataAccess
                         NumPhase = matchDao.Phase,
                         Matchs = new List<Match>() { matchDao.GetMatch() }
                     };
-                    listMatch.Add(matchsPhase);
+                    listMatchphase.Add(matchsPhase);
                 }
-                return listMatch;
+                
             }
-            return listMatch;
+            return listMatchphase;
         }
     }
 }

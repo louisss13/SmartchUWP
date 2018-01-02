@@ -9,6 +9,7 @@ namespace DataAccess.Dao
 {
     public class MatchDAO
     { 
+        public long Id { get; set; }
         public User Joueur1 { get; set; }
         public User Joueur2 { get; set; }
         public int Joueur1Id { get; set; }
@@ -17,11 +18,13 @@ namespace DataAccess.Dao
         public string Emplacement { get; set; }
         public EMatchState State { get; set; }
         public Score Score { get; set; }
-        public DateTime Time { get; set; }
+        public TimeSpan DebutPrevu { get; set; }
         public int Phase { get; set; }
 
+        public MatchDAO() { }
         public MatchDAO(Match match, int phase)
         {
+            Id = match.Id;
             Joueur1 = match.Player1;
             Joueur2 = match.Player2;
             if (match.Player1 != null)
@@ -32,7 +35,7 @@ namespace DataAccess.Dao
             Emplacement = match.Emplacement;
             State = match.State;
             Score = match.Score;
-            Time = match.Time;
+            DebutPrevu = match.Time;
             Phase = phase;
         }
 
@@ -40,13 +43,14 @@ namespace DataAccess.Dao
         {
             return new Match()
             {
+                Id = Id,
                 Player1 = (Joueur1!= null)?Joueur1: new User() { Id = Joueur1Id},
                 Player2 = (Joueur2 != null) ? Joueur2 : new User() { Id = Joueur2Id },
                 Arbitre = Arbitre,
                 Emplacement = Emplacement,
                 State = State,
                 Score = Score,
-                Time = Time
+                Time = DebutPrevu
             };
         }
         public static ICollection<MatchDAO> getListMatchDAO(ICollection<MatchsPhase> matchsPhases)
