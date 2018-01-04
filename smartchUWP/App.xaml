@@ -8,12 +8,14 @@
     RequestedTheme="Light">
     <Application.Resources>
         
-            <SolidColorBrush Color="#cc6600" x:Key="border"/>
-        
+        <SolidColorBrush Color="#cc6600" x:Key="border"/>
+        <SolidColorBrush Color="#951C07" x:Key="ErrorBackgroundColor"/>
+
         <conv:DateTimeConverter x:Name="DateTimeToDateConverter"/>
         <conv:DateTimeToAgeConverter x:Name="DateTimeToAgeConverter"/>
         <conv:DateTimeToDateTimeOffsetConverter x:Name="DateTimeToDateTimeOffsetConverter"/>
         <conv:TournamentStatesConverter x:Name="TournamentStatesConverter"/>
+        <conv:BooleanToVisibilityConverter x:Name="BooleanToVisibilityConverter"/>
         <vm1:ViewModelLocator x:Key="Locator" xmlns:vm="using:smartchUWP.ViewModel"/>
 
         <DataTemplate x:Key="ClubsList">

@@ -47,10 +47,7 @@ namespace smartchUWP.Services
             RootFrame.Navigate(MainPage.GetType());
 
             CurrentFrame = ((Window.Current.Content as Frame).Content as MainPage).AppFrame;
-            
-            
-            
-           
+
             IsRootFrame = true;
         }
 

@@ -15,7 +15,8 @@ namespace DataAccess
         public static readonly String UsersAccountUrl = Url + "userinfo/account";
         public static readonly String AccountUrl = Url + "account";
         public static readonly String LogInUrl = Url + "jwt";
-        public static readonly string ClubUrl = Url + "clubs";
+        //public static readonly string ClubUrl = Url + "clubs";
+        public static readonly string ClubUrl = Url + "clubs/user/1";
         public static readonly string TournamentUrl = Url + "tournaments";
         
         public static String GetMatchUrl(long tournamentId, long matchId)
