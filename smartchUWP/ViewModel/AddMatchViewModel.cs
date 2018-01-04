@@ -26,6 +26,7 @@ namespace smartchUWP.ViewModel
         private ObservableCollection<User> _listeArbitre = new ObservableCollection<User>();
 
         public RelayCommand CommandAjouterMatch { get; private set; }
+        public RelayCommand CommandAddPoint { get; private set; }
 
         public Match Match
         {
@@ -168,10 +169,27 @@ namespace smartchUWP.ViewModel
         public AddMatchViewModel()
         {
             CommandAjouterMatch = new RelayCommand(EnregistrerMatch, CanEnregistrerMatch);
+            CommandAddPoint = new RelayCommand(AddPoint, CanAddPoint);
             InitializeAsync();
             
         }
-        
+        private async void AddPoint()
+        {
+            TournamentsServices tournamentsServices = new TournamentsServices();
+            Point point = new Point()
+            {
+                Joueur = EJoueurs.Joueur1
+            };
+            await tournamentsServices.AddPointMatch(Match.Id, point);
+        }
+        private Boolean CanAddPoint()
+        {
+            if(Match != null && Match.Id > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         private async void EnregistrerMatch()
         {
             TournamentsServices tournamentsServices = new TournamentsServices();

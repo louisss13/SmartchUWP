@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Views;
 using smartchUWP.View;
+using smartchUWP.View.Clubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,16 +39,18 @@ namespace smartchUWP.Services
         }
         
 
-            private void SetRootFrame()
+        private void SetRootFrame()
         {
-            if (Window.Current.Content is IRootFrame)
-            {
-                RootFrame = ((IRootFrame)Window.Current.Content).getRootFrame();
-                CurrentFrame = RootFrame;
-            }
+            MainPage MainPage = new MainPage();
+            MainPage.AppFrame.Navigate(new Clubs().GetType());
+            RootFrame = (Window.Current.Content as Frame);
+            RootFrame.Navigate(MainPage.GetType());
+
+            CurrentFrame = ((Window.Current.Content as Frame).Content as MainPage).AppFrame;
+            
+            
+            
            
-            else
-                throw new ArgumentNullException("Root Frame is undefined");
             IsRootFrame = true;
         }
 

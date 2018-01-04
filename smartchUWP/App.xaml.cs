@@ -42,16 +42,16 @@ namespace smartchUWP
         /// <param name="e">Détails concernant la requête et le processus de lancement.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            MainPage MainPage = Window.Current.Content as MainPage;
+            Frame rootFrame = Window.Current.Content as Frame;
 
             // Ne répétez pas l'initialisation de l'application lorsque la fenêtre comporte déjà du contenu,
             // assurez-vous juste que la fenêtre est active
-            if (MainPage == null)
+            if (rootFrame == null)
             {
                 // Créez un Frame utilisable comme contexte de navigation et naviguez jusqu'à la première page
-                MainPage = new MainPage();
+                rootFrame = new Frame();
 
-                MainPage.AppFrame.NavigationFailed += OnNavigationFailed;
+                rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -59,17 +59,17 @@ namespace smartchUWP
                 }
 
                 // Placez le frame dans la fenêtre active
-                Window.Current.Content = MainPage;
+                Window.Current.Content = rootFrame;
             }
 
             if (e.PrelaunchActivated == false)
             {
-                if (MainPage.AppFrame.Content == null)
+                if (rootFrame.Content == null)
                 {
                     // Quand la pile de navigation n'est pas restaurée, accédez à la première page,
                     // puis configurez la nouvelle page en transmettant les informations requises en tant que
                     // paramètre
-                    MainPage.AppFrame.Navigate(typeof(Login), e.Arguments);
+                    rootFrame.Navigate(typeof(Login), e.Arguments);
                 }
                 // Vérifiez que la fenêtre actuelle est active
 

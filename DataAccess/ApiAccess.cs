@@ -9,8 +9,8 @@ namespace DataAccess
 {
     public sealed class ApiAccess
     {
-        private static readonly String Url = "http://localhost:49391/api/";
-        //private static readonly String Url = "http://smartch.azurewebsites.net/api/";
+        //private static readonly String Url = "http://localhost:49391/api/";
+        private static readonly String Url = "http://smartch.azurewebsites.net/api/";
         public static readonly String UsersUrl = Url + "userinfo";
         public static readonly String UsersAccountUrl = Url + "userinfo/account";
         public static readonly String AccountUrl = Url + "account";
@@ -21,6 +21,10 @@ namespace DataAccess
         public static String GetMatchUrl(long tournamentId, long matchId)
         {
             return Url + "tournaments/" + tournamentId + "/matchs/" + matchId;
+        }
+        public static String GetMatchPointUrl( long matchId)
+        {
+            return Url + "matchs/" +  matchId;
         }
 
         public String Token { get; set; }
