@@ -37,17 +37,17 @@ namespace smartchUWP.ViewModel
             FrameNavigationService navigationPages = new FrameNavigationService();
 
 
-            navigationPages.Configure("Home", typeof(View.Clubs.Clubs), 1);
-            navigationPages.Configure("Clubs",  typeof(View.Clubs.Clubs), 1);
-            navigationPages.Configure("AddClub", typeof(View.Clubs.AddClub), 2);
-            navigationPages.Configure("Membres", typeof(View.Membres.Membres), 1);
-            navigationPages.Configure("AddMembre", typeof(View.Membres.AddMembre), 2);
-            navigationPages.Configure("Tournaments", typeof(View.Tournaments.Tournaments), 1);
-            navigationPages.Configure("AddMatch", typeof(View.Tournaments.AddMatch), 2);
-            navigationPages.Configure("AddTournament", typeof(View.Tournaments.AddTournament), 2);
-            navigationPages.Configure("SelectTournament", typeof(View.Tournaments.Matchs), 2);
+            navigationPages.Configure("Home", typeof(View.Clubs.Clubs), 2);
+            navigationPages.Configure("Clubs",  typeof(View.Clubs.Clubs), 2);
+            navigationPages.Configure("AddClub", typeof(View.Clubs.AddClub), 3);
+            navigationPages.Configure("Membres", typeof(View.Membres.Membres), 2);
+            navigationPages.Configure("AddMembre", typeof(View.Membres.AddMembre), 3);
+            navigationPages.Configure("Tournaments", typeof(View.Tournaments.Tournaments), 2);
+            navigationPages.Configure("AddMatch", typeof(View.Tournaments.AddMatch), 3);
+            navigationPages.Configure("AddTournament", typeof(View.Tournaments.AddTournament), 3);
+            navigationPages.Configure("SelectTournament", typeof(View.Tournaments.Matchs), 3);
             navigationPages.Configure("Login", typeof(View.Login), 0);
-            navigationPages.Configure("Register", typeof(View.Register), 0);
+            navigationPages.Configure("Register", typeof(View.Register), 1);
             SimpleIoc.Default.Register<INavigationService>(() => navigationPages);
 
 
