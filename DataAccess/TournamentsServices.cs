@@ -156,9 +156,33 @@ namespace DataAccess
             }
             return contentResponse;
         }
+
+        public async Task<ResponseObject> DelPointMatch(long id, Point point)
+        {
+            HttpContent putContent = new StringContent(JObject.FromObject(point).ToString());
+
+            putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var wc = new AuthHttpClient();
+            var response = await wc.DeleteAsync(ApiAccess.GetMatchPointUrl(id)+"/"+point.Joueur);
+
+            ResponseObject contentResponse = new ResponseObject();
+            String jstr = response.Content.ReadAsStringAsync().Result;
+            if (response.StatusCode == HttpStatusCode.Accepted)
+            {
+                contentResponse.Content = JObject.Parse(jstr);
+                contentResponse.Success = true;
+            }
+            else
+            {
+                contentResponse.Content = JArray.Parse(jstr);
+                contentResponse.Success = false;
+            }
+            return contentResponse;
+        }
+
         public async Task<ResponseObject> AddPointMatch( long matchId, Point point)
         {
-            
+
             HttpContent putContent = new StringContent(JObject.FromObject(point).ToString());
 
             putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");

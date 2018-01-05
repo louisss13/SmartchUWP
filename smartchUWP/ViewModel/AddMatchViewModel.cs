@@ -27,6 +27,7 @@ namespace smartchUWP.ViewModel
 
         public RelayCommand CommandAjouterMatch { get; private set; }
         public RelayCommand CommandAddPoint { get; private set; }
+        public RelayCommand CommandDelPoint { get; private set; }
 
         public Match Match
         {
@@ -45,6 +46,7 @@ namespace smartchUWP.ViewModel
 
                 }
                 RaisePropertyChanged("Match");
+                CommandAddPoint.RaiseCanExecuteChanged();
             }
         }
         public User SelectedJoueur1
@@ -170,6 +172,7 @@ namespace smartchUWP.ViewModel
         {
             CommandAjouterMatch = new RelayCommand(EnregistrerMatch, CanEnregistrerMatch);
             CommandAddPoint = new RelayCommand(AddPoint, CanAddPoint);
+            CommandDelPoint = new RelayCommand(DelPoint, CanAddPoint);
             InitializeAsync();
             
         }
@@ -181,6 +184,15 @@ namespace smartchUWP.ViewModel
                 Joueur = EJoueurs.Joueur1
             };
             await tournamentsServices.AddPointMatch(Match.Id, point);
+        }
+        private async void DelPoint()
+        {
+            TournamentsServices tournamentsServices = new TournamentsServices();
+            Point point = new Point()
+            {
+                Joueur = EJoueurs.Joueur1
+            };
+            await tournamentsServices.DelPointMatch(Match.Id, point);
         }
         private Boolean CanAddPoint()
         {

@@ -36,17 +36,17 @@ namespace smartchUWP.ViewModel
             FrameNavigationService navigationPages = new FrameNavigationService();
 
 
-            navigationPages.Configure("Home", typeof(View.Clubs.Clubs));
-            navigationPages.Configure("Clubs",  typeof(View.Clubs.Clubs));
-            navigationPages.Configure("AddClub", typeof(View.Clubs.AddClub));
-            navigationPages.Configure("Membres", typeof(View.Membres.Membres));
-            navigationPages.Configure("AddMembre", typeof(View.Membres.AddMembre));
-            navigationPages.Configure("Tournaments", typeof(View.Tournaments.Tournaments));
-            navigationPages.Configure("AddMatch", typeof(View.Tournaments.AddMatch));
-            navigationPages.Configure("AddTournament", typeof(View.Tournaments.AddTournament));
-            navigationPages.Configure("SelectTournament", typeof(View.Tournaments.Matchs));
-            navigationPages.Configure("Login", typeof(View.Login));
-            navigationPages.Configure("Register", typeof(View.Register));
+            navigationPages.Configure("Home", typeof(View.Clubs.Clubs), 1);
+            navigationPages.Configure("Clubs",  typeof(View.Clubs.Clubs), 1);
+            navigationPages.Configure("AddClub", typeof(View.Clubs.AddClub), 1);
+            navigationPages.Configure("Membres", typeof(View.Membres.Membres), 1);
+            navigationPages.Configure("AddMembre", typeof(View.Membres.AddMembre), 1);
+            navigationPages.Configure("Tournaments", typeof(View.Tournaments.Tournaments), 1);
+            navigationPages.Configure("AddMatch", typeof(View.Tournaments.AddMatch), 1);
+            navigationPages.Configure("AddTournament", typeof(View.Tournaments.AddTournament), 1);
+            navigationPages.Configure("SelectTournament", typeof(View.Tournaments.Matchs), 1);
+            navigationPages.Configure("Login", typeof(View.Login), 0);
+            navigationPages.Configure("Register", typeof(View.Register), 0);
             SimpleIoc.Default.Register<INavigationService>(() => navigationPages);
 
 

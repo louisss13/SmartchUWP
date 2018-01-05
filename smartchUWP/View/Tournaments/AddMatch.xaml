@@ -19,7 +19,8 @@
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Button Content="Enregistrer" Command="{Binding CommandAjouterMatch}"/>
-        <Button Content="Addpont" Command="{Binding CommandAddPoint}"/>
+        <Button Content="Addpoint" Command="{Binding CommandAddPoint}"/>
+        <Button Content="Delpoint" Command="{Binding CommandDelPoint}"/>
         <TextBlock Text="Ajouter un match"/>
         <ComboBox Header="Joueur 1" ItemsSource="{Binding ListeJoueur1}" ItemTemplate="{StaticResource ListeUserTemplate}" SelectedItem="{Binding SelectedJoueur1, Mode=TwoWay}"/>
         <ComboBox Header="Joueur 2" ItemsSource="{Binding ListeJoueur2}" ItemTemplate="{StaticResource ListeUserTemplate}" SelectedItem="{Binding SelectedJoueur2, Mode=TwoWay}"/>

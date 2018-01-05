@@ -18,8 +18,10 @@ namespace smartchUWP.Services
         private readonly string  rootString = "---ROOT---";
         private bool IsRootFrame { get; set; } = false;
         public Dictionary<string, Type> Configuration { get; set; } = new Dictionary<string, Type>();
+        public Dictionary<string, int> ConfigurationRootLevel { get; set; } = new Dictionary<string, int>();
         public Frame CurrentFrame { get; set; }
         private Frame RootFrame { get; set; }
+        private MainPage MainPage { get; set; }
 
         public FrameNavigationService() {
             
@@ -41,8 +43,9 @@ namespace smartchUWP.Services
 
         private void SetRootFrame()
         {
-            MainPage MainPage = new MainPage();
-            MainPage.AppFrame.Navigate(new Clubs().GetType());
+            if(MainPage == null )
+                MainPage = new MainPage();
+           
             RootFrame = (Window.Current.Content as Frame);
             RootFrame.Navigate(MainPage.GetType());
 
@@ -51,9 +54,10 @@ namespace smartchUWP.Services
             IsRootFrame = true;
         }
 
-        public void Configure(string key, Type type)
+        public void Configure(string key, Type type, int rootLevel)
         {
             Configuration.Add(key, type);
+            ConfigurationRootLevel.Add(key, rootLevel);
         }
 
         public void GoBack()
@@ -77,12 +81,26 @@ namespace smartchUWP.Services
             if (this.Configuration.ContainsKey(pageKey))
             {
                 Type pageType = this.Configuration[pageKey];
+                Frame frametoNavigate;
+                switch (this.ConfigurationRootLevel[pageKey])
+                {
+                    case 0:
+                        frametoNavigate = RootFrame;
+                    break;
+                    case 1:
+                        frametoNavigate = CurrentFrame;
+                        break;
+                    default:
+                        frametoNavigate = RootFrame;
+                        break;
+                }
+                
                 if (parameter == null)
                 {
-                    CurrentFrame.Navigate(pageType);
+                    frametoNavigate.Navigate(pageType);
                 }
                 else
-                    CurrentFrame.Navigate(pageType, parameter);
+                    frametoNavigate.Navigate(pageType, parameter);
             }
             else
                 Console.WriteLine("Key "+ pageKey + " unknow");

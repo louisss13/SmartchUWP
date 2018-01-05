@@ -20,7 +20,7 @@ namespace DataAccess
             var rawClubs = JArray.Parse(reponse);
             var clubs = rawClubs.Children().Select(d => new Club()
             {
-                ClubId = d["clubId"].Value<int>(),
+                ClubId = d["id"].Value<int>(),
                 Name = d["name"].Value<String>(),
                 ContactMail = d["contactMail"].Value<String>(),
                 Phone = d["phone"].Value<string>()
