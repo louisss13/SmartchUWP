@@ -118,6 +118,7 @@
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\MatchsViewModel.cs" />
+    <Compile Include="ViewModel\RegisterViewModel.cs" />
     <Compile Include="ViewModel\TournamentViewModel.cs" />
     <Compile Include="ViewModel\AddMembreViewModel.cs" />
     <Compile Include="ViewModel\MembresModelView.cs" />

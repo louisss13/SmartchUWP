@@ -33,9 +33,7 @@
             <NavigationViewItem Icon="Audio" Content="Spectateur" Tag="spectators"/>
         </NavigationView.MenuItems>
 
-        <NavigationView.AutoSuggestBox>
-            <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
-        </NavigationView.AutoSuggestBox>
+        
 
         <NavigationView.HeaderTemplate>
             <DataTemplate>

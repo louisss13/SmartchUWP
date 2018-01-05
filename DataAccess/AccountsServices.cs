@@ -66,13 +66,23 @@ namespace DataAccess
                 contentResponse.Content = JObject.Parse(jstr);
                 contentResponse.Success = true;
             }
+            else if(response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var rawError = JArray.Parse(jstr);
+                contentResponse.Content = rawError.Children().Select(e => new Error()
+                    {
+                        Code = e["code"].Value<String>(),
+                        Description = e["description"].Value<String>()                                                           
+                    });
+                contentResponse.Success = false;
+            }
             else
             {
-                contentResponse.Content = JArray.Parse(jstr);
+                contentResponse.Content = "Erreur";
                 contentResponse.Success = false;
-                
             }
             
+
             return contentResponse;
         }
     }

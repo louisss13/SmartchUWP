@@ -111,6 +111,7 @@
     <Compile Include="Club.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="EJoueurs.cs" />
+    <Compile Include="ErrorObject.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="MatchsPhases.cs" />
     <Compile Include="MatchState.cs" />

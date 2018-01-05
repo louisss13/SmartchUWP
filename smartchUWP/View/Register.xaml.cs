@@ -30,28 +30,6 @@ namespace smartchUWP.View
         {
             this.InitializeComponent();
         }
-        private async void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            AccountsServices accountsServices = new AccountsServices();
-            Account newUser = new Account() { Password = Password.Password, Email=Email.Text};
-            ResponseObject AddedUser = await accountsServices.AddUser(newUser);
-            if (AddedUser.Success)
-            {
-                messageOk.Visibility = Visibility.Visible;
-                messageNotOk.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                messageOk.Visibility = Visibility.Collapsed;
-                messageNotOk.Text += AddedUser.Content;
-                messageNotOk.Visibility = Visibility.Visible;
-
-            }
-            //this.Frame.Navigate(typeof(Page2));
-        }
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            //this.Frame.Navigate(typeof(Page2));
-        }
+        
     }
 }

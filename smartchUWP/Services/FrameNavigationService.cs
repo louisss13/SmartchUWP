@@ -14,8 +14,9 @@ namespace smartchUWP.Services
 {
     public class FrameNavigationService : INavigationService
     {
-        public string CurrentPageKey => throw new NotImplementedException();
+        
         private readonly string  rootString = "---ROOT---";
+        public string CurrentPageKey { get; set; }
         private bool IsRootFrame { get; set; } = false;
         public Dictionary<string, Type> Configuration { get; set; } = new Dictionary<string, Type>();
         public Dictionary<string, int> ConfigurationRootLevel { get; set; } = new Dictionary<string, int>();
@@ -27,17 +28,29 @@ namespace smartchUWP.Services
             
             SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested;
         }
-        private void App_BackRequested(object sender,BackRequestedEventArgs e)
+        private void App_BackRequested(object sender, BackRequestedEventArgs e)
         {
-            if (CurrentFrame.CanGoBack)
-            {
-                CurrentFrame.GoBack();
-                SetAppBarBackButtonVisibility();
-            }
+            GoBack();
+            
         }
         private void SetAppBarBackButtonVisibility()
         {
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = (CurrentFrame.CanGoBack) ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+            bool canGoBack = false;
+            if (this.ConfigurationRootLevel.ContainsKey(CurrentPageKey))
+            {
+                switch (this.ConfigurationRootLevel[CurrentPageKey]) {
+                    case 0:
+                        canGoBack = RootFrame.CanGoBack;
+                        break;
+                    case 1:
+                        canGoBack = false;
+                        break;
+                    case 2:
+                        canGoBack = CurrentFrame.CanGoBack;
+                        break;
+                }
+            }
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = (canGoBack) ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
         }
         
 
@@ -62,7 +75,33 @@ namespace smartchUWP.Services
 
         public void GoBack()
         {
-            CurrentFrame.GoBack();
+            if (this.ConfigurationRootLevel.ContainsKey(CurrentPageKey))
+            {
+               
+                switch (this.ConfigurationRootLevel[CurrentPageKey])
+                {
+                    case 0:
+                        if (RootFrame.CanGoBack)
+                        {
+                            RootFrame.GoBack();
+                            SetAppBarBackButtonVisibility();
+                        }
+                        break;
+
+
+                    case 2:
+                        if (CurrentFrame.CanGoBack)
+                        {
+                            CurrentFrame.GoBack();
+                            SetAppBarBackButtonVisibility();
+                        }
+
+                        break;
+                }
+            }
+            CurrentPageKey = "Login";
+
+
         }
 
         public void NavigateTo(string pageKey)
@@ -72,6 +111,7 @@ namespace smartchUWP.Services
 
         public void NavigateTo(string pageKey, object parameter)
         {
+            CurrentPageKey = pageKey;
             if (!IsRootFrame)
             {
                 SetRootFrame();

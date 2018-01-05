@@ -28,8 +28,9 @@ namespace smartchUWP.ViewModel
             SimpleIoc.Default.Register<AddClubViewModel>();
             SimpleIoc.Default.Register<MatchsViewModel>();
             SimpleIoc.Default.Register<AddMatchViewModel>();
+            SimpleIoc.Default.Register<RegisterViewModel>();
 
-            
+
 
 
 
@@ -38,13 +39,13 @@ namespace smartchUWP.ViewModel
 
             navigationPages.Configure("Home", typeof(View.Clubs.Clubs), 1);
             navigationPages.Configure("Clubs",  typeof(View.Clubs.Clubs), 1);
-            navigationPages.Configure("AddClub", typeof(View.Clubs.AddClub), 1);
+            navigationPages.Configure("AddClub", typeof(View.Clubs.AddClub), 2);
             navigationPages.Configure("Membres", typeof(View.Membres.Membres), 1);
-            navigationPages.Configure("AddMembre", typeof(View.Membres.AddMembre), 1);
+            navigationPages.Configure("AddMembre", typeof(View.Membres.AddMembre), 2);
             navigationPages.Configure("Tournaments", typeof(View.Tournaments.Tournaments), 1);
-            navigationPages.Configure("AddMatch", typeof(View.Tournaments.AddMatch), 1);
-            navigationPages.Configure("AddTournament", typeof(View.Tournaments.AddTournament), 1);
-            navigationPages.Configure("SelectTournament", typeof(View.Tournaments.Matchs), 1);
+            navigationPages.Configure("AddMatch", typeof(View.Tournaments.AddMatch), 2);
+            navigationPages.Configure("AddTournament", typeof(View.Tournaments.AddTournament), 2);
+            navigationPages.Configure("SelectTournament", typeof(View.Tournaments.Matchs), 2);
             navigationPages.Configure("Login", typeof(View.Login), 0);
             navigationPages.Configure("Register", typeof(View.Register), 0);
             SimpleIoc.Default.Register<INavigationService>(() => navigationPages);
@@ -61,6 +62,7 @@ namespace smartchUWP.ViewModel
         public LoginViewModel Login { get { return ServiceLocator.Current.GetInstance<LoginViewModel>(); } }
         public AddMatchViewModel AddMatch { get { return ServiceLocator.Current.GetInstance<AddMatchViewModel>(); } }
         public MatchsViewModel Matchs { get { return ServiceLocator.Current.GetInstance<MatchsViewModel>(); } }
+        public RegisterViewModel Register { get { return ServiceLocator.Current.GetInstance<RegisterViewModel>(); } }
 
     }
 }
