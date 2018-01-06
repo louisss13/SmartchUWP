@@ -50,12 +50,19 @@ namespace smartchUWP.Services
                 RootFrame = (Window.Current.Content as Frame);
             }
         }
-        private void SetMainPage()
+        private void SetMainPage(string pageKey)
         {
-            if (MainPage == null)
-                MainPage = new MainPage();
-            RootFrame.Navigate(MainPage.GetType());
-            CurrentFrame = ((Window.Current.Content as Frame).Content as MainPage).AppFrame;
+            int oldRootType = (PageKeyHistorique.Count() > 0) ? this.ConfigurationRootLevel[PageKeyHistorique.Peek()] : -1;
+            
+            if (oldRootType != 2 && oldRootType != 3)
+            {
+                if (MainPage == null)
+                    MainPage = new MainPage();
+                RootFrame.Navigate(MainPage.GetType());
+
+                CurrentFrame = ((Window.Current.Content as Frame).Content as MainPage).AppFrame;
+            }
+
         }
         public void Configure(string key, Type type, int rootLevel)
         {
@@ -65,9 +72,20 @@ namespace smartchUWP.Services
 
         public void GoBack()
         {
-           
-            string pageKeyOld = PageKeyHistorique.Pop();
-            NavigateTo(pageKeyOld);
+            if (PageKeyHistorique.Count() > 0)
+            {
+                string pageKeyOld = PageKeyHistorique.Pop();
+                Frame frameToGoBack = GetFrame(CurrentPageKey);
+                CurrentPageKey = pageKeyOld;
+
+                if (frameToGoBack.CanGoBack)
+                {
+                    frameToGoBack.GoBack();
+                }
+                SetAppBarBackButtonVisibility();
+
+            }
+        
         }
 
         public void NavigateTo(string pageKey)
@@ -78,39 +96,15 @@ namespace smartchUWP.Services
         public void NavigateTo(string pageKey, object parameter)
         {
             SetRootFrame();
-            if(CurrentPageKey != null)
-            {
-                PageKeyHistorique.Push(CurrentPageKey);
-            }
-            CurrentPageKey = pageKey;
 
             if (this.Configuration.ContainsKey(pageKey))
             {
                 Type pageType = this.Configuration[pageKey];
-                Frame frametoNavigate;
-                switch (this.ConfigurationRootLevel[pageKey])
-                {
-                    case 0:
-                        PageKeyHistorique.Clear();
-                        frametoNavigate = RootFrame;
-                    break;
-                    case 1:
-                        frametoNavigate = RootFrame;
-                        break;
-                    case 2:
-                        PageKeyHistorique.Clear();
-                        SetMainPage();
-                        frametoNavigate = CurrentFrame;
-                        break;
-                    case 3:
-                        SetMainPage();
-                        frametoNavigate = CurrentFrame;
-                        break;
-                    default:
-                        frametoNavigate = RootFrame;
-                        break;
-                }
                 
+                InitNavigation(pageKey);
+                Frame frametoNavigate = GetFrame(pageKey);
+
+
                 if (parameter == null)
                 {
                     frametoNavigate.Navigate(pageType);
@@ -122,6 +116,42 @@ namespace smartchUWP.Services
                 Console.WriteLine("Key "+ pageKey + " unknow");
 
             SetAppBarBackButtonVisibility();
+        }
+
+        private Frame GetFrame(string pageKey)
+        {
+            
+            switch (this.ConfigurationRootLevel[pageKey])
+            {
+                case 2:
+                case 3:
+                    return CurrentFrame;
+                default:
+                    return RootFrame;
+                    
+            }
+        }
+        private void InitNavigation(string pageKey)
+        {
+            if (CurrentPageKey != null)
+            {
+                PageKeyHistorique.Push(CurrentPageKey);
+            }
+            CurrentPageKey = pageKey;
+            switch (this.ConfigurationRootLevel[pageKey])
+            {
+                case 0:
+                    PageKeyHistorique.Clear();
+                    break;
+                
+                case 2:
+                    PageKeyHistorique.Clear();
+                    SetMainPage(pageKey);
+                    break;
+                case 3:
+                    SetMainPage(pageKey);
+                    break;
+            }
         }
     }
 }
