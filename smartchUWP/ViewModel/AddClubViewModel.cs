@@ -16,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddClubViewModel : ViewModelBase, IListeMembreViewModel
+    public class AddClubViewModel : MainPageViewModel, IListeMembreViewModel
     {
-        private INavigationService _navigationService;
+       
         private ObservableCollection<User> _allMembers;
         private ObservableCollection<User> _selectedAllMembers = new ObservableCollection<User>();
         private ObservableCollection<User> _selectedMembersEntity = new ObservableCollection<User>();
@@ -92,9 +92,9 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public AddClubViewModel(INavigationService navigationService)
+        public AddClubViewModel(INavigationService navigationService):base(navigationService)
         {
-            _navigationService = navigationService;
+            
             CommandAddClub = new RelayCommand(AddClub);
             CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
             CommandDelMember = new RelayCommand(DelMembre, IsParameterDel);
@@ -113,8 +113,9 @@ namespace smartchUWP.ViewModel
                 MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListClub));
                 _navigationService.NavigateTo("Clubs");
             }
-            else { }
-               // TextErreur.Visibility = Visibility.Visible;
+            else
+            { }
+              
 
         }
 
@@ -143,10 +144,12 @@ namespace smartchUWP.ViewModel
         public async void SetMembers()
         {
             UsersServices usersServices = new UsersServices();
-            var users = await usersServices.GetUsers();
-            AllMembers = new ObservableCollection<User>(users.Except(Club.Members));
-            MembersEntity = new ObservableCollection<User>(Club.Members);
-
+            var response = await usersServices.GetUsers();
+            if (response.Success) {
+                List<User> users = ((List<Object>)response.Content).Cast<User>().ToList();
+                AllMembers = new ObservableCollection<User>(users.Except(Club.Members));
+                MembersEntity = new ObservableCollection<User>(Club.Members);
+            }
         }
 
         

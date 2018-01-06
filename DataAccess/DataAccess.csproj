@@ -110,10 +110,16 @@
     <Compile Include="ApiAccess.cs" />
     <Compile Include="AuthHttpClient.cs" />
     <Compile Include="ClubsServices.cs" />
+    <Compile Include="Dao\AccountDAO.cs" />
+    <Compile Include="Dao\ClubDAO.cs" />
+    <Compile Include="Dao\LoginResponseDAO.cs" />
+    <Compile Include="Dao\UserDAO.cs" />
+    <Compile Include="GetResponseService.cs" />
     <Compile Include="Dao\LogInDAO.cs" />
     <Compile Include="Dao\MatchDAO.cs" />
     <Compile Include="Dao\TournamentListDAO.cs" />
     <Compile Include="Dao\TournamentDAO.cs" />
+    <Compile Include="Interface\DaoConvertible.cs" />
     <Compile Include="TournamentsServices.cs" />
     <Compile Include="UsersServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

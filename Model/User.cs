@@ -8,7 +8,7 @@ namespace Model
 {
     public class User
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public String Email { get; set; }
 
         public String Name { get; set; }

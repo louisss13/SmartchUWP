@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddMembreViewModel : ViewModelBase
+    public class AddMembreViewModel : MainPageViewModel
     {
         public RelayCommand CommandAddMember { get; private set; }
 
@@ -34,10 +34,8 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public AddMembreViewModel(INavigationService navigationService)
+        public AddMembreViewModel(INavigationService navigationService) : base(navigationService)
         {
-            _navigationService = navigationService;
-
             CommandAddMember = new RelayCommand(AddMembre);
             if (IsInDesignMode)
             {

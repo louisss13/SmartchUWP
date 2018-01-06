@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class MatchsViewModel : ViewModelBase
+    public class MatchsViewModel : MainPageViewModel
     {
        
-        private INavigationService _navigationService;
+        
         private Tournament _selectedTournament = null;
         private MatchsPhase _selectedPhase;
         private Match _selectedMatch;
@@ -81,9 +81,9 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public MatchsViewModel(INavigationService navigationService)
+        public MatchsViewModel(INavigationService navigationService) : base(navigationService)
         {
-            _navigationService = navigationService;
+            
             MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
 
             CommandNavigateAddMatch = new RelayCommand(NavigateToAddMatch);
@@ -163,20 +163,23 @@ namespace smartchUWP.ViewModel
                 case NotificationMessageType.Tournament:
                     SelectedTournament = (Tournament)message.Variable;
                     TournamentsServices tournamentsServices = new TournamentsServices();
-                    SelectedTournament = await tournamentsServices.GetTournament(SelectedTournament.Id);
-                    if (SelectedTournament.Matches == null || SelectedTournament.Matches.Count() <= 0)
+                    var response = await tournamentsServices.GetTournament(SelectedTournament.Id);
+                    if (response.Success)
                     {
-                        SelectedTournament.Matches = new List<MatchsPhase>()
+                        SelectedTournament = (Tournament)response.Content;
+                        if (SelectedTournament.Matches == null || SelectedTournament.Matches.Count() <= 0)
                         {
-                            new MatchsPhase(){
-                                NumPhase = 1,
-                                Matchs = new List<Match>()
-                            }
-                        };
+                            SelectedTournament.Matches = new List<MatchsPhase>()
+                            {
+                                new MatchsPhase(){
+                                    NumPhase = 1,
+                                    Matchs = new List<Match>()
+                                }
+                            };
 
+                        }
+                        SelectedPhase = MatchsPhases.Where(m => m.NumPhase == 1).First();
                     }
-                    SelectedPhase = MatchsPhases.Where(m => m.NumPhase == 1).First();
-
 
                     break;
             }

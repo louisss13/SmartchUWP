@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using Model;
 using smartchUWP.Services;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddMatchViewModel : ViewModelBase
+    public class AddMatchViewModel : MainPageViewModel
     {
         private Match _match;
         private User _selectedJoueur1;
@@ -168,7 +169,7 @@ namespace smartchUWP.ViewModel
         public int? NumPhase { get; set; }
         
 
-        public AddMatchViewModel()
+        public AddMatchViewModel(INavigationService navigationService) : base(navigationService)
         {
             CommandAjouterMatch = new RelayCommand(EnregistrerMatch, CanEnregistrerMatch);
             CommandAddPoint = new RelayCommand(AddPoint, CanAddPoint);
@@ -264,22 +265,40 @@ namespace smartchUWP.ViewModel
             UsersServices usersServices = new UsersServices();
             TournamentsServices tournamentsServices = new TournamentsServices();
             long idTounrnament = Tournament.Id;
-            var users = await tournamentsServices.GetParticipants(idTounrnament);
-            var arbitres = await usersServices.GetUsersWithAccount();
-            AllArbitre = new ObservableCollection<User>(arbitres);
-            AllUsers = new ObservableCollection<User>(users);
-            //if(Match.Arbitre != null)
-            //    SelectedArbitre = AllArbitre.Where(a => a.Id == Match.Arbitre.Id);
-            if (Match.Player1 != null)
+            var responseUser = await tournamentsServices.GetParticipants(idTounrnament);
+            var responseArbitre = await usersServices.GetUsersWithAccount();
+            bool allRequestSuccess = true;
+            if (responseUser.Success)
             {
-                SelectedJoueur1 = AllUsers.Where(u => u.Id == Match.Player1.Id).First();
+                List<User> users = ((List<Object>)responseUser.Content).Cast<User>().ToList();
+                AllUsers = new ObservableCollection<User>(users);
             }
-            if (Match.Player2 != null)
+            else
+                allRequestSuccess = false;
+            if (responseArbitre.Success)
             {
-                SelectedJoueur2 = AllUsers.Where(u => u.Id == Match.Player2.Id).First();
+                List<User> arbitres = ((List<object>)responseArbitre.Content).Cast<User>().ToList();
+                AllArbitre = new ObservableCollection<User>(arbitres);
             }
-            HeurePrevue = Match.Time;
-            LieuMatch = Match.Emplacement;
+            else
+                allRequestSuccess = false;
+
+
+
+            if (allRequestSuccess) { 
+                //if(Match.Arbitre != null)
+                //    SelectedArbitre = AllArbitre.Where(a => a.Id == Match.Arbitre.Id);
+                if (Match.Player1 != null)
+                {
+                    SelectedJoueur1 = AllUsers.Where(u => u.Id == Match.Player1.Id).First();
+                }
+                if (Match.Player2 != null)
+                {
+                    SelectedJoueur2 = AllUsers.Where(u => u.Id == Match.Player2.Id).First();
+                }
+                HeurePrevue = Match.Time;
+                LieuMatch = Match.Emplacement;
+            }
         }
 
     }

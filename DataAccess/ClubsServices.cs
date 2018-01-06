@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using DataAccess.Dao;
+using Model;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -13,19 +14,13 @@ namespace DataAccess
 {
     public class ClubsServices
     {
-        public async Task<IEnumerable<Club>> GetClubs()
+        public async Task<ResponseObject> GetClubs()
         {
             var wc = new AuthHttpClient();
-            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.ClubUrl));
-            var rawClubs = JArray.Parse(reponse);
-            var clubs = rawClubs.Children().Select(d => new Club()
-            {
-                ClubId = d["id"].Value<int>(),
-                Name = d["name"].Value<String>(),
-                ContactMail = d["contactMail"].Value<String>(),
-                Phone = d["phone"].Value<string>()
-            });
-            return clubs;
+            var response = await wc.GetAsync(new Uri(ApiAccess.ClubUrl));
+            var reponse = GetResponseService.TraiteResponse(response, new ClubDAO(),true);
+            
+            return reponse;
             
         }
         public async Task<ResponseObject> AddClub(Club club)
@@ -36,25 +31,8 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             var response = await wc.PostAsync(new Uri(ApiAccess.ClubUrl), postContent);
 
-            ResponseObject contentResponse = new ResponseObject();
-            String jstr = response.Content.ReadAsStringAsync().Result;
+            return GetResponseService.TraiteResponse(response, new ClubDAO(), false);
 
-
-
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                contentResponse.Content = JObject.Parse(jstr);
-                contentResponse.Success = true;
-            }
-            else
-            {
-                contentResponse.Content = JArray.Parse(jstr);
-                contentResponse.Success = false;
-
-            }
-
-            return contentResponse;
-            
         }
     }
 }

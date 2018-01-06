@@ -1,11 +1,14 @@
 ﻿using DataAccess.Dao;
+using DataAccess.Interface;
 using Model;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataAccess
 {
-    public class TournamentDAO
+    class TournamentDAO : IDaoConvertible
     {
         public long Id { get; set; }
         public string Name { get; set; }
@@ -60,25 +63,57 @@ namespace DataAccess
         private ICollection<MatchsPhase> MatcshDAOToMatchs()
         {
             List<MatchsPhase> listMatchphase = new List<MatchsPhase>();
-            foreach(MatchDAO matchDao in Matches)
+            if (Matches != null)
             {
-                MatchsPhase matchsPhase = listMatchphase.Find(m => m.NumPhase == matchDao.Phase);
-                if (matchsPhase != null)
+                foreach (MatchDAO matchDao in Matches)
                 {
-                    matchsPhase.Matchs.Add(matchDao.GetMatch());
-                }
-                else
-                {
-                    matchsPhase = new MatchsPhase()
+                    MatchsPhase matchsPhase = listMatchphase.Find(m => m.NumPhase == matchDao.Phase);
+                    if (matchsPhase != null)
                     {
-                        NumPhase = matchDao.Phase,
-                        Matchs = new List<Match>() { matchDao.GetMatch() }
-                    };
-                    listMatchphase.Add(matchsPhase);
+                        matchsPhase.Matchs.Add(matchDao.GetMatch());
+                    }
+                    else
+                    {
+                        matchsPhase = new MatchsPhase()
+                        {
+                            NumPhase = matchDao.Phase,
+                            Matchs = new List<Match>() { matchDao.GetMatch() }
+                        };
+                        listMatchphase.Add(matchsPhase);
+                    }
+
                 }
-                
             }
             return listMatchphase;
         }
+
+        public object ToObjectModel()
+        {
+
+            return GetTournament();
+        }
+
+        public IDaoConvertible ToObjectDao(JToken d)
+        {
+            Id = d["id"].Value<int>();
+            Name = d["name"].Value<String>();
+            BeginDate = d["beginDate"].Value<DateTime>();
+            EndDate = d["endDate"].Value<DateTime>();
+            Etat = (TournamentState)d["etat"].Value<int>();
+            Participants = d.SelectToken("participants").Children().Select(l => (User)new UserDAO().ToObjectDao(l).ToObjectModel()).ToList();
+            Matches = d.SelectToken("matches").Children().Select(l => (MatchDAO) new MatchDAO().ToObjectDao(l)).ToList();
+            Address = (d["address"].Value<Object>() != null) ? new Address()
+            {
+                Street = (String)d.SelectToken("address.street"),
+                Box = (String)d.SelectToken("address.box"),
+                City = (String)d.SelectToken("address.city"),
+                
+                Number = (String)d.SelectToken("address.number"),
+                Zipcode = (String)d.SelectToken("address.zipCode"),
+            } : null;
+            return this;
+        }
+
+      
     }
 }

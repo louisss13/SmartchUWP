@@ -12,15 +12,15 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class MembresModelView : ViewModelBase
+    public class MembresModelView : MainPageViewModel
     {
         public RelayCommand CmdNavigateAddMembre { get; private set; }
 
-        private INavigationService _navigationService;
+        
         private ObservableCollection<User> _users = null;
-        public MembresModelView(INavigationService navigationService)
+        public MembresModelView(INavigationService navigationService) : base(navigationService)
         {
-            _navigationService = navigationService;
+            
             CmdNavigateAddMembre = new RelayCommand(NavigateToAddMembre);
             if (IsInDesignMode)
             {
@@ -54,9 +54,12 @@ namespace smartchUWP.ViewModel
         public async Task InitializeAsync()
         {
             var service = new UsersServices();
-            var users = await service.GetUsers();
-            Users = new ObservableCollection<User>(users);
-
+            var response = await service.GetUsers();
+            if (response.Success)
+            {
+                List<User> users = ((List<Object>)response.Content).Cast<User>().ToList();
+                Users = new ObservableCollection<User>(users);
+            }
         }
     }
 }

@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddTournamentViewModel : ViewModelBase, IListeMembreViewModel
+    public class AddTournamentViewModel : MainPageViewModel, IListeMembreViewModel
     {
-        private INavigationService _navigationService;
+        
         private ObservableCollection<Club> _clubs = null;
         private ObservableCollection<User> _allMembers;
         private ObservableCollection<User> _selectedAllMembers = new ObservableCollection<User>();
@@ -30,7 +30,7 @@ namespace smartchUWP.ViewModel
         public RelayCommand CommandAddMember { get; private set; }
         public RelayCommand CommandDelMember { get; private set; }
 
-        public AddTournamentViewModel(INavigationService navigationService)
+        public AddTournamentViewModel(INavigationService navigationService) : base(navigationService)
         {
             CommandAddTournament = new RelayCommand( AddTournament);
             CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
@@ -164,9 +164,12 @@ namespace smartchUWP.ViewModel
         public async void SetMembers()
         {
             UsersServices usersServices = new UsersServices();
-            var users = await usersServices.GetUsers();
-            AllMembers = new ObservableCollection<User>(users.Except(OTournament.Participants));
-            MembersEntity = new ObservableCollection<User>(OTournament.Participants);
+            var response = await usersServices.GetUsers();
+            if (response.Success) {
+                List<User> users = ((List<Object>)response.Content).Cast<User>().ToList();
+                AllMembers = new ObservableCollection<User>(users.Except(OTournament.Participants));
+                MembersEntity = new ObservableCollection<User>(OTournament.Participants);
+            }
 
         }
 
@@ -234,7 +237,7 @@ namespace smartchUWP.ViewModel
         {
             var service = new ClubsServices();
             var clubs = await service.GetClubs();
-            Clubs = new ObservableCollection<Club>(clubs);
+            Clubs = new ObservableCollection<Club>(clubs.Content as IEnumerable<Club>);
         }
     }
 }

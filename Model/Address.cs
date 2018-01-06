@@ -8,6 +8,7 @@ namespace Model
 {
     public class Address
     {
+        public long Id { get; set; }
         public String Street { get; set; }
         public string Number { get; set; }
         public string City { get; set; }

@@ -1,4 +1,6 @@
-﻿using Model;
+﻿using DataAccess.Interface;
+using Model;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Dao
 {
-    class TournamentListDAO
+    class TournamentListDAO : IDaoConvertible
     {
         public long Id { get; set; }
         public string Name { get; set; }
@@ -17,6 +19,7 @@ namespace DataAccess.Dao
         public DateTime EndDate { get; set; }
         public TournamentState Etat { get; set; }
 
+        public ICollection<User> Participants{ get; set; }
         public ICollection<long> ParticipantsId { get; set; }
         public ICollection<string> AdminsId { get; set; }
 
@@ -47,6 +50,49 @@ namespace DataAccess.Dao
                 account.Add(admin.Account);
             }*/
             AdminsId = account;
+        }
+
+        public object ToObjectModel()
+        {
+            List<User> users = new List<User>();
+            if (ParticipantsId != null && (Participants == null || Participants.Count() <= 0)) { 
+                
+                foreach (long joueur in ParticipantsId)
+                {
+                    users.Add(new User() { Id = joueur });
+                }
+            }
+            return new Tournament()
+            {
+                Id = Id,
+                Name = Name,
+                BeginDate = BeginDate,
+                EndDate = EndDate,
+                Etat = Etat,
+                Participants = users,
+                Address = Address
+            };
+        
+        }
+
+        public IDaoConvertible ToObjectDao(JToken d)
+        {
+            Id = d["id"].Value<int>();
+            Name = d["name"].Value<String>();
+            BeginDate = d["beginDate"].Value<DateTime>();
+            EndDate = d["endDate"].Value<DateTime>();
+            Etat = (TournamentState)d["etat"].Value<int>();
+            Participants = d.SelectToken("participantsId").Children().Select(l => new User() { Id = l.Value<int>() }).ToList();
+            Address = (d["address"].Value<Object>() != null) ? new Address()
+            {
+                Street = (String)d.SelectToken("address.street"),
+                Box = (String)d.SelectToken("address.box"),
+                City = (String)d.SelectToken("address.city"),
+
+                Number = (String)d.SelectToken("address.number"),
+                Zipcode = (String)d.SelectToken("address.zipCode"),
+            } : null;
+            return this;
         }
     }
 }

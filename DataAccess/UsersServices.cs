@@ -46,26 +46,20 @@ namespace DataAccess
             return contentResponse;
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<ResponseObject> GetUsers()
         {
             var wc = new AuthHttpClient();
-            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.UsersUrl));
-            var rawUsers = JArray.Parse(reponse);
-            var users = RawToUsers(rawUsers);
-
-            return users;
-
-        }
-        public async Task<IEnumerable<User>> GetUsersWithAccount()
-        {
-            var wc = new AuthHttpClient();
-            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.UsersAccountUrl));
-            var rawUsers = JArray.Parse(reponse);
-            var users = RawToUsers(rawUsers);
+            var reponse = await wc.GetAsync(new Uri(ApiAccess.UsersUrl));
+            return GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
            
-            return users;
         }
-        public static IEnumerable<User> RawToUsers(JArray rawUsers)
+        public async Task<ResponseObject> GetUsersWithAccount()
+        {
+            var wc = new AuthHttpClient();
+            var reponse = await wc.GetAsync(new Uri(ApiAccess.UsersAccountUrl));
+            return GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
+        }
+        /*public static IEnumerable<User> RawToUsers(JArray rawUsers)
         {
             var users = rawUsers.Children().Select(d => new User()
             {
@@ -88,6 +82,6 @@ namespace DataAccess
 
             });
             return users;
-        }
+        }*/
     }
 }

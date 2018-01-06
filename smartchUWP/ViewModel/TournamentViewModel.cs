@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class TournamentViewModel : ViewModelBase
+    public class TournamentViewModel : MainPageViewModel
     {
-        private readonly INavigationService _navigationService;
+        
         private ObservableCollection<Tournament> _tournaments = null;
         private Tournament _selectedTournament;
 
@@ -40,10 +40,10 @@ namespace smartchUWP.ViewModel
         }
 
 
-        public TournamentViewModel(INavigationService navigationService)
+        public TournamentViewModel(INavigationService navigationService) : base(navigationService)
         {
 
-            _navigationService = navigationService;
+            
             NavigateCommand = new RelayCommand(NavigateToAddTournament);
             CommandNavigateSelect = new RelayCommand(NavigateToSelectTournament, IsSelected);
             CommandNavigateModification = new RelayCommand(NavigateToSelectTournament);
@@ -109,8 +109,12 @@ namespace smartchUWP.ViewModel
         private async void SetTournaments()
         {
             var service = new TournamentsServices();
-            var tournament = await service.GetTournaments();
-            Tournaments = new ObservableCollection<Tournament>(tournament);
+            ResponseObject response = await service.GetTournaments();
+            if (response.Success)
+            {
+                var tournament = ((List<Object>)response.Content).Cast<Tournament>().ToList();
+                Tournaments = new ObservableCollection<Tournament>(tournament);
+            }
         }
     }
 }

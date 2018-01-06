@@ -1,4 +1,6 @@
-﻿using Model;
+﻿using DataAccess.Interface;
+using Model;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Dao
 {
-    public class MatchDAO
+    class MatchDAO : IDaoConvertible
     { 
         public long Id { get; set; }
         public User Joueur1 { get; set; }
         public User Joueur2 { get; set; }
-        public int Joueur1Id { get; set; }
-        public int Joueur2Id { get; set; }
+        public long Joueur1Id { get; set; }
+        public long Joueur2Id { get; set; }
         public Account Arbitre { get; set; }
         public string Emplacement { get; set; }
         public EMatchState State { get; set; }
@@ -67,6 +69,26 @@ namespace DataAccess.Dao
             return matchs;
         }
 
+        public object ToObjectModel()
+        {
+            return GetMatch();
+        }
 
+        public IDaoConvertible ToObjectDao(JToken d)
+        {
+            Id = d["id"].Value<long>();
+            Joueur1 = (User)new UserDAO().ToObjectDao(d["joueur1"]).ToObjectModel();
+            Joueur2 = (User)new UserDAO().ToObjectDao(d["joueur2"]).ToObjectModel();
+            Joueur1Id = d["joueur1Id"].Value<long>();
+            Joueur2Id = d["joueur2Id"].Value<long>();
+            
+            Arbitre = (Account)new AccountDAO().ToObjectDao(d.SelectToken("arbitre")).ToObjectModel();
+            Emplacement = d["emplacement"].Value<string>();
+            //State = d[""]
+            //Score = match.Score;
+            DebutPrevu = TimeSpan.Parse(d["debutPrevu"].Value<string>());
+            Phase = d["phase"].Value<int>(); ;
+            return this;
+        }
     }
 }

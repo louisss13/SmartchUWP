@@ -22,68 +22,22 @@ namespace DataAccess
             postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var wc = new AuthHttpClient();
             var response = await wc.PostAsync(new Uri(ApiAccess.LogInUrl), postContent);
-            String content = response.Content.ReadAsStringAsync().Result;
-            ResponseObject contentResponse = new ResponseObject();
-            switch (response.StatusCode)
-            {
-                case HttpStatusCode.OK:
-
-                    contentResponse.Content = JObject.Parse(content);
-                    ApiAccess.Instance.Token = ((JObject)contentResponse.Content)["access_token"].Value<String>();
-
-                    contentResponse.Success = true;
-                    break;
-                case HttpStatusCode.Unauthorized:
-
-                    contentResponse.Content = null;
-                    contentResponse.Success = false;
-                    break;
-                default:
-                    contentResponse.Success = false;
-                    break;
-            }
-            return contentResponse;
-
+            ResponseObject responseO = GetResponseService.TraiteResponse(response, new LoginResponseDAO(), false);
+            if(responseO.Success)
+                ApiAccess.Instance.Token = ((LoginResponseDAO)responseO.Content).AccessToken;
+            return responseO;
+            
         }
 
         public async Task<ResponseObject> AddUser(Account user)
         {
             HttpContent postContent = new StringContent(JObject.FromObject(user).ToString());
-
             postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
             var wc = new AuthHttpClient();
-
-
             var response = await wc.PostAsync(new Uri(ApiAccess.AccountUrl), postContent);
 
-            ResponseObject contentResponse = new ResponseObject();
-            String jstr = response.Content.ReadAsStringAsync().Result;
-
-
-
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                contentResponse.Content = JObject.Parse(jstr);
-                contentResponse.Success = true;
-            }
-            else if(response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var rawError = JArray.Parse(jstr);
-                contentResponse.Content = rawError.Children().Select(e => new Error()
-                    {
-                        Code = e["code"].Value<String>(),
-                        Description = e["description"].Value<String>()                                                           
-                    });
-                contentResponse.Success = false;
-            }
-            else
-            {
-                contentResponse.Content = "Erreur";
-                contentResponse.Success = false;
-            }
-            
-
-            return contentResponse;
+            return GetResponseService.TraiteResponse(response, new AccountDAO(), false);
         }
     }
 }

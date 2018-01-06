@@ -13,9 +13,36 @@ namespace smartchUWP.ViewModel
 {
     public class MainPageViewModel : ViewModelBase
     {
+        private Boolean _isChargement = false;
+
+        public Boolean IsChargement
+        {
+            get
+            {
+                return _isChargement;
+            }
+            set
+            {
+                _isChargement = value;
+                RaisePropertyChanged("IsChargement");
+                RaisePropertyChanged("IsNotChargement");
+            }
+        }
+        public Boolean IsNotChargement
+        {
+            get
+            {
+                return !IsChargement;
+            }
+            set
+            {
+                IsChargement = value;
+            }
+        }
+
         public RelayCommand<Object> CommandSelectChangeMenu { get; private set; }
         public RelayCommand<Object> CommandInvokedMenu { get; private set; }
-        private readonly INavigationService _navigationService;
+        protected readonly INavigationService _navigationService;
 
         public MainPageViewModel(INavigationService navigationService)
         {

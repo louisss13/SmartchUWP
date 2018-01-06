@@ -8,7 +8,7 @@ namespace Model
 {
     public class Club
     {
-        public int ClubId { get; set;}
+        public long ClubId { get; set;}
         public String Name { get; set; }
         public String ContactMail { get; set; }
         public String Phone { get; set; }

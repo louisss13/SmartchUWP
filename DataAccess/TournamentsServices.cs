@@ -14,101 +14,53 @@ namespace DataAccess
 {
     public class TournamentsServices
     {
-        public async Task<IEnumerable<Tournament>> GetTournaments()
+        public async Task<ResponseObject> GetTournaments()
         {
             var wc = new AuthHttpClient();
-            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.TournamentUrl));
-            var rawClubs = JArray.Parse(reponse);
-            var tournaments = rawClubs.Children().Select(d => new Tournament()
-            {
-                Id = d["id"].Value<int>(),
-                Name = d["name"].Value<String>(),
-                BeginDate = d["beginDate"].Value<DateTime>(),
-                EndDate = d["endDate"].Value<DateTime>(),
-                Etat = (TournamentState)d["etat"].Value<int>(),
-                Participants = d.SelectToken("participantsId").Children().Select(l => new User() { Id = l.Value<int>()}).ToList(),
-                Address = (d["address"].Value<Object>() != null) ? new Address()
-                {
-                    Street = (String)d.SelectToken("address.street"),
-                    Box = (String)d.SelectToken("address.box"),
-                    City = (String)d.SelectToken("address.city"),
-                    //Country = (Country)d.SelectToken("adresse.street"),
-                    Number = (String)d.SelectToken("address.number"),
-                    Zipcode = (String)d.SelectToken("address.zipCode"),
-                } : null,
-
-            });
-            return tournaments;
-
+            var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl));
+            return GetResponseService.TraiteResponse(reponse, new TournamentListDAO(), true);
+            
         }
 
-        public async Task<Tournament> GetTournament(long idTournament)
+        public async Task<ResponseObject> GetTournament(long idTournament)
         {
             var wc = new AuthHttpClient();
-            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.TournamentUrl + "/" + idTournament ));
-            var rawTournament = JObject.Parse(reponse);
-            var Tournament = rawTournament.ToObject<TournamentDAO>();
-            return Tournament.GetTournament();
+            var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl + "/" + idTournament ));
+            return GetResponseService.TraiteResponse(reponse, new TournamentDAO(), false);
         }
 
         public async Task<ResponseObject> AddTournamentAsync(Tournament tournament)
         {
             TournamentListDAO tournamentListDAO = new TournamentListDAO(tournament);
             HttpContent postContent = new StringContent(JObject.FromObject(tournamentListDAO).ToString());
-
             postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
             var wc = new AuthHttpClient();
             var response = await wc.PostAsync(new Uri(ApiAccess.TournamentUrl), postContent);
 
-            ResponseObject contentResponse = new ResponseObject();
-            String jstr = response.Content.ReadAsStringAsync().Result;
-
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                contentResponse.Content = JObject.Parse(jstr);
-                contentResponse.Success = true;
-            }
-            else
-            {
-                contentResponse.Content = JArray.Parse(jstr);
-                contentResponse.Success = false;
-            }
-            return contentResponse;
+            return GetResponseService.TraiteResponse(response, new TournamentDAO(), false);
         }
 
         public async Task<ResponseObject> UpdateAsync(Tournament selectedTournament)
         {
             TournamentDAO tournamentDAO = new TournamentDAO(selectedTournament);
             HttpContent putContent = new StringContent(JObject.FromObject(tournamentDAO).ToString());
-
             putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
             var wc = new AuthHttpClient();
             var response = await wc.PutAsync(new Uri(ApiAccess.TournamentUrl+"/"+selectedTournament.Id), putContent);
 
-            ResponseObject contentResponse = new ResponseObject();
-            String jstr = response.Content.ReadAsStringAsync().Result;
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                contentResponse.Content = JObject.Parse(jstr);
-                contentResponse.Success = true;
-            }
-            else
-            {
-                contentResponse.Content = JArray.Parse(jstr);
-                contentResponse.Success = false;
-            }
-            return contentResponse;
+            return GetResponseService.TraiteResponse(response, new TournamentDAO(), false);
         }
 
-        public async Task<IEnumerable<User>> GetParticipants(long idTournament)
+        public async Task<ResponseObject> GetParticipants(long idTournament)
         {
             var wc = new AuthHttpClient();
-            var reponse = await wc.GetStringAsync(new Uri(ApiAccess.TournamentUrl+"/"+ idTournament+"/participants"));
-            var rawUsers = JArray.Parse(reponse);
-            var users = UsersServices.RawToUsers(rawUsers);
+            var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl+"/"+ idTournament+"/participants"));
 
-            return users;
+            return GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
+
+            
 
         }
 
