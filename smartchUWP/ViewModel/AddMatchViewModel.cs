@@ -212,6 +212,7 @@ namespace smartchUWP.ViewModel
             Match.Player2 = SelectedJoueur2;
             Match.Time = HeurePrevue;
             
+            
             if(Match.Id > 0)
             {
                 bool isUpdate = await tournamentsServices.UpdateMatch(Tournament, Match, NumPhase.GetValueOrDefault());
@@ -219,6 +220,10 @@ namespace smartchUWP.ViewModel
             else
             {
                 ResponseObject response = await tournamentsServices.AddMatch(Tournament, Match, NumPhase.GetValueOrDefault());
+                if (response.Success)
+                {
+                    _navigationService.NavigateTo("Tournaments");
+                }
             }
             
         }

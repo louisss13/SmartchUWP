@@ -87,6 +87,8 @@ namespace DataAccess
 
         public async Task<ResponseObject> AddMatch(Tournament tournament, Match match, int phase)
         {
+            if (phase <= 0)
+                phase = 1;
             MatchDAO matchDAO = new MatchDAO(match, phase);
             HttpContent putContent = new StringContent(JObject.FromObject(matchDAO).ToString());
 

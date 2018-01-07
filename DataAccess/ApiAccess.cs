@@ -21,6 +21,8 @@ namespace DataAccess
         
         public static String GetMatchUrl(long tournamentId, long matchId)
         {
+            if(matchId == 0)
+                return Url + "tournaments/" + tournamentId + "/matchs/";
             return Url + "tournaments/" + tournamentId + "/matchs/" + matchId;
         }
         public static String GetMatchPointUrl( long matchId)
