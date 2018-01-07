@@ -4,8 +4,7 @@ namespace Model
 {
     public class Score
     {
-        public List<Point> Points { get; set; }
-        public User JoueurGagnant { get; set; }
-
+        public List<EJoueurs> Joueurs { get; set; }
+        public List<Dictionary<EJoueurs, int>> PointLevel { get; set; }
     }
 }
