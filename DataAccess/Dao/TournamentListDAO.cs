@@ -54,13 +54,17 @@ namespace DataAccess.Dao
 
         public object ToObjectModel()
         {
-            List<User> users = new List<User>();
+            ICollection<User> users = new List<User>();
             if (ParticipantsId != null && (Participants == null || Participants.Count() <= 0)) { 
                 
                 foreach (long joueur in ParticipantsId)
                 {
                     users.Add(new User() { Id = joueur });
                 }
+            }
+            else
+            {
+                users = Participants;
             }
             return new Tournament()
             {

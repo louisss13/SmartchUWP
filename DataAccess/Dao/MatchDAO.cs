@@ -16,7 +16,7 @@ namespace DataAccess.Dao
         public User Joueur2 { get; set; }
         public long Joueur1Id { get; set; }
         public long Joueur2Id { get; set; }
-        public Account Arbitre { get; set; }
+        public User Arbitre { get; set; }
         public string Emplacement { get; set; }
         public EMatchState State { get; set; }
         public Score Score { get; set; }
@@ -82,7 +82,7 @@ namespace DataAccess.Dao
             Joueur1Id = d["joueur1Id"].Value<long>();
             Joueur2Id = d["joueur2Id"].Value<long>();
             
-            Arbitre = (Account)new AccountDAO().ToObjectDao(d.SelectToken("arbitre")).ToObjectModel();
+            Arbitre = (User)new UserDAO().ToObjectDao(d.SelectToken("arbitre")).ToObjectModel();
             Emplacement = d["emplacement"].Value<string>();
             //State = d[""]
             //Score = match.Score;

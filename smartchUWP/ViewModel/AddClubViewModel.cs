@@ -16,12 +16,23 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddClubViewModel : MainPageViewModel, IListeMembreViewModel
+    public class AddClubViewModel : MainPageViewModel, IListeMembreViewModel, IAddressForm
     {
        
         private ObservableCollection<User> _allMembers;
         private ObservableCollection<User> _selectedAllMembers = new ObservableCollection<User>();
         private ObservableCollection<User> _selectedMembersEntity = new ObservableCollection<User>();
+        private bool _isAddressError = false;
+        private bool _isAddressRequiredCity = false;
+        private bool _isAddressRequiredNumber = false;
+        private bool _isAddressRequiredStreet = false;
+        private bool _isAddressRequiredZipCode = false;
+        private bool _isAddClubError = false;
+        private bool _isIncorrectMailAddress = false;
+        private bool _isNullMailAddress = false;
+        private bool _isNameRequired = false;
+        private bool _isPhoneRequired = false;
+        
 
         public RelayCommand CommandAddClub { get; private set; }
         public RelayCommand CommandAddMember { get; private set; }
@@ -92,6 +103,138 @@ namespace smartchUWP.ViewModel
             }
         }
 
+        public Address Address { get { return Club.Adresse; } set { Club.Adresse = value; RaisePropertyChanged("Address"); } }
+        public bool IsErrorAdresse
+        {
+            get
+            {
+                return _isAddressError;
+            }
+            set
+            {
+                _isAddressError = value;
+                RaisePropertyChanged("IsErrorAdresse");
+            }
+        }
+        public bool IsAddressRequiredCity
+        {
+            get
+            {
+                return _isAddressRequiredCity;
+            }
+            set
+            {
+                _isAddressRequiredCity = value;
+                RaisePropertyChanged("IsAddressRequiredCity");
+                IsErrorAdresse = true;
+            }
+        }
+        public bool IsAddressRequiredNumber
+        {
+            get
+            {
+                return _isAddressRequiredNumber;
+            }
+            set
+            {
+                _isAddressRequiredNumber = value;
+                RaisePropertyChanged("IsAddressRequiredNumber");
+                IsErrorAdresse = true;
+            }
+        }
+        public bool IsAddressRequiredStreet
+        {
+            get
+            {
+                return _isAddressRequiredStreet;
+            }
+            set
+            {
+                _isAddressRequiredStreet = value;
+                RaisePropertyChanged("IsAddressRequiredStreet");
+                IsErrorAdresse = true;
+            }
+        }
+        public bool IsAddressRequiredZipCode
+        {
+            get
+            {
+                return _isAddressRequiredZipCode;
+            }
+            set
+            {
+                _isAddressRequiredZipCode = value;
+                RaisePropertyChanged("IsAddressRequiredZipCode");
+                IsErrorAdresse = true;
+            }
+        }
+
+        public bool IsAddClubError
+        {
+            get
+            {
+                return _isAddClubError;
+            }
+            set
+            {
+                _isAddClubError = value;
+                RaisePropertyChanged("IsAddClubError");
+            }
+        }
+        public bool IsIncorrectMailAddress
+        {
+            get
+            {
+                return _isIncorrectMailAddress;
+            }
+            set
+            {
+                _isIncorrectMailAddress = value;
+                RaisePropertyChanged("IsIncorrectMailAddress");
+                IsAddClubError = true;
+            }
+        }
+        public bool IsNullMailAddress
+        {
+            get
+            {
+                return _isNullMailAddress;
+            }
+            set
+            {
+                _isNullMailAddress = value;
+                RaisePropertyChanged("IsNullMailAddress");
+                IsAddClubError = true;
+            }
+        }
+        public bool IsNameRequired
+        {
+            get
+            {
+                return _isNameRequired;
+            }
+            set
+            {
+                _isNameRequired = value;
+                RaisePropertyChanged("IsNameRequired");
+                IsAddClubError = true;
+            }
+        }
+        public bool IsPhoneRequired
+        {
+            get
+            {
+                return _isPhoneRequired;
+            }
+            set
+            {
+                _isPhoneRequired = value;
+                RaisePropertyChanged("IsPhoneRequired");
+                IsAddClubError = true;
+            }
+        }
+
+
         public AddClubViewModel(INavigationService navigationService):base(navigationService)
         {
             
@@ -104,6 +247,7 @@ namespace smartchUWP.ViewModel
 
         public async void AddClub()
         {
+            InitError();
             ClubsServices clubsServices = new ClubsServices();
             ResponseObject response = await clubsServices.AddClub(Club);
 
@@ -114,7 +258,10 @@ namespace smartchUWP.ViewModel
                 _navigationService.NavigateTo("Clubs");
             }
             else
-            { }
+            {
+                List<Error> errors = (List<Error>)response.Content;
+                GereError(errors);
+            }
               
 
         }
@@ -150,6 +297,65 @@ namespace smartchUWP.ViewModel
                 AllMembers = new ObservableCollection<User>(users.Except(Club.Members));
                 MembersEntity = new ObservableCollection<User>(Club.Members);
             }
+        }
+
+        public void GereError(List<Error> errors)
+        {
+            foreach(Error error in errors)
+            {
+                SwitchError(error);
+            }
+            
+        }
+        public new void SwitchError(Error error)
+        {
+            base.SwitchError(error);
+            switch (error.Code)
+            {
+                case "ErrorAdresse":
+                    IsErrorAdresse = true;
+                    break;
+                case "AddressRequiredCity":
+                    IsAddressRequiredCity = true;
+                    break;
+                case "AddressRequiredNumber":
+                    IsAddressRequiredNumber = true;
+                    break;
+                case "AddressRequiredStreet":
+                    IsAddressRequiredStreet = true;
+                    break;
+                case "AddressRequiredZipCode":
+                    IsAddressRequiredZipCode = true;
+                    break;
+
+                case "IncorrectMailAddress":
+                    IsIncorrectMailAddress = true;
+                    break;
+                case "NullMailAddress":
+                    IsNullMailAddress = true;
+                    break;
+                case "NameRequired":
+                    IsNameRequired = true;
+                    break;
+                case "PhoneRequired":
+                    IsPhoneRequired = true;
+                    break;
+            }
+        }
+        private void InitError()
+        {
+            IsAddressRequiredCity = false;
+            IsAddressRequiredNumber = false;
+            IsAddressRequiredStreet = false;
+            IsAddressRequiredZipCode = false;
+
+            IsErrorAdresse = false;
+
+            IsIncorrectMailAddress = false;
+            IsNullMailAddress = false;
+            IsNameRequired = false;
+            IsPhoneRequired = false;
+            IsAddClubError = false;
         }
 
         

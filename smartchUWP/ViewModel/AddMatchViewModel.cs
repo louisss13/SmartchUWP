@@ -18,7 +18,7 @@ namespace smartchUWP.ViewModel
         private Match _match;
         private User _selectedJoueur1;
         private User _selectedJoueur2;
-        private Account _selectedArbitre;
+        private User _selectedArbitre;
         private TimeSpan _heurePrevue = new TimeSpan(12, 0, 0);
         private String _lieuMatch;
         private ObservableCollection<User> _allUsers = new ObservableCollection<User>();
@@ -76,7 +76,7 @@ namespace smartchUWP.ViewModel
                 CommandAjouterMatch.RaiseCanExecuteChanged();
             }
         }
-        public Account SelectedArbitre
+        public User SelectedArbitre
         {
             get
             {

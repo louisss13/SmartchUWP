@@ -11,6 +11,7 @@
     >
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        
         <StackPanel>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -22,17 +23,55 @@
             </Grid>
             
             <Pivot >
-                <PivotItem Header="Info générales">
-                    <StackPanel >
-                        
-                        <TextBlock Name="TextErreur" Text="Erreur lors de la création" Visibility="Collapsed" />
-                        <TextBox Header="Nom du Club" Text="{Binding Club.Name, Mode=TwoWay}" />
-                        <TextBox Header="Email de contact" Text="{Binding Club.ContactMail, Mode=TwoWay}"/>
-                        <TextBox Header="Téléphone" Text="{Binding Club.Phone, Mode=TwoWay}"/>
-                    </StackPanel>
+                
+                <PivotItem  >
+                    <PivotItem.Header>
+                        <Border BorderThickness="{Binding IsAddClubError, Converter={StaticResource BooleanToIsVisibleBorderThikness}}" 
+                                BorderBrush="{StaticResource ErrorBackgroundColor}">
+                            <TextBlock Text="Info générales" Margin="10,0,10,0"/>
+                        </Border>
+                    </PivotItem.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Background="{StaticResource ErrorBackgroundColor}" 
+                                    Padding="20"
+                                    Visibility="{Binding IsAddClubError, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="L'adresse mail n'a pas un format valide" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsIncorrectMailAddress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <TextBlock Text="L'adresse mail ne doit pas être vide" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsNullMailAddress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <TextBlock Text="Le nom du club ne doit pas être vide" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsNameRequired, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <TextBlock Text="Le club doit posséder un numéro de téléphone" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsPhoneRequired, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    VerticalAlignment="Top">
+
+                           
+                            <TextBox Header="Nom du Club" Text="{Binding Club.Name, Mode=TwoWay}" />
+                            <TextBox Header="Email de contact" Text="{Binding Club.ContactMail, Mode=TwoWay}"/>
+                            <TextBox Header="Téléphone" Text="{Binding Club.Phone, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </Grid>
+                    
                 </PivotItem>
-                <PivotItem Header="Adresse">
-                    <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding Club.Adresse, Mode=TwoWay}"/>
+                <PivotItem >
+                    <PivotItem.Header>
+                        <Border BorderThickness="{Binding IsErrorAdresse, Converter={StaticResource BooleanToIsVisibleBorderThikness}}" 
+                                BorderBrush="{StaticResource ErrorBackgroundColor}"
+                                >
+                            <TextBlock Text="Adresse" Margin="10,0,10,0"/>
+                        </Border>
+                    </PivotItem.Header>
+                    <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding Source={StaticResource Locator}, Path=AddClub}"/>
                 </PivotItem>
                 <PivotItem Header="Membres">
                     <Frame  SourcePageType="view:MemberSelection" DataContext="{Binding Source={StaticResource Locator}, Path=AddClub}"/>

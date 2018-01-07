@@ -8,14 +8,39 @@
     mc:Ignorable="d"
     
     >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"
+                    Padding="20,20,20,20"
+                    Background="{StaticResource ErrorBackgroundColor}"
+                    Visibility="{Binding IsErrorAdresse, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="La ville ne doit pas être vide" 
+                       Foreground="White"
+                       Visibility="{Binding IsAddressRequiredCity, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Text="Le numéro ne doit pas être vide" 
+                       Foreground="White"
+                       Visibility="{Binding IsAddressRequiredNumber, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Text="La rue ne doit pas être vide" 
+                       Foreground="White"
+                       Visibility="{Binding IsAddressRequiredStreet, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Text="Le code postal ne doit pas être vide" 
+                       Foreground="White"
+                       Visibility="{Binding IsAddressRequiredZipCode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </StackPanel>
+    
+        <StackPanel VerticalAlignment="Top"
+                    Padding="20,20,20,20"
+                    Grid.Row="1">
+            
+            <TextBox Header="Rue" Name="Street" Text="{Binding Address.Street, Mode=TwoWay}"/>
+            <TextBox Header="Numéro" Name="Number" Text="{Binding Address.Number, Mode=TwoWay}"/>
+            <TextBox Header="Boite" Name="Box" Text="{Binding Address.Box, Mode=TwoWay}" />
+            <TextBox Header="Ville" Name="City" Text="{Binding Address.City , Mode=TwoWay}"/>
+            <TextBox Header="Code Postal" Name="Zipcode" Text="{Binding Address.Zipcode, Mode=TwoWay}"/>
 
-    <StackPanel >
-        <TextBlock Text="Adresse"/>
-        <TextBox Header="Rue" Name="Street" Text="{Binding Street, Mode=TwoWay}"/>
-        <TextBox Header="Numéro" Name="Number" Text="{Binding Number, Mode=TwoWay}"/>
-        <TextBox Header="Boite" Name="Box" Text="{Binding Box, Mode=TwoWay}" />
-        <TextBox Header="Ville" Name="City" Text="{Binding City , Mode=TwoWay}"/>
-        <TextBox Header="Code Postal" Name="Zipcode" Text="{Binding Zipcode, Mode=TwoWay}"/>
-
-    </StackPanel>
+        </StackPanel>
+    </Grid>
 </Page>

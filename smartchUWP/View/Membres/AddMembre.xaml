@@ -19,17 +19,57 @@
             <Button Grid.Column="1" Name="AjouterButton" Content="Ajouter" Command="{Binding CommandAddMember}"/>
         </Grid>
         <Pivot>
-            <PivotItem Header="Infos générales">
-                <StackPanel >
-                    <TextBox Header="Nom"  Text="{Binding User.Name, Mode=TwoWay}"/>
-                    <TextBox Header="Prénom" Text="{Binding User.FirstName, Mode=TwoWay}"/>
-                    <TextBox Header="Email" Text="{Binding User.Email, Mode=TwoWay}"/>
-                    <TextBox Header="Téléphone"  Text="{Binding User.Phone, Mode=TwoWay}"/>
-                    <DatePicker Header="Date de naissance"  Date="{Binding User.Birthday, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}"/>
-                </StackPanel>
+            <PivotItem>
+                <PivotItem.Header>
+                    <Border BorderThickness="{Binding IsErrorUser, Converter={StaticResource BooleanToIsVisibleBorderThikness}}" 
+                                BorderBrush="{StaticResource ErrorBackgroundColor}">
+                        <TextBlock Text="Info générales" Margin="10,0,10,0"/>
+                    </Border>
+                </PivotItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Background="{StaticResource ErrorBackgroundColor}" 
+                                    Padding="20"
+                                    Visibility="{Binding IsErrorUser, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="L'adresse mail n'a pas un format valide" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsEmailFormatError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="L'adresse mail ne doit pas être vide" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsEmailRequired, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="Le nom ne doit pas être vide" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsNameRequired, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="Le prénom ne doit pas être vide" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsFirstNameRequired, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="La date de naissance ne doit pas être vide" 
+                                        Foreground="White"
+                                        Visibility="{Binding IsBirtdayRequired, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                VerticalAlignment="Top"
+                                Margin="20">
+                        <TextBox Header="Nom"  Text="{Binding User.Name, Mode=TwoWay}"/>
+                        <TextBox Header="Prénom" Text="{Binding User.FirstName, Mode=TwoWay}"/>
+                        <TextBox Header="Email" Text="{Binding User.Email, Mode=TwoWay}"/>
+                        <TextBox Header="Téléphone"  Text="{Binding User.Phone, Mode=TwoWay}"/>
+                        <DatePicker Header="Date de naissance"  Date="{Binding User.Birthday, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Grid>
             </PivotItem>
-            <PivotItem Header="Adresse">
-                <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding User.Adresse, Mode=TwoWay}"/>
+            <PivotItem >
+                <PivotItem.Header>
+                    <Border BorderThickness="{Binding IsErrorAdresse, Converter={StaticResource BooleanToIsVisibleBorderThikness}}" 
+                                BorderBrush="{StaticResource ErrorBackgroundColor}"
+                                >
+                        <TextBlock Text="Adresse" Margin="10,0,10,0"/>
+                    </Border>
+                </PivotItem.Header>
+                <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding Source={StaticResource Locator}, Path=AddMembre}"/>
             </PivotItem>
         </Pivot>
 

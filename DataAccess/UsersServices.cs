@@ -26,24 +26,8 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             var response = await wc.PostAsync(new Uri(ApiAccess.UsersUrl), postContent);
 
-            ResponseObject contentResponse = new ResponseObject();
-            String jstr = response.Content.ReadAsStringAsync().Result;
-
-
-
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                contentResponse.Content = JObject.Parse(jstr);
-                contentResponse.Success = true;
-            }
-            else
-            {
-                contentResponse.Content = JArray.Parse(jstr);
-                contentResponse.Success = false;
-
-            }
-
-            return contentResponse;
+            return GetResponseService.TraiteResponse(response, new UserDAO(), false);
+            
         }
 
         public async Task<ResponseObject> GetUsers()

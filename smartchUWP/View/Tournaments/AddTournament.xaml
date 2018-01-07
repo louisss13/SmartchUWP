@@ -14,28 +14,59 @@
             <Pivot.RightHeader>
                 <Button Content="Enregister" Command="{Binding CommandAddTournament}" />
             </Pivot.RightHeader>
-            <PivotItem Header="Info générales">
-                <StackPanel >
-                    <TextBox Name="Name" Header="Nom du tournois" Text="{Binding OTournament.Name, Mode=TwoWay}"/>
-                    <DatePicker Name="DateDebut" Header="Date de début" Date="{Binding OTournament.BeginDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
-                    <DatePicker Name="DateFin" Header="Date de Fin" Date="{Binding OTournament.EndDate, Mode=TwoWay , Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
-                    <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedItem="{Binding OTournament.Etat, Mode=TwoWay, Converter={StaticResource TournamentStatesConverter}}"/>
-                    <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding OTournament.Club, Mode=TwoWay}" />
-                   
-                </StackPanel>
+            <PivotItem >
+                <PivotItem.Header>
+                    <Border BorderThickness="{Binding IsTournamentError, Converter={StaticResource BooleanToIsVisibleBorderThikness}}" 
+                                BorderBrush="{StaticResource ErrorBackgroundColor}">
+                        <TextBlock Text="Info générales" Margin="10,0,10,0"/>
+                    </Border>
+                </PivotItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0"
+                            Background="{StaticResource ErrorBackgroundColor}" 
+                            Padding="20"
+                            Visibility="{Binding IsTournamentError, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="Un club est requis pour créer un tournois" 
+                                   Foreground="White"
+                                   Visibility="{Binding IsClubRequired, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="Le nom d'un tournois ne doit pas être vide" 
+                                    Foreground="White"
+                                    Visibility="{Binding IsNameTournamentRequired, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                VerticalAlignment="Top"
+                                Margin="20">
+                        <TextBox Name="Name" Header="Nom du tournois" Text="{Binding OTournament.Name, Mode=TwoWay}"/>
+                        <DatePicker Name="DateDebut" Header="Date de début" Date="{Binding OTournament.BeginDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
+                        <DatePicker Name="DateFin" Header="Date de Fin" Date="{Binding OTournament.EndDate, Mode=TwoWay , Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
+                        <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedItem="{Binding OTournament.Etat, Mode=TwoWay, Converter={StaticResource TournamentStatesConverter}}"/>
+                        <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding OTournament.Club, Mode=TwoWay}" />
+
+                    </StackPanel>
+                </Grid>
+                
             </PivotItem>
-            <PivotItem Header="Adresse" >
-                <Frame  SourcePageType="view:AdresseForm" DataContext="{Binding OTournament.Adresse, Mode=TwoWay}"/>
+            <PivotItem >
+                <PivotItem.Header>
+                    <Border BorderThickness="{Binding IsErrorAdresse, Converter={StaticResource BooleanToIsVisibleBorderThikness}}" 
+                                BorderBrush="{StaticResource ErrorBackgroundColor}"
+                                >
+                        <TextBlock Text="Adresse" Margin="10,0,10,0"/>
+                    </Border>
+                </PivotItem.Header>
+                <Frame  SourcePageType="view:AdresseForm" 
+                        DataContext="{Binding Source={StaticResource Locator}, Path=AddTournament}"
+                        VerticalAlignment="Top"
+                        Margin="20"/>
             </PivotItem>
             <PivotItem Header="Participants"  >
                 <Frame  SourcePageType="view:MemberSelection" DataContext="{Binding Source={StaticResource Locator}, Path=AddTournament}"/>
             </PivotItem>
-            <PivotItem Header="Terrain">
-                
-            </PivotItem>
-            <PivotItem Header="Match">
-                
-            </PivotItem>
+            
         </Pivot>
         
     </Grid>

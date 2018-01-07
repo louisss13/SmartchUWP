@@ -20,8 +20,31 @@ namespace smartchUWP.ViewModel
         public RelayCommand CmdNavigateAddClub { get; private set; }
 
         private ObservableCollection<Club> _clubs = null;
-
+        private Club _selectedClub;
         
+        
+        public Club SelectedClub
+        {
+            get
+            {
+                return _selectedClub;
+            }
+            set
+            {
+                _selectedClub = value;
+                RaisePropertyChanged("SelectedClub");
+                RaisePropertyChanged("IsSelectedClub");
+            }
+        }
+        public bool IsSelectedClub
+        {
+            get
+            {
+                return SelectedClub != null && SelectedClub.ClubId >0;
+            }
+
+        }
+
 
         public ClubsViewModel(INavigationService navigationService) : base(navigationService)
         {

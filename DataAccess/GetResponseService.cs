@@ -45,7 +45,7 @@ namespace DataAccess.Dao
                     {
                         Code = e["code"].Value<String>(),
                         Description = e["description"].Value<String>()
-                    });
+                    }).ToList();
                     contentResponse.Success = false;
                 }
                 else if (response.StatusCode == HttpStatusCode.GatewayTimeout)

@@ -16,6 +16,7 @@
         <conv:DateTimeToDateTimeOffsetConverter x:Name="DateTimeToDateTimeOffsetConverter"/>
         <conv:TournamentStatesConverter x:Name="TournamentStatesConverter"/>
         <conv:BooleanToVisibilityConverter x:Name="BooleanToVisibilityConverter"/>
+        <conv:BooleanToIsVisibleBorderThikness x:Name="BooleanToIsVisibleBorderThikness"/>
         <vm1:ViewModelLocator x:Key="Locator" xmlns:vm="using:smartchUWP.ViewModel"/>
 
         <DataTemplate x:Key="ClubsList">

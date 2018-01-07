@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -50,20 +51,9 @@ namespace smartchUWP.ViewModel
             CommandSelectChangeMenu = new RelayCommand<Object>(SelectionChanged );
             CommandInvokedMenu = new RelayCommand<Object>(InvokedItemMenu);
 
-            if (IsInDesignMode)
-            {
-
-            }
-            else
-            {
-                InitializeAsync();
-            }
-        }
-        public async Task InitializeAsync()
-        {
             
-
         }
+        
         
         public void SelectionChanged(Object args)
         {
@@ -118,6 +108,11 @@ namespace smartchUWP.ViewModel
                     _navigationService.NavigateTo("Tournaments");
                     break;
             }
+        }
+
+        public void SwitchError(Error error)
+        {
+
         }
     }
 }

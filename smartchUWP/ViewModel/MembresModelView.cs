@@ -1,8 +1,10 @@
 ﻿using DataAccess;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+
 using GalaSoft.MvvmLight.Views;
 using Model;
+using smartchUWP.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,7 +22,7 @@ namespace smartchUWP.ViewModel
         private ObservableCollection<User> _users = null;
         public MembresModelView(INavigationService navigationService) : base(navigationService)
         {
-            
+            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
             CmdNavigateAddMembre = new RelayCommand(NavigateToAddMembre);
             if (IsInDesignMode)
             {
@@ -28,7 +30,7 @@ namespace smartchUWP.ViewModel
             }
             else
             {
-                InitializeAsync();
+                SetUsers();
             }
         }
         private void NavigateToAddMembre()
@@ -51,7 +53,8 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("Users");
             }
         }
-        public async Task InitializeAsync()
+ 
+        public async Task SetUsers()
         {
             var service = new UsersServices();
             var response = await service.GetUsers();
@@ -59,6 +62,16 @@ namespace smartchUWP.ViewModel
             {
                 List<User> users = ((List<Object>)response.Content).Cast<User>().ToList();
                 Users = new ObservableCollection<User>(users);
+            }
+        }
+        private async void MessageReceiver(NotificationMessage message)
+        {
+            switch (message.VariableType)
+            {
+                case NotificationMessageType.ListUser:
+                    await SetUsers();
+
+                    break;
             }
         }
     }

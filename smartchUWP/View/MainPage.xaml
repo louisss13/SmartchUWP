@@ -11,7 +11,7 @@
     DataContext="{Binding Source={StaticResource Locator} , Path=MainPage}"
     mc:Ignorable="d">
 
-    <NavigationView x:Name="NavView" >
+    <NavigationView x:Name="NavView" IsSettingsVisible="false" >
         <interactivity:Interaction.Behaviors>
             <core:EventTriggerBehavior EventName="ItemInvoked">
                 <core:InvokeCommandAction Command="{Binding CommandInvokedMenu}" />
@@ -21,17 +21,17 @@
             </core:EventTriggerBehavior>
         </interactivity:Interaction.Behaviors>
         <NavigationView.MenuItems>
-            <NavigationViewItem Content="Home" Tag="home">
+            <!--<NavigationViewItem Content="Home" Tag="home">
                 <NavigationViewItem.Icon>
                     <FontIcon Glyph="&#xE10F;"/>
                 </NavigationViewItem.Icon>
-            </NavigationViewItem>
+            </NavigationViewItem>-->
             <NavigationViewItemSeparator/>
             
             <NavigationViewItem Icon="Audio" Content="Mes clubs" Tag="clubs"/>
             <NavigationViewItem Icon="People" Content="Membres" Tag="members"/>
             <NavigationViewItem Icon="Video" Content="Tournois" Tag="tournaments"/>
-            <NavigationViewItem Icon="Audio" Content="Spectateur" Tag="spectators"/>
+            
         </NavigationView.MenuItems>
 
         
@@ -42,12 +42,12 @@
             </DataTemplate>
         </NavigationView.HeaderTemplate>
 
-        <NavigationView.PaneFooter>
+        <!--<NavigationView.PaneFooter>
             <HyperlinkButton x:Name="MoreInfoBtn"
                              Content="More info"
                              
                              Margin="12,0"/>
-        </NavigationView.PaneFooter>
+        </NavigationView.PaneFooter>-->
         <Grid>
             <Grid Visibility="{Binding IsChargement , Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}" >
                 <Image gif:AnimationBehavior.SourceUri="ms-appx:////Assets/gifs/ping-loader.gif" 
@@ -66,6 +66,6 @@
                 </Frame.ContentTransitions>
             </Frame>
         </Grid>
-
+        
     </NavigationView>
 </Page>

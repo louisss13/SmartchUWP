@@ -19,13 +19,18 @@
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Button Content="Enregistrer" Command="{Binding CommandAjouterMatch}"/>
-        <Button Content="Addpoint" Command="{Binding CommandAddPoint}"/>
-        <Button Content="Delpoint" Command="{Binding CommandDelPoint}"/>
-        <TextBlock Text="Ajouter un match"/>
+        <!--<Button Content="Addpoint" Command="{Binding CommandAddPoint}"/>
+        <Button Content="Delpoint" Command="{Binding CommandDelPoint}"/>-->
+        <TextBlock >
+            <Run Text="Ajouter un match" FontWeight="Bold" FontSize="20" />
+        </TextBlock>
         <ComboBox Header="Joueur 1" ItemsSource="{Binding ListeJoueur1}" ItemTemplate="{StaticResource ListeUserTemplate}" SelectedItem="{Binding SelectedJoueur1, Mode=TwoWay}"/>
         <ComboBox Header="Joueur 2" ItemsSource="{Binding ListeJoueur2}" ItemTemplate="{StaticResource ListeUserTemplate}" SelectedItem="{Binding SelectedJoueur2, Mode=TwoWay}"/>
         <TextBox Header="Lieu" Text="{Binding LieuMatch, Mode=TwoWay}"/>
         <TimePicker Header="Heure prévue" Time="{Binding HeurePrevue, Mode=TwoWay}"/>
-        <ComboBox Header="Arbitre" ItemsSource="{Binding AllArbitre}" ItemTemplate="{StaticResource ListeUserTemplate}" SelectedItem="{Binding SelectedArbitre, Mode=TwoWay}"/>
+        <ComboBox Header="Arbitre" 
+                  ItemsSource="{Binding AllArbitre}" 
+                  ItemTemplate="{StaticResource ListeUserTemplate}" 
+                  SelectedItem="{Binding SelectedArbitre, Mode=TwoWay}"/>
     </StackPanel>
 </Page>

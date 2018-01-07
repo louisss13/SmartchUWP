@@ -15,13 +15,21 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddTournamentViewModel : MainPageViewModel, IListeMembreViewModel
+    public class AddTournamentViewModel : MainPageViewModel, IListeMembreViewModel, IAddressForm
     {
         
         private ObservableCollection<Club> _clubs = null;
         private ObservableCollection<User> _allMembers;
         private ObservableCollection<User> _selectedAllMembers = new ObservableCollection<User>();
         private ObservableCollection<User> _selectedMembersEntity = new ObservableCollection<User>();
+        private bool _isAddressError = false;
+        private bool _isAddressRequiredCity = false;
+        private bool _isAddressRequiredNumber = false;
+        private bool _isAddressRequiredStreet = false;
+        private bool _isAddressRequiredZipCode = false;
+        private bool _isTournamentError = false;
+        private bool _isClubRequired = false;
+        private bool _isNameTournamentRequired = false;
 
         private ObservableTournament _tournament = new ObservableTournament( new Tournament() { Address = new Address() { Street = "rue de la loi" } });
         private ObservableCollection<KeyValuePair<TournamentState, string>> _tournamentStates = null;
@@ -30,20 +38,111 @@ namespace smartchUWP.ViewModel
         public RelayCommand CommandAddMember { get; private set; }
         public RelayCommand CommandDelMember { get; private set; }
 
-        public AddTournamentViewModel(INavigationService navigationService) : base(navigationService)
+        public Address Address { get { return OTournament.Address; } set { OTournament.Address = value; RaisePropertyChanged("Address"); } }
+        public bool IsErrorAdresse
         {
-            CommandAddTournament = new RelayCommand( AddTournament);
-            CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
-            CommandDelMember = new RelayCommand(DelMembre, IsParameterDel);
-            if (IsInDesignMode)
+            get
             {
-                _clubs = new ObservableCollection<Club> { new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
+                return _isAddressError;
             }
-            else
+            set
             {
-                InitializeAsync();
+                _isAddressError = value;
+                RaisePropertyChanged("IsErrorAdresse");
             }
         }
+        public bool IsAddressRequiredCity
+        {
+            get
+            {
+                return _isAddressRequiredCity;
+            }
+            set
+            {
+                _isAddressRequiredCity = value;
+                RaisePropertyChanged("IsAddressRequiredCity");
+                IsErrorAdresse = true;
+            }
+        }
+        public bool IsAddressRequiredNumber
+        {
+            get
+            {
+                return _isAddressRequiredNumber;
+            }
+            set
+            {
+                _isAddressRequiredNumber = value;
+                RaisePropertyChanged("IsAddressRequiredNumber");
+                IsErrorAdresse = true;
+            }
+        }
+        public bool IsAddressRequiredStreet
+        {
+            get
+            {
+                return _isAddressRequiredStreet;
+            }
+            set
+            {
+                _isAddressRequiredStreet = value;
+                RaisePropertyChanged("IsAddressRequiredStreet");
+                IsErrorAdresse = true;
+            }
+        }
+        public bool IsAddressRequiredZipCode
+        {
+            get
+            {
+                return _isAddressRequiredZipCode;
+            }
+            set
+            {
+                _isAddressRequiredZipCode = value;
+                RaisePropertyChanged("IsAddressRequiredZipCode");
+                IsErrorAdresse = true;
+            }
+        }
+
+        public bool IsTournamentError
+        {
+            get
+            {
+                return _isTournamentError;
+            }
+            set
+            {
+                _isTournamentError = value;
+                RaisePropertyChanged("IsTournamentError");
+            }
+        }
+        public bool IsClubRequired
+        {
+            get
+            {
+                return _isClubRequired;
+            }
+            set
+            {
+                _isClubRequired = value;
+                RaisePropertyChanged("IsClubRequired");
+                IsTournamentError = true;
+            }
+        }
+        public bool IsNameTournamentRequired
+        {
+            get
+            {
+                return _isNameTournamentRequired;
+            }
+            set
+            {
+                _isNameTournamentRequired = value;
+                RaisePropertyChanged("IsNameTournamentRequired");
+                IsTournamentError = true;
+            }
+        }
+
         public ObservableCollection<KeyValuePair<TournamentState, string>> TournamentStates
         {
             get
@@ -141,6 +240,21 @@ namespace smartchUWP.ViewModel
             }
         }
 
+        public AddTournamentViewModel(INavigationService navigationService) : base(navigationService)
+        {
+            CommandAddTournament = new RelayCommand(AddTournament);
+            CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
+            CommandDelMember = new RelayCommand(DelMembre, IsParameterDel);
+            if (IsInDesignMode)
+            {
+                _clubs = new ObservableCollection<Club> { new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
+            }
+            else
+            {
+                InitializeAsync();
+            }
+        }
+
         public bool IsParameterAdd()
         {
             return SelectedAllMembers.Count > 0;
@@ -176,6 +290,7 @@ namespace smartchUWP.ViewModel
 
         public async void AddTournament()
         {
+            InitError();
             Tournament tournament = OTournament;
             tournament.Admins = null;
             //tournament.Club = null;
@@ -185,6 +300,13 @@ namespace smartchUWP.ViewModel
             if (response.Success)
             {
                 MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListTournament));
+            }
+            else
+            {
+                foreach(Error error in response.Content as List<Error>)
+                {
+                    SwitchError(error);
+                }
             }
         }
 
@@ -236,8 +358,58 @@ namespace smartchUWP.ViewModel
         private async void SetClubList()
         {
             var service = new ClubsServices();
-            var clubs = await service.GetClubs();
-            Clubs = new ObservableCollection<Club>(clubs.Content as IEnumerable<Club>);
+            var response = await service.GetClubs();
+            if (response.Success)
+            {
+                List<Club> clubs = ((List<object>)response.Content).Cast<Club>().ToList();
+                Clubs = new ObservableCollection<Club>(clubs);
+            }
+        }
+
+        public new void SwitchError(Error error)
+        {
+            base.SwitchError(error);
+            switch (error.Code)
+            {
+                case "ErrorAdresse":
+                    IsErrorAdresse = true;
+                    break;
+                case "AddressRequiredCity":
+                    IsAddressRequiredCity = true;
+                    break;
+                case "AddressRequiredNumber":
+                    IsAddressRequiredNumber = true;
+                    break;
+                case "AddressRequiredStreet":
+                    IsAddressRequiredStreet = true;
+                    break;
+                case "AddressRequiredZipCode":
+                    IsAddressRequiredZipCode = true;
+                    break;
+
+                case "ClubRequired":
+                    IsClubRequired = true;
+                    break;
+                case "NameTournamentRequired":
+                    IsNameTournamentRequired = true;
+                    break;
+                
+            }
+        }
+        private void InitError()
+        {
+            IsAddressRequiredCity = false;
+            IsAddressRequiredNumber = false;
+            IsAddressRequiredStreet = false;
+            IsAddressRequiredZipCode = false;
+
+            IsErrorAdresse = false;
+
+            IsClubRequired = false;
+            IsNameTournamentRequired = false;
+
+            IsTournamentError = false;
+            
         }
     }
 }

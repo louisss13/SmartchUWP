@@ -95,11 +95,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToIsVisibleBorderThikness.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeConverter.cs" />
     <Compile Include="Converters\DateTimeToAgeConverter.cs" />
     <Compile Include="Converters\DateTimeToDateTimeOffsetConverter.cs" />
     <Compile Include="Converters\TournamentStatesConverter.cs" />
+    <Compile Include="Interfaces\IAddressForm.cs" />
     <Compile Include="Interfaces\IListeMembreViewModel.cs" />
     <Compile Include="Observable\ObservableAddress.cs" />
     <Compile Include="Observable\ObservableClub.cs" />
