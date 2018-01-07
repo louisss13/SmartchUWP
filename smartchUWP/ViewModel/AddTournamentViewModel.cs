@@ -313,11 +313,11 @@ namespace smartchUWP.ViewModel
         public async Task InitializeAsync()
         {
             SetClubList();
-            TournamentStates = getTournamentState();
+            TournamentStates = GetTournamentState();
             SetMembers();
         }
         //TODO A mettre dans un converter plutot
-        private ObservableCollection<KeyValuePair<TournamentState, string>> getTournamentState()
+        private ObservableCollection<KeyValuePair<TournamentState, string>> GetTournamentState()
         {
             var stateDictionary = new ObservableCollection<KeyValuePair<TournamentState, string>>() ;
             foreach (TournamentState etat in Enum.GetValues(typeof(TournamentState)))

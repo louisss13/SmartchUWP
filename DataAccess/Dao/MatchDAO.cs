@@ -46,8 +46,8 @@ namespace DataAccess.Dao
             return new Match()
             {
                 Id = Id,
-                Player1 = (Joueur1!= null)?Joueur1: new User() { Id = Joueur1Id},
-                Player2 = (Joueur2 != null) ? Joueur2 : new User() { Id = Joueur2Id },
+                Player1 = Joueur1 ?? new User() { Id = Joueur1Id },
+                Player2 = Joueur2 ?? new User() { Id = Joueur2Id },
                 Arbitre = Arbitre,
                 Emplacement = Emplacement,
                 State = State,
@@ -55,7 +55,7 @@ namespace DataAccess.Dao
                 Time = DebutPrevu
             };
         }
-        public static ICollection<MatchDAO> getListMatchDAO(ICollection<MatchsPhase> matchsPhases)
+        public static ICollection<MatchDAO> GetListMatchDAO(ICollection<MatchsPhase> matchsPhases)
         {
             List<MatchDAO> matchs = new List<MatchDAO>();
             foreach(MatchsPhase phase in matchsPhases)

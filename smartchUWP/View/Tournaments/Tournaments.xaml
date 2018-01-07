@@ -20,7 +20,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <CommandBar  >
                 <AppBarButton Icon="Add" Label="Ajouter" Command="{Binding NavigateCommand}"/>
-                <AppBarButton Icon="Edit" Label="Edit" Command="{Binding CommandNavigateModification}"/>
+                
                 <AppBarButton Icon="Target" Label="Info" Command="{Binding CommandNavigateSelect}"/>
     
             </CommandBar>

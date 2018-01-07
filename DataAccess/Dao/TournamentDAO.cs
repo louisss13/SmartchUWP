@@ -39,7 +39,7 @@ namespace DataAccess
             Etat = tournament.Etat;
             Participants = tournament.Participants;
             Admins = tournament.Admins;
-            Matches = MatchDAO.getListMatchDAO(tournament.Matches);
+            Matches = MatchDAO.GetListMatchDAO(tournament.Matches);
 
         }
 
