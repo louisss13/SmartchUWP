@@ -112,11 +112,14 @@
     <Compile Include="Country.cs" />
     <Compile Include="EJoueurs.cs" />
     <Compile Include="ErrorObject.cs" />
+    <Compile Include="ModelException\BadRequestException.cs" />
+    <Compile Include="ModelException\GetDataException.cs" />
+    <Compile Include="ModelException\ServerException.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="MatchsPhases.cs" />
     <Compile Include="MatchState.cs" />
+    <Compile Include="ModelException\ServiceException.cs" />
     <Compile Include="Point.cs" />
-    <Compile Include="ResponseObject.cs" />
     <Compile Include="Score.cs" />
     <Compile Include="Tournament.cs" />
     <Compile Include="TournamentState.cs" />

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddMatchViewModel : MainPageViewModel
+    public class AddMatchViewModel : SmartchViewModelBase
     {
         private Match _match;
         private User _selectedJoueur1;
@@ -184,7 +184,15 @@ namespace smartchUWP.ViewModel
             {
                 Joueur = EJoueurs.Joueur1
             };
-            await tournamentsServices.AddPointMatch(Match.Id, point);
+            try
+            {
+                await tournamentsServices.AddPointMatch(Match.Id, point);
+            }
+            catch (Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+            
         }
         private async void DelPoint()
         {
@@ -193,7 +201,15 @@ namespace smartchUWP.ViewModel
             {
                 Joueur = EJoueurs.Joueur1
             };
-            await tournamentsServices.DelPointMatch(Match.Id, point);
+            try
+            {
+                await tournamentsServices.DelPointMatch(Match.Id, point);
+            }
+            catch(Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+            
         }
         private Boolean CanAddPoint()
         {
@@ -219,10 +235,17 @@ namespace smartchUWP.ViewModel
             }
             else
             {
-                ResponseObject response = await tournamentsServices.AddMatch(Tournament, Match, NumPhase.GetValueOrDefault());
-                if (response.Success)
+                try
                 {
-                    _navigationService.NavigateTo("Tournaments");
+                    bool response = await tournamentsServices.AddMatch(Tournament, Match, NumPhase.GetValueOrDefault());
+                    if (response)
+                    {
+                        _navigationService.NavigateTo("Tournaments");
+                    }
+                }
+                catch(Exception e)
+                {
+                    SetGeneralErrorMessage(e);
                 }
             }
             
@@ -270,25 +293,19 @@ namespace smartchUWP.ViewModel
             UsersServices usersServices = new UsersServices();
             TournamentsServices tournamentsServices = new TournamentsServices();
             long idTounrnament = Tournament.Id;
-            var responseUser = await tournamentsServices.GetParticipants(idTounrnament);
-            var responseArbitre = await usersServices.GetUsersWithAccount();
             bool allRequestSuccess = true;
-            if (responseUser.Success)
+            try
             {
-                List<User> users = ((List<Object>)responseUser.Content).Cast<User>().ToList();
+                List<User> users = await tournamentsServices.GetParticipants(idTounrnament);
                 AllUsers = new ObservableCollection<User>(users);
-            }
-            else
-                allRequestSuccess = false;
-            if (responseArbitre.Success)
-            {
-                List<User> arbitres = ((List<object>)responseArbitre.Content).Cast<User>().ToList();
+                List<User> arbitres = await usersServices.GetUsersWithAccount();
                 AllArbitre = new ObservableCollection<User>(arbitres);
             }
-            else
+            catch(Exception e)
+            {
                 allRequestSuccess = false;
-
-
+                SetGeneralErrorMessage(e);
+            }
 
             if (allRequestSuccess) { 
                 //if(Match.Arbitre != null)

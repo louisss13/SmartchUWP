@@ -8,6 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:gif="using:XamlAnimatedGif"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core" 
+    xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
     DataContext="{Binding Source={StaticResource Locator} , Path=MainPage}"
     mc:Ignorable="d">
 
@@ -49,14 +51,42 @@
                              Margin="12,0"/>
         </NavigationView.PaneFooter>-->
         <Grid>
-            <Grid Visibility="{Binding IsChargement , Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0"
+                    Padding="20,20,20,20"
+                    Background="{StaticResource ErrorBackgroundColor}"
+                    >
+                <interactivity:Interaction.Behaviors>
+                    <!-- Animation du Toolkit -->
+                    <behaviors:Fade x:Name="FadeIn" Value="1" Duration="2000" AutomaticallyStart="False"/>
+                    <behaviors:Fade x:Name="FadeOut" Value="0" Duration="2000" AutomaticallyStart="False"/>
+
+                    <!-- Déclencheur -->
+                    <Core:DataTriggerBehavior Binding="{Binding IsGeneralError}" ComparisonCondition="Equal" Value="True">
+                        <!-- Lancement de l'animation -->
+                        <Core:CallMethodAction MethodName="StartAnimation" TargetObject="{Binding ElementName=FadeIn}" />
+                    </Core:DataTriggerBehavior>
+                    <Core:DataTriggerBehavior Binding="{Binding IsGeneralError}" ComparisonCondition="Equal" Value="False">
+                        <!-- Lancement de l'animation -->
+                        <Core:CallMethodAction MethodName="StartAnimation" TargetObject="{Binding ElementName=FadeOut}" />
+                    </Core:DataTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+                <TextBlock Text="{Binding ErrorDescription, Mode=TwoWay}" Margin="10,0,10,0" Name="errorMessage"/>
+            </StackPanel>
+            
+            <Grid Grid.Row="1"  >
                 <Image gif:AnimationBehavior.SourceUri="ms-appx:////Assets/gifs/ping-loader.gif" 
                        Height="200px" 
                        Width="200px" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center"/>
             </Grid>
-            <Frame x:Name="ContentFrame"  
+            <Frame Grid.Row="1"
+                    x:Name="ContentFrame"  
                    Margin="24"
                    Visibility="{Binding IsNotChargement, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}">
                 <Frame.ContentTransitions>

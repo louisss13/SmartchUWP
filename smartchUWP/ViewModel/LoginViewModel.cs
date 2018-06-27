@@ -3,22 +3,27 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
+using Model.ModelException;
+using smartchUWP.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class LoginViewModel : ViewModelBase
+    public class LoginViewModel : SmartchViewModelBase, IAfficheErrorGeneral
     {
-        private INavigationService _navigationService;
+        
         private bool _isChargement = false;
         private bool _isErrorConnection = false;
+        private bool _isGeneralError = false;
 
         private String _email = "louisss13@gmail.com";
         private String _password = "Coucou-123";
+        private String _errorDescription = "";
 
         public bool IsNotChargement
         {
@@ -57,6 +62,20 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("IsErrorConnection");
             }
         }
+        public bool IsGeneralError
+        {
+            get
+            {
+                return _isGeneralError;
+            }
+            set
+            {
+                _isGeneralError = value;
+                RaisePropertyChanged("IsGeneralError");
+            }
+        }
+
+        
 
         public RelayCommand CommandLogin { get; private set; }
         public RelayCommand CommandNavigateRegister { get; private set; }
@@ -87,12 +106,29 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("Password");
             }
         }
-
-        public LoginViewModel(INavigationService navigationService)
+        public String ErrorDescription
         {
-            _navigationService = navigationService;
+            get
+            {
+                return _errorDescription;
+            }
+            set
+            {
+                _errorDescription = value + "234567890";
+                RaisePropertyChanged("ErrorDescription");
+            }
+        }
+
+
+        public LoginViewModel(INavigationService navigationService):base(navigationService)
+        {
             CommandLogin = new RelayCommand(Login);
             CommandNavigateRegister = new RelayCommand(NavigateToRegister);
+        }
+        public void SetMessageConnection()
+        {
+            IsGeneralError = true;
+            ErrorDescription = "Un problème est survenu lors de l'envois d'une requète. Etes-vous connecté à internet?";
         }
         private void NavigateToRegister()
         {
@@ -104,16 +140,17 @@ namespace smartchUWP.ViewModel
         {
             IsChargement = true;
             AccountsServices accountsServices = new AccountsServices();
-
-            ResponseObject response = await accountsServices.LogIn(Email, Password);
-
-            if (response.Success)
+            try
             {
-                _navigationService.NavigateTo("Home"); 
+                bool response = await accountsServices.LogIn(Email, Password);
+                if (response)
+                {
+                    _navigationService.NavigateTo("Home");
+                }
             }
-            else
+            catch (Exception e)
             {
-                IsErrorConnection = true;
+                SetGeneralErrorMessage(e, this);
             }
             IsChargement = false; 
         }

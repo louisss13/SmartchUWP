@@ -15,7 +15,7 @@ using Windows.UI.Notifications;
 
 namespace smartchUWP.ViewModel
 {
-    public class ClubsViewModel : MainPageViewModel
+    public class ClubsViewModel : SmartchViewModelBase
     {
         public RelayCommand CmdNavigateAddClub { get; private set; }
 
@@ -48,8 +48,6 @@ namespace smartchUWP.ViewModel
 
         public ClubsViewModel(INavigationService navigationService) : base(navigationService)
         {
-           
-
             CmdNavigateAddClub = new RelayCommand(NavigateToAddClub);
 
             MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
@@ -90,9 +88,16 @@ namespace smartchUWP.ViewModel
         private async void SetClubs()
         {
             var service = new ClubsServices();
-            var clubs = await service.GetClubs();
-            ICollection<Club> allClubs = ((List<Object>) clubs.Content).Cast<Club>().ToList();
-            Clubs = new ObservableCollection<Club>(allClubs);
+            try
+            {
+                ICollection<Club> allClubs = await service.GetClubs();
+                Clubs = new ObservableCollection<Club>(allClubs);
+            }
+            catch(Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+           
         }
         private void MessageReceiver(NotificationMessage message)
         {

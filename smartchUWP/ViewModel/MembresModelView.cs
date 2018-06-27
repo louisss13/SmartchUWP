@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class MembresModelView : MainPageViewModel
+    public class MembresModelView : SmartchViewModelBase
     {
         public RelayCommand CmdNavigateAddMembre { get; private set; }
 
@@ -57,12 +57,18 @@ namespace smartchUWP.ViewModel
         public async Task SetUsers()
         {
             var service = new UsersServices();
-            var response = await service.GetUsers();
-            if (response.Success)
+            try
             {
-                List<User> users = ((List<Object>)response.Content).Cast<User>().ToList();
+                List<User> users = await service.GetUsers();
                 Users = new ObservableCollection<User>(users);
             }
+            catch(Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+            
+                
+            
         }
         private async void MessageReceiver(NotificationMessage message)
         {

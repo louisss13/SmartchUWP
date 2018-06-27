@@ -5,11 +5,15 @@
     xmlns:local="using:smartchUWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core" 
+    xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
     mc:Ignorable="d"
     DataContext="{Binding Source={StaticResource Locator} , Path=Register}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
@@ -46,8 +50,28 @@
                        Foreground="White"
                        Visibility="{Binding IsPasswordConfirmEquals, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </StackPanel>
-        
-        <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="0"
+                    Padding="20,20,20,20"
+                    Background="{StaticResource ErrorBackgroundColor}"
+                    >
+            <interactivity:Interaction.Behaviors>
+                <!-- Animation du Toolkit -->
+                <behaviors:Fade x:Name="FadeIn" Value="1" Duration="2000" AutomaticallyStart="False"/>
+                <behaviors:Fade x:Name="FadeOut" Value="0" Duration="2000" AutomaticallyStart="False"/>
+
+                <!-- Déclencheur -->
+                <Core:DataTriggerBehavior Binding="{Binding IsGeneralError}" ComparisonCondition="Equal" Value="True">
+                    <!-- Lancement de l'animation -->
+                    <Core:CallMethodAction MethodName="StartAnimation" TargetObject="{Binding ElementName=FadeIn}" />
+                </Core:DataTriggerBehavior>
+                <Core:DataTriggerBehavior Binding="{Binding IsGeneralError}" ComparisonCondition="Equal" Value="False">
+                    <!-- Lancement de l'animation -->
+                    <Core:CallMethodAction MethodName="StartAnimation" TargetObject="{Binding ElementName=FadeOut}" />
+                </Core:DataTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+            <TextBlock Text="{Binding ErrorDescription, Mode=TwoWay}" Margin="10,0,10,0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Padding="0,20, 0, 0">

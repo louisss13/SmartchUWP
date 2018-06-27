@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
-using Microsoft.Practices.ServiceLocation;
+
 using Model;
 using smartchUWP.Services;
 using System;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class TournamentViewModel : MainPageViewModel
+    public class TournamentViewModel : SmartchViewModelBase
     {
         
         private ObservableCollection<Tournament> _tournaments = null;
@@ -56,7 +56,7 @@ namespace smartchUWP.ViewModel
             }
             else
             {
-                InitializeAsync();
+                SetTournaments();
             }
         }
         private bool IsSelected()
@@ -64,7 +64,7 @@ namespace smartchUWP.ViewModel
             return SelectedTournament != null;
         }
         
-    private void NavigateToSelectTournament()
+        private void NavigateToSelectTournament()
         {
             
             _navigationService.NavigateTo("SelectTournament");
@@ -93,10 +93,7 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("Tournaments");
             }
         }
-        public async Task InitializeAsync()
-        {
-           SetTournaments();   
-        }
+        
         private void MessageReceiver(NotificationMessage message) 
         {
             switch (message.VariableType)
@@ -109,12 +106,16 @@ namespace smartchUWP.ViewModel
         private async void SetTournaments()
         {
             var service = new TournamentsServices();
-            ResponseObject response = await service.GetTournaments();
-            if (response.Success)
+            try
             {
-                var tournament = ((List<Object>)response.Content).Cast<Tournament>().ToList();
+                List<Tournament> tournament = await service.GetTournaments();
                 Tournaments = new ObservableCollection<Tournament>(tournament);
             }
+            catch(Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+
         }
     }
 }

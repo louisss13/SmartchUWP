@@ -1,4 +1,5 @@
 ﻿using smartchUWP.Services;
+using smartchUWP.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,10 @@ namespace smartchUWP.View
         public Frame getRootFrame()
         {
             return AppFrame;
+        }
+        public MainPageViewModel GetViewModel()
+        {
+            return ((MainPageViewModel)DataContext);
         }
     }
 }

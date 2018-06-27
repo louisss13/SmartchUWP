@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http.Headers;
 using DataAccess.Dao;
+using Model.ModelException;
 
 namespace DataAccess
 {
@@ -18,54 +19,51 @@ namespace DataAccess
         {
         }
 
-        public async Task<ResponseObject> AddUser(User user)
+        public async Task<bool> AddUser(User user)
         {
             HttpContent postContent = new StringContent(JObject.FromObject(user).ToString());
 
             postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var wc = new AuthHttpClient();
-            var response = await wc.PostAsync(new Uri(ApiAccess.UsersUrl), postContent);
-
-            return GetResponseService.TraiteResponse(response, new UserDAO(), false);
-            
-        }
-
-        public async Task<ResponseObject> GetUsers()
-        {
-            var wc = new AuthHttpClient();
-            var reponse = await wc.GetAsync(new Uri(ApiAccess.UsersUrl));
-            return GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
-           
-        }
-        public async Task<ResponseObject> GetUsersWithAccount()
-        {
-            var wc = new AuthHttpClient();
-            var reponse = await wc.GetAsync(new Uri(ApiAccess.UsersAccountUrl));
-            return GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
-        }
-        /*public static IEnumerable<User> RawToUsers(JArray rawUsers)
-        {
-            var users = rawUsers.Children().Select(d => new User()
+            try
             {
-                Id = d["id"].Value<int>(),
-                Name = d["name"].Value<String>(),
-                FirstName = d["firstName"].Value<string>(),
-                Email = d["email"].Value<String>(),
-                Phone = d["phone"].Value<string>(),
-                Birthday = d["birthday"].Value<DateTime>(),
-                Adresse = (d["adresse"].Value<Object>() != null) ? new Address()
-                {
-                    Street = (String)d.SelectToken("adresse.street"),
-                    Box = (String)d.SelectToken("adresse.box"),
-                    City = (String)d.SelectToken("adresse.city"),
-                    //Country = (Country)d.SelectToken("adresse.street"),
-                    Number = (String)d.SelectToken("adresse.number"),
-                    Zipcode = (String)d.SelectToken("adresse.zipCode"),
+                var response = await wc.PostAsync(new Uri(ApiAccess.UsersUrl), postContent);
+                GetResponseService.TraiteResponse(response, new UserDAO(), false);
+                return true;
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
+        }
 
-                } : null
-
-            });
-            return users;
-        }*/
+        public async Task<List<User>> GetUsers()
+        {
+            var wc = new AuthHttpClient();
+            try
+            {
+                var reponse = await wc.GetAsync(new Uri(ApiAccess.UsersUrl));
+                var usersDao = GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
+                return ((List<Object>)usersDao).Cast<User>().ToList();
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
+        }
+        public async Task<List<User>> GetUsersWithAccount()
+        {
+            var wc = new AuthHttpClient();
+            try
+            {
+                var reponse = await wc.GetAsync(new Uri(ApiAccess.UsersAccountUrl));
+                var usersDAO = GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
+                return ((List<object>)usersDAO).Cast<User>().ToList();
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
+        }
     }
 }

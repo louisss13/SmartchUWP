@@ -101,11 +101,11 @@
     <Compile Include="Converters\DateTimeToAgeConverter.cs" />
     <Compile Include="Converters\DateTimeToDateTimeOffsetConverter.cs" />
     <Compile Include="Converters\TournamentStatesConverter.cs" />
+    <Compile Include="Interfaces\IAfficheErrorGeneral.cs" />
     <Compile Include="Interfaces\IAddressForm.cs" />
     <Compile Include="Interfaces\IListeMembreViewModel.cs" />
     <Compile Include="Observable\ObservableAddress.cs" />
     <Compile Include="Observable\ObservableClub.cs" />
-    <Compile Include="Observable\ObservableProperty.cs" />
     <Compile Include="Observable\ObservableTournament.cs" />
     <Compile Include="Observable\ObservableUserInfo.cs" />
     <Compile Include="Services\EModelClass.cs" />
@@ -113,7 +113,6 @@
     <Compile Include="Services\FrameNavigationService.cs" />
     <Compile Include="Services\IRootFrame.cs" />
     <Compile Include="Services\NotificationMessage.cs" />
-    <Compile Include="Services\ObservableProperty.cs" />
     <Compile Include="ViewModel\AddClubViewModel.cs" />
     <Compile Include="ViewModel\AddMatchViewModel.cs" />
     <Compile Include="ViewModel\AddTournamentViewModel.cs" />
@@ -121,6 +120,7 @@
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\MatchsViewModel.cs" />
     <Compile Include="ViewModel\RegisterViewModel.cs" />
+    <Compile Include="ViewModel\SmartchViewModelBase.cs" />
     <Compile Include="ViewModel\TournamentViewModel.cs" />
     <Compile Include="ViewModel\AddMembreViewModel.cs" />
     <Compile Include="ViewModel\MembresModelView.cs" />
@@ -272,13 +272,22 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.0.5</Version>
+      <Version>6.1.5</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp">
+      <Version>3.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI">
+      <Version>3.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Animations">
+      <Version>3.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.0</Version>
     </PackageReference>
     <PackageReference Include="MvvmLight">
-      <Version>5.3.0</Version>
+      <Version>5.4.1</Version>
     </PackageReference>
     <PackageReference Include="XamlAnimatedGif">
       <Version>1.1.10</Version>

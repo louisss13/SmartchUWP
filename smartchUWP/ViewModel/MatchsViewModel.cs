@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class MatchsViewModel : MainPageViewModel
+    public class MatchsViewModel : SmartchViewModelBase
     {
        
         
@@ -117,7 +117,14 @@ namespace smartchUWP.ViewModel
                 };
                 matchs.Add(match);
             }
-
+            if (MatchsPhases.Count == 0)
+            {
+                MatchsPhases.Add(new MatchsPhase()
+                {
+                    NumPhase = 1,
+                    Matchs = new List<Match>()
+                });
+            }
             MatchsPhases.Where(m => m.NumPhase == 1).First().Matchs = matchs;
             MatchsPhases.Add(new MatchsPhase()
             {
@@ -153,7 +160,14 @@ namespace smartchUWP.ViewModel
         private async void RegisterTournamentAsync()
         {
             TournamentsServices tournamentsServices = new TournamentsServices();
-            ResponseObject response = await tournamentsServices.UpdateAsync(SelectedTournament);
+            try
+            {
+                await tournamentsServices.UpdateAsync(SelectedTournament);
+            }
+            catch(Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
         }
 
         public async void MessageReceiver(NotificationMessage message)
@@ -163,10 +177,9 @@ namespace smartchUWP.ViewModel
                 case NotificationMessageType.Tournament:
                     SelectedTournament = (Tournament)message.Variable;
                     TournamentsServices tournamentsServices = new TournamentsServices();
-                    var response = await tournamentsServices.GetTournament(SelectedTournament.Id);
-                    if (response.Success)
+                    try
                     {
-                        SelectedTournament = (Tournament)response.Content;
+                        SelectedTournament = await tournamentsServices.GetTournament(SelectedTournament.Id);
                         if (SelectedTournament.Matches == null || SelectedTournament.Matches.Count() <= 0)
                         {
                             SelectedTournament.Matches = new List<MatchsPhase>()
@@ -180,8 +193,11 @@ namespace smartchUWP.ViewModel
                         }
                         SelectedPhase = MatchsPhases.Where(m => m.NumPhase == 1).First();
                     }
-
-                    break;
+                    catch(Exception e)
+                    {
+                        SetGeneralErrorMessage(e);
+                    }
+               break;
             }
         }
     }

@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
+using Model.ModelException;
 using smartchUWP.Interfaces;
 using smartchUWP.Observable;
 using smartchUWP.Services;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddClubViewModel : MainPageViewModel, IListeMembreViewModel, IAddressForm
+    public class AddClubViewModel : SmartchViewModelBase, IListeMembreViewModel, IAddressForm
     {
        
         private ObservableCollection<User> _allMembers;
@@ -249,20 +250,25 @@ namespace smartchUWP.ViewModel
         {
             InitError();
             ClubsServices clubsServices = new ClubsServices();
-            ResponseObject response = await clubsServices.AddClub(Club);
-
-            
-            if (response.Success)
+            try
             {
-                MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListClub));
-                _navigationService.NavigateTo("Clubs");
+                bool response = await clubsServices.AddClub(Club);
+                if (response)
+                {
+                    MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListClub));
+                    _navigationService.NavigateTo("Clubs");
+                }
             }
-            else
+            catch (BadRequestException e)
             {
-                List<Error> errors = (List<Error>)response.Content;
+                List<Error> errors = e.Errors.ToList();
                 GereError(errors);
             }
-              
+            
+            catch (Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
 
         }
 
@@ -291,12 +297,18 @@ namespace smartchUWP.ViewModel
         public async void SetMembers()
         {
             UsersServices usersServices = new UsersServices();
-            var response = await usersServices.GetUsers();
-            if (response.Success) {
-                List<User> users = ((List<Object>)response.Content).Cast<User>().ToList();
+            try
+            {
+                List<User> users = await usersServices.GetUsers();
                 AllMembers = new ObservableCollection<User>(users.Except(Club.Members));
                 MembersEntity = new ObservableCollection<User>(Club.Members);
             }
+            catch (Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+           
+            
         }
 
         public void GereError(List<Error> errors)
@@ -307,9 +319,9 @@ namespace smartchUWP.ViewModel
             }
             
         }
-        public new void SwitchError(Error error)
+        public void SwitchError(Error error)
         {
-            base.SwitchError(error);
+            
             switch (error.Code)
             {
                 case "ErrorAdresse":

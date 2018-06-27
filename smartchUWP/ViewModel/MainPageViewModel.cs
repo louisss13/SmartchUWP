@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
+using smartchUWP.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,9 +13,11 @@ using Windows.UI.Xaml.Controls;
 
 namespace smartchUWP.ViewModel
 {
-    public class MainPageViewModel : ViewModelBase
+    public class MainPageViewModel : SmartchViewModelBase, IAfficheErrorGeneral
     {
         private Boolean _isChargement = false;
+        private Boolean _isGeneralError = false;
+        private String _errorDescription = "";
 
         public Boolean IsChargement
         {
@@ -40,18 +43,40 @@ namespace smartchUWP.ViewModel
                 IsChargement = value;
             }
         }
+        public Boolean IsGeneralError
+        {
+            get
+            {
+                return _isGeneralError;
+            }
+            set
+            {
+                _isGeneralError = value;
+                RaisePropertyChanged("IsGeneralError");
+            }
+        }
+
+        public String ErrorDescription
+        {
+            get
+            {
+                return _errorDescription;
+            }
+            set
+            {
+                _errorDescription = value + "234567890";
+                RaisePropertyChanged("ErrorDescription");
+            }
+        }
 
         public RelayCommand<Object> CommandSelectChangeMenu { get; private set; }
         public RelayCommand<Object> CommandInvokedMenu { get; private set; }
-        protected readonly INavigationService _navigationService;
 
-        public MainPageViewModel(INavigationService navigationService)
+        public MainPageViewModel(INavigationService navigationService):base(navigationService)
         {
-            _navigationService = navigationService;
+            
             CommandSelectChangeMenu = new RelayCommand<Object>(SelectionChanged );
             CommandInvokedMenu = new RelayCommand<Object>(InvokedItemMenu);
-
-            
         }
         
         
@@ -70,6 +95,7 @@ namespace smartchUWP.ViewModel
                 
             }
         }
+        
 
         private void InvokedItemMenu(Object args)
         {
@@ -110,9 +136,6 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public void SwitchError(Error error)
-        {
-
-        }
+       
     }
 }

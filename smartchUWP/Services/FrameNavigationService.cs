@@ -23,7 +23,7 @@ namespace smartchUWP.Services
         public Dictionary<string, int> ConfigurationRootLevel { get; set; } = new Dictionary<string, int>();
         public Frame CurrentFrame { get; set; }
         private Frame RootFrame { get; set; }
-        private MainPage MainPage { get; set; }
+        public MainPage MainPage { get; set; }
 
         public FrameNavigationService() {
             
@@ -41,6 +41,7 @@ namespace smartchUWP.Services
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = (canGoBack) ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
         }
         
+       
 
         private void SetRootFrame()
         {

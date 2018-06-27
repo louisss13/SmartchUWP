@@ -5,13 +5,42 @@
     xmlns:local="using:smartchUWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core" 
+    xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
     mc:Ignorable="d"
     xmlns:gif="using:XamlAnimatedGif"
     DataContext="{Binding Source={StaticResource Locator} , Path=Login}"
     >
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel HorizontalAlignment="Center" 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"
+                    Padding="20,20,20,20"
+                    Background="{StaticResource ErrorBackgroundColor}"
+                    >
+            <interactivity:Interaction.Behaviors>
+                <!-- Animation du Toolkit -->
+                <behaviors:Fade x:Name="FadeIn" Value="1" Duration="2000" AutomaticallyStart="False" />
+                <behaviors:Fade x:Name="FadeOut" Value="0" Duration="2000" AutomaticallyStart="False"/>
+
+                <!-- Déclencheur -->
+                <Core:DataTriggerBehavior Binding="{Binding IsGeneralError}" ComparisonCondition="Equal" Value="True">
+                    <!-- Lancement de l'animation -->
+                    <Core:CallMethodAction MethodName="StartAnimation" TargetObject="{Binding ElementName=FadeIn}" />
+                </Core:DataTriggerBehavior>
+                <Core:DataTriggerBehavior Binding="{Binding IsGeneralError}" ComparisonCondition="Equal" Value="False">
+                    <!-- Lancement de l'animation -->
+                    <Core:CallMethodAction MethodName="StartAnimation" TargetObject="{Binding ElementName=FadeOut}" />
+                </Core:DataTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+            <TextBlock Text="{Binding ErrorDescription, Mode=TwoWay}" Margin="10,0,10,0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Center" 
                     VerticalAlignment="Center" 
                     Visibility="{Binding IsNotChargement , Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}">
             <Border Background="{StaticResource ErrorBackgroundColor}">
@@ -50,7 +79,8 @@
            
            
         </StackPanel>
-        <Grid Visibility="{Binding IsChargement , Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}" >
+        <Grid Grid.Row="1"
+              Visibility="{Binding IsChargement , Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}" >
             <Image gif:AnimationBehavior.SourceUri="ms-appx:////Assets/gifs/ping-loader.gif" 
                    Height="200px" 
                    Width="200px" 

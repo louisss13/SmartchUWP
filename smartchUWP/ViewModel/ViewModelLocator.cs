@@ -1,6 +1,7 @@
-﻿using GalaSoft.MvvmLight.Ioc;
+﻿using CommonServiceLocator;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
-using Microsoft.Practices.ServiceLocation;
+//using Microsoft.Practices.ServiceLocation;
 using smartchUWP.Services;
 using smartchUWP.View;
 using System;

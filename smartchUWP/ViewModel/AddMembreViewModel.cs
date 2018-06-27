@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
+using Model.ModelException;
 using smartchUWP.Interfaces;
 using smartchUWP.Observable;
 using smartchUWP.Services;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddMembreViewModel : MainPageViewModel, IAddressForm
+    public class AddMembreViewModel : SmartchViewModelBase, IAddressForm
     {
         public RelayCommand CommandAddMember { get; private set; }
 
@@ -203,24 +204,31 @@ namespace smartchUWP.ViewModel
         {
             InitError();
             UsersServices usersServices = new UsersServices();
-            ResponseObject response = await usersServices.AddUser(User);
-            if (response.Success)
+            try
             {
-                _navigationService.NavigateTo("Membres");
-                MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListUser));
+                bool response = await usersServices.AddUser(User);
+                if (response)
+                {
+                    _navigationService.NavigateTo("Membres");
+                    MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListUser));
+                }
             }
-            else
+            catch(BadRequestException e)
             {
-                List<Error> errors = (List<Error>)response.Content;
-                foreach(Error error in errors)
+                List<Error> errors = e.Errors.ToList();
+                foreach (Error error in errors)
                 {
                     SwitchError(error);
                 }
             }
+            catch(Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
         }
-        public new void SwitchError(Error error)
+        public void SwitchError(Error error)
         {
-            base.SwitchError(error);
+            
             switch (error.Code)
             {
                 case "ErrorAdresse":

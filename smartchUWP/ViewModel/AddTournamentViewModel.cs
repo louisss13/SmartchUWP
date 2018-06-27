@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
+using Model.ModelException;
 using smartchUWP.Interfaces;
 using smartchUWP.Observable;
 using smartchUWP.Services;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddTournamentViewModel : MainPageViewModel, IListeMembreViewModel, IAddressForm
+    public class AddTournamentViewModel : SmartchViewModelBase, IListeMembreViewModel, IAddressForm
     {
         
         private ObservableCollection<Club> _clubs = null;
@@ -275,16 +276,20 @@ namespace smartchUWP.ViewModel
             AllMembers = new ObservableCollection<User>(AllMembers.Concat(SelectedMembersEntity));
             MembersEntity = new ObservableCollection<User>(MembersEntity.Except(SelectedMembersEntity));
         }
+
         public async void SetMembers()
         {
             UsersServices usersServices = new UsersServices();
-            var response = await usersServices.GetUsers();
-            if (response.Success) {
-                List<User> users = ((List<Object>)response.Content).Cast<User>().ToList();
+            try
+            {
+                List<User> users = await usersServices.GetUsers();
                 AllMembers = new ObservableCollection<User>(users.Except(OTournament.Participants));
                 MembersEntity = new ObservableCollection<User>(OTournament.Participants);
             }
-
+            catch (Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
         }
 
 
@@ -296,21 +301,29 @@ namespace smartchUWP.ViewModel
             //tournament.Club = null;
 
             TournamentsServices tournamentsServices = new TournamentsServices();
-            ResponseObject response = await tournamentsServices.AddTournamentAsync(tournament);
-            if (response.Success)
+            try
             {
-                MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListTournament));
+                bool response = await tournamentsServices.AddTournamentAsync(tournament);
+                if (response)
+                {
+                    MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListTournament));
+                }
             }
-            else
+            catch (BadRequestException e)
             {
-                foreach(Error error in response.Content as List<Error>)
+                foreach (Error error in e.Errors.ToList() as List<Error>)
                 {
                     SwitchError(error);
                 }
             }
+            catch (Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+           
         }
 
-        public async Task InitializeAsync()
+        public async void InitializeAsync()
         {
             SetClubList();
             TournamentStates = GetTournamentState();
@@ -346,6 +359,7 @@ namespace smartchUWP.ViewModel
             
             return stateDictionary;
         }
+
         private void MessageReceiver(NotificationMessage message)
         {
             switch (message.VariableType)
@@ -358,17 +372,22 @@ namespace smartchUWP.ViewModel
         private async void SetClubList()
         {
             var service = new ClubsServices();
-            var response = await service.GetClubs();
-            if (response.Success)
+            try
             {
-                List<Club> clubs = ((List<object>)response.Content).Cast<Club>().ToList();
+                List<Club> clubs = await service.GetClubs();
                 Clubs = new ObservableCollection<Club>(clubs);
             }
+            catch(Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+           
+            
         }
 
-        public new void SwitchError(Error error)
+        public void SwitchError(Error error)
         {
-            base.SwitchError(error);
+            
             switch (error.Code)
             {
                 case "ErrorAdresse":

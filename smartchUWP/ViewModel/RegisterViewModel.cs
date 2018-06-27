@@ -3,7 +3,9 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
+using Model.ModelException;
 using Newtonsoft.Json.Linq;
+using smartchUWP.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,8 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class RegisterViewModel: ViewModelBase
+    public class RegisterViewModel: SmartchViewModelBase, IAfficheErrorGeneral
     {
-        private INavigationService _navigationService;
         private bool _isErrorConnexion = false;
         private bool _isPasswordTooShort = false;
         private bool _isPasswordRequiresNonAlphanumeric = false;
@@ -26,6 +27,8 @@ namespace smartchUWP.ViewModel
         private bool _isPasswordConfirmEquals = false;
         private bool _isEmailNotValid = false;
         private bool _isDuplicateUserName = false;
+        private bool _isGeneralError = false;
+        private String _errorDescription = "";
 
         private String _email = "";
         private String _password = "";
@@ -164,7 +167,31 @@ namespace smartchUWP.ViewModel
                 IsErrorConnexion = true;
             }
         }
+        public bool IsGeneralError
+        {
+            get
+            {
+                return _isGeneralError;
+            }
+            set
+            {
+                _isGeneralError = value;
+                RaisePropertyChanged("IsGeneralError");
+            }
+        }
 
+        public String ErrorDescription
+        {
+            get
+            {
+                return _errorDescription;
+            }
+            set
+            {
+                _errorDescription = value + "234567890";
+                RaisePropertyChanged("ErrorDescription");
+            }
+        }
         public String Email
         {
             get
@@ -207,9 +234,9 @@ namespace smartchUWP.ViewModel
         }
 
 
-        public RegisterViewModel(INavigationService navigationService)
+        public RegisterViewModel(INavigationService navigationService):base(navigationService)
         {
-            _navigationService = navigationService;
+            
             CommandSaveNewAccount = new RelayCommand(SaveNewAccount);
             CommandClear = new RelayCommand(ClearField);
         }
@@ -230,18 +257,24 @@ namespace smartchUWP.ViewModel
             {
                 AccountsServices accountsServices = new AccountsServices();
                 Account newUser = new Account() { Password = Password, Email = Email };
-                ResponseObject AddedUser = await accountsServices.AddUser(newUser);
-                if (AddedUser.Success)
+                try
                 {
-                    _navigationService.NavigateTo("Login");
+                    bool isAdded = await accountsServices.AddUser(newUser);
+                    if (isAdded)
+                    {
+                        _navigationService.NavigateTo("Login");
+                    }
                 }
-                else if(AddedUser.Content is IEnumerable<Error>)
-                {
-                    foreach(Error error in (AddedUser.Content as IEnumerable<Error>))
+                catch (BadRequestException e) {
+                    foreach (Error error in (e.Errors as IEnumerable<Error>))
                     {
                         ErrorSwitch(error.Code);
                     }
                 }
+                catch (Exception e) {
+                    SetGeneralErrorMessage(e, this);
+                }
+                
                 
             }
             

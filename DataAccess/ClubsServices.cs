@@ -1,5 +1,6 @@
 ﻿using DataAccess.Dao;
 using Model;
+using Model.ModelException;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,25 +15,37 @@ namespace DataAccess
 {
     public class ClubsServices
     {
-        public async Task<ResponseObject> GetClubs()
+        public async Task<List<Club>> GetClubs()
         {
             var wc = new AuthHttpClient();
-            var response = await wc.GetAsync(new Uri(ApiAccess.ClubUrl));
-            var reponse = GetResponseService.TraiteResponse(response, new ClubDAO(),true);
-            
-            return reponse;
-            
+            try
+            {
+                var response = await wc.GetAsync(new Uri(ApiAccess.ClubUrl));
+                var clubsDao = GetResponseService.TraiteResponse(response, new ClubDAO(),true);
+                return ((List<object>)clubsDao).Cast<Club>().ToList();
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
+           
         }
-        public async Task<ResponseObject> AddClub(Club club)
+        public async Task<bool> AddClub(Club club)
         {
             HttpContent postContent = new StringContent(JObject.FromObject(club).ToString());
 
             postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var wc = new AuthHttpClient();
-            var response = await wc.PostAsync(new Uri(ApiAccess.ClubUrl), postContent);
-
-            return GetResponseService.TraiteResponse(response, new ClubDAO(), false);
-
+            try
+            {
+                var response = await wc.PostAsync(new Uri(ApiAccess.ClubUrl), postContent);
+                GetResponseService.TraiteResponse(response, new ClubDAO(), false);
+                return true;
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DataAccess.Dao;
 using Model;
+using Model.ModelException;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,54 +15,87 @@ namespace DataAccess
 {
     public class TournamentsServices
     {
-        public async Task<ResponseObject> GetTournaments()
+        public async Task<List<Tournament>> GetTournaments()
         {
             var wc = new AuthHttpClient();
-            var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl));
-            return GetResponseService.TraiteResponse(reponse, new TournamentListDAO(), true);
-            
+            try
+            {
+                var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl));
+                var tournamentDAO = GetResponseService.TraiteResponse(reponse, new TournamentListDAO(), true);
+                return ((List<Object>)tournamentDAO).Cast<Tournament>().ToList();
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
         }
 
-        public async Task<ResponseObject> GetTournament(long idTournament)
+        public async Task<Tournament> GetTournament(long idTournament)
         {
             var wc = new AuthHttpClient();
-            var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl + "/" + idTournament ));
-            return GetResponseService.TraiteResponse(reponse, new TournamentDAO(), false);
+            try
+            {
+                var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl + "/" + idTournament ));
+                return (Tournament) GetResponseService.TraiteResponse(reponse, new TournamentDAO(), false);
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
         }
 
-        public async Task<ResponseObject> AddTournamentAsync(Tournament tournament)
+        public async Task<bool> AddTournamentAsync(Tournament tournament)
         {
             TournamentListDAO tournamentListDAO = new TournamentListDAO(tournament);
             HttpContent postContent = new StringContent(JObject.FromObject(tournamentListDAO).ToString());
             postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var wc = new AuthHttpClient();
-            var response = await wc.PostAsync(new Uri(ApiAccess.TournamentUrl), postContent);
-
-            return GetResponseService.TraiteResponse(response, new TournamentDAO(), false);
+            try
+            {
+                var response = await wc.PostAsync(new Uri(ApiAccess.TournamentUrl), postContent);
+                GetResponseService.TraiteResponse(response, new TournamentDAO(), false);
+                return true;
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
+            
         }
 
-        public async Task<ResponseObject> UpdateAsync(Tournament selectedTournament)
+        public async Task<bool> UpdateAsync(Tournament selectedTournament)
         {
             TournamentDAO tournamentDAO = new TournamentDAO(selectedTournament);
             HttpContent putContent = new StringContent(JObject.FromObject(tournamentDAO).ToString());
             putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var wc = new AuthHttpClient();
-            var response = await wc.PutAsync(new Uri(ApiAccess.TournamentUrl+"/"+selectedTournament.Id), putContent);
-
-            return GetResponseService.TraiteResponse(response, new TournamentDAO(), false);
+            try
+            {
+                var response = await wc.PutAsync(new Uri(ApiAccess.TournamentUrl+"/"+selectedTournament.Id), putContent);
+                GetResponseService.TraiteResponse(response, new TournamentDAO(), false);
+                return true;
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
         }
 
-        public async Task<ResponseObject> GetParticipants(long idTournament)
+        public async Task<List<User>> GetParticipants(long idTournament)
         {
             var wc = new AuthHttpClient();
-            var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl+"/"+ idTournament+"/participants"));
-
-            return GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
-
-            
-
+            try
+            {
+                var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl+"/"+ idTournament+"/participants"));
+                var usersDao = GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
+                return ((List<Object>)usersDao).Cast<User>().ToList();
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
         }
 
         public async Task<Boolean> UpdateMatch(Tournament tournament, Match match, int phase)
@@ -71,21 +105,19 @@ namespace DataAccess
 
             putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var wc = new AuthHttpClient();
-            var response = await wc.PutAsync(ApiAccess.GetMatchUrl(tournament.Id, match.Id), putContent);
-
-            String jstr = response.Content.ReadAsStringAsync().Result;
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
+                var response = await wc.PutAsync(ApiAccess.GetMatchUrl(tournament.Id, match.Id), putContent);
+                GetResponseService.TraiteResponse(response, null, false);
                 return true;
             }
-            else
+            catch (HttpRequestException)
             {
-                return false;
+                throw new GetDataException();
             }
-
         }
 
-        public async Task<ResponseObject> AddMatch(Tournament tournament, Match match, int phase)
+        public async Task<bool> AddMatch(Tournament tournament, Match match, int phase)
         {
             if (phase <= 0)
                 phase = 1;
@@ -94,68 +126,50 @@ namespace DataAccess
 
             putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var wc = new AuthHttpClient();
-            var response = await wc.PostAsync(ApiAccess.GetMatchUrl(tournament.Id, match.Id), putContent);
-
-            ResponseObject contentResponse = new ResponseObject();
-            String jstr = response.Content.ReadAsStringAsync().Result;
-            if (response.StatusCode == HttpStatusCode.Created)
+            try
             {
-                contentResponse.Content = JObject.Parse(jstr);
-                contentResponse.Success = true;
+                var response = await wc.PostAsync(ApiAccess.GetMatchUrl(tournament.Id, match.Id), putContent);
+                GetResponseService.TraiteResponse(response, null, false);
+                return true;
             }
-            else
+            catch (HttpRequestException)
             {
-                contentResponse.Content = JArray.Parse(jstr);
-                contentResponse.Success = false;
+                throw new GetDataException();
             }
-            return contentResponse;
         }
 
-        public async Task<ResponseObject> DelPointMatch(long id, Point point)
+        public async Task<bool> DelPointMatch(long id, Point point)
         {
             HttpContent putContent = new StringContent(JObject.FromObject(point).ToString());
-
             putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var wc = new AuthHttpClient();
-            var response = await wc.DeleteAsync(ApiAccess.GetMatchPointUrl(id)+"/"+point.Joueur);
-
-            ResponseObject contentResponse = new ResponseObject();
-            String jstr = response.Content.ReadAsStringAsync().Result;
-            if (response.StatusCode == HttpStatusCode.Accepted)
+            try
             {
-                contentResponse.Content = JObject.Parse(jstr);
-                contentResponse.Success = true;
+                var response = await wc.DeleteAsync(ApiAccess.GetMatchPointUrl(id)+"/"+point.Joueur);
+                GetResponseService.TraiteResponse(response, null, false);
+                return true;
             }
-            else
+            catch (HttpRequestException)
             {
-                contentResponse.Content = JArray.Parse(jstr);
-                contentResponse.Success = false;
+                throw new GetDataException();
             }
-            return contentResponse;
         }
 
-        public async Task<ResponseObject> AddPointMatch( long matchId, Point point)
+        public async Task<bool> AddPointMatch( long matchId, Point point)
         {
-
             HttpContent putContent = new StringContent(JObject.FromObject(point).ToString());
-
             putContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var wc = new AuthHttpClient();
-            var response = await wc.PostAsync(ApiAccess.GetMatchPointUrl(matchId), putContent);
-
-            ResponseObject contentResponse = new ResponseObject();
-            String jstr = response.Content.ReadAsStringAsync().Result;
-            if (response.StatusCode == HttpStatusCode.Created)
+            try
             {
-                contentResponse.Content = JObject.Parse(jstr);
-                contentResponse.Success = true;
+                var response = await wc.PostAsync(ApiAccess.GetMatchPointUrl(matchId), putContent);
+                GetResponseService.TraiteResponse(response, null, false);
+                return true;
             }
-            else
+            catch (HttpRequestException)
             {
-                contentResponse.Content = JArray.Parse(jstr);
-                contentResponse.Success = false;
+                throw new GetDataException();
             }
-            return contentResponse;
         }
     }
 }
