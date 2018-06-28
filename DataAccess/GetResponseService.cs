@@ -1,5 +1,6 @@
 ﻿using DataAccess.Interface;
 using Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -42,13 +43,27 @@ namespace DataAccess.Dao
             }
 
             else if (response.StatusCode == HttpStatusCode.BadRequest)
-            {    
-                var rawError = JArray.Parse(stringResult);
-                IEnumerable<Error> errors = rawError.Children().Select(e => new Error() {
-                    Code = e["code"].Value<String>(),
-                    Description = e["description"].Value<String>()
-                });
-                throw new Model.ModelException.BadRequestException("Bad request", errors);
+            {
+                try
+                {
+                    var rawError = JArray.Parse(stringResult);
+                    IEnumerable<Error> errors = rawError.Children().Select(e => new Error()
+                    {
+                        Code = e["code"].Value<String>(),
+                        Description = e["description"].Value<String>()
+                    });
+                    throw new Model.ModelException.BadRequestException("Bad request", errors);
+                }
+                catch (JsonReaderException)
+                {
+                    IEnumerable<Error> errors = new List<Error>() { new Error() {
+                        Code = "442",
+                        Description = "Donnée non valide"
+                    } };
+                    
+                    throw new Model.ModelException.BadRequestException("Bad request", errors);
+                }
+               
             }
             else if (response.StatusCode == HttpStatusCode.GatewayTimeout)
             {

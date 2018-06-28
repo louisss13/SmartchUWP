@@ -18,8 +18,12 @@ namespace smartchUWP.ViewModel
     {
         
         private bool _isChargement = false;
+        private bool _isEmailVide = false;
+        private bool _isEmailInvalide = false;
+        private bool _isPasswordVide = false;
         private bool _isErrorConnection = false;
         private bool _isGeneralError = false;
+        private bool _isGeneralErrorVisible = false;
 
         private String _email = "louisss13@gmail.com";
         private String _password = "Coucou-123";
@@ -74,8 +78,56 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("IsGeneralError");
             }
         }
+        public bool IsGeneralErrorVisible
+        {
+            get
+            {
+                return _isGeneralErrorVisible;
+            }
+            set
+            {
+                _isGeneralErrorVisible = value;
+                RaisePropertyChanged("IsGeneralErrorVisible");
+            }
+        }
+        public bool IsEmailVide
+        {
+            get
+            {
+                return _isEmailVide;
+            }
+            set
+            {
+                _isEmailVide = value;
+                RaisePropertyChanged("IsEmailVide");
+            }
+        }
+        public bool IsPasswordVide
+        {
+            get
+            {
+                return _isPasswordVide;
+            }
+            set
+            {
+                _isPasswordVide = value;
+                RaisePropertyChanged("IsPasswordVide");
+            }
+        }
+        public bool IsEmailInvalide
+        {
+            get
+            {
+                return _isEmailInvalide;
+            }
+            set
+            {
+                _isEmailInvalide = value;
+                RaisePropertyChanged("IsEmailInvalide");
+            }
+        }
 
-        
+
 
         public RelayCommand CommandLogin { get; private set; }
         public RelayCommand CommandNavigateRegister { get; private set; }
@@ -114,7 +166,7 @@ namespace smartchUWP.ViewModel
             }
             set
             {
-                _errorDescription = value + "234567890";
+                _errorDescription = value;
                 RaisePropertyChanged("ErrorDescription");
             }
         }
@@ -125,11 +177,7 @@ namespace smartchUWP.ViewModel
             CommandLogin = new RelayCommand(Login);
             CommandNavigateRegister = new RelayCommand(NavigateToRegister);
         }
-        public void SetMessageConnection()
-        {
-            IsGeneralError = true;
-            ErrorDescription = "Un problème est survenu lors de l'envois d'une requète. Etes-vous connecté à internet?";
-        }
+        
         private void NavigateToRegister()
         {
             IsChargement = true;
@@ -138,6 +186,31 @@ namespace smartchUWP.ViewModel
         }
         private async void Login()
         {
+            IsErrorConnection = false;
+            IsEmailVide = false;
+            IsPasswordVide = false;
+            IsEmailInvalide = false;
+
+            int nbError = 0;
+            if(Email.Length <= 0)
+            {
+                IsEmailVide = true;
+                nbError++;
+            }
+            if(Password.Length <= 0)
+            {
+                IsPasswordVide = true;
+                nbError++;
+            }
+            if (!IsValidMail(Email))
+            {
+                IsEmailInvalide = true;
+                nbError++;
+            }
+            if(nbError > 0)
+            {
+                return;
+            }
             IsChargement = true;
             AccountsServices accountsServices = new AccountsServices();
             try
@@ -148,11 +221,27 @@ namespace smartchUWP.ViewModel
                     _navigationService.NavigateTo("Home");
                 }
             }
+            catch (BadRequestException)
+            {
+                IsErrorConnection = true;
+            }
             catch (Exception e)
             {
                 SetGeneralErrorMessage(e, this);
             }
             IsChargement = false; 
+        }
+        private Boolean IsValidMail(String email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

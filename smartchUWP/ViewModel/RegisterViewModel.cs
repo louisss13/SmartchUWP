@@ -28,12 +28,13 @@ namespace smartchUWP.ViewModel
         private bool _isEmailNotValid = false;
         private bool _isDuplicateUserName = false;
         private bool _isGeneralError = false;
-        private String _errorDescription = "";
+        private bool _isGeneralErrorVisible = false;
+        
 
         private String _email = "";
         private String _password = "";
         private String _passwordConfirm = "";
-
+        private String _errorDescription = "";
 
         public RelayCommand CommandSaveNewAccount { get; private set; }
         public RelayCommand CommandClear { get; private set; }
@@ -177,6 +178,18 @@ namespace smartchUWP.ViewModel
             {
                 _isGeneralError = value;
                 RaisePropertyChanged("IsGeneralError");
+            }
+        }
+        public bool IsGeneralErrorVisible
+        {
+            get
+            {
+                return _isGeneralErrorVisible;
+            }
+            set
+            {
+                _isGeneralErrorVisible = value;
+                RaisePropertyChanged("IsGeneralErrorVisible");
             }
         }
 

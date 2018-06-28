@@ -307,6 +307,7 @@ namespace smartchUWP.ViewModel
                 if (response)
                 {
                     MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListTournament));
+                    _navigationService.NavigateTo("Tournaments");
                 }
             }
             catch (BadRequestException e)

@@ -53,6 +53,7 @@
         <StackPanel Grid.Row="0"
                     Padding="20,20,20,20"
                     Background="{StaticResource ErrorBackgroundColor}"
+                    Visibility="{Binding IsGeneralErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                     >
             <interactivity:Interaction.Behaviors>
                 <!-- Animation du Toolkit -->

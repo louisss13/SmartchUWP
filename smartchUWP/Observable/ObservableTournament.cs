@@ -30,7 +30,7 @@ namespace smartchUWP.Observable
             base.Participants = tournament.Participants;
             
         }
-        private ObservableAddress _address = new ObservableAddress() { Street = "coucou"};
+        private ObservableAddress _address = new ObservableAddress() {};
         private ObservableCollection<User> _participants;
 
         public new ObservableCollection<Account> Admins { get; set; }

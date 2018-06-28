@@ -23,7 +23,7 @@
                 </PivotItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0"
@@ -44,7 +44,7 @@
                         <DatePicker Name="DateDebut" Header="Date de début" Date="{Binding OTournament.BeginDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
                         <DatePicker Name="DateFin" Header="Date de Fin" Date="{Binding OTournament.EndDate, Mode=TwoWay , Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
                         <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedItem="{Binding OTournament.Etat, Mode=TwoWay, Converter={StaticResource TournamentStatesConverter}}"/>
-                        <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding OTournament.Club, Mode=TwoWay}" />
+                        <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="ClubId" SelectedItem="{Binding OTournament.Club, Mode=TwoWay}" />
 
                     </StackPanel>
                 </Grid>

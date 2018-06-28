@@ -17,6 +17,7 @@ namespace smartchUWP.ViewModel
     {
         private Boolean _isChargement = false;
         private Boolean _isGeneralError = false;
+        private Boolean _isGeneralErrorVisible = false;
         private String _errorDescription = "";
 
         public Boolean IsChargement
@@ -43,6 +44,18 @@ namespace smartchUWP.ViewModel
                 IsChargement = value;
             }
         }
+        public Boolean IsGeneralErrorVisible
+        {
+            get
+            {
+                return _isGeneralErrorVisible;
+            }
+            set
+            {
+                _isGeneralErrorVisible = value;
+                RaisePropertyChanged("IsGeneralErrorVisible");
+            }
+        }
         public Boolean IsGeneralError
         {
             get
@@ -64,13 +77,14 @@ namespace smartchUWP.ViewModel
             }
             set
             {
-                _errorDescription = value + "234567890";
+                _errorDescription = value ;
                 RaisePropertyChanged("ErrorDescription");
             }
         }
 
         public RelayCommand<Object> CommandSelectChangeMenu { get; private set; }
         public RelayCommand<Object> CommandInvokedMenu { get; private set; }
+        
 
         public MainPageViewModel(INavigationService navigationService):base(navigationService)
         {

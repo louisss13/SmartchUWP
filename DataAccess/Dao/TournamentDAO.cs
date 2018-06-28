@@ -100,8 +100,8 @@ namespace DataAccess
             BeginDate = d["beginDate"].Value<DateTime>();
             EndDate = d["endDate"].Value<DateTime>();
             Etat = (TournamentState)d["etat"].Value<int>();
-            Participants = d.SelectToken("participants").Children().Select(l => (User)new UserDAO().ToObjectDao(l).ToObjectModel()).ToList();
-            Matches = d.SelectToken("matches").Children().Select(l => (MatchDAO) new MatchDAO().ToObjectDao(l)).ToList();
+            Participants = d.SelectToken("participants")?.Children().Select(l => (User)new UserDAO().ToObjectDao(l).ToObjectModel()).ToList();
+            Matches = d.SelectToken("matches")?.Children().Select(l => (MatchDAO) new MatchDAO().ToObjectDao(l)).ToList();
             Address = (d["address"].Value<Object>() != null) ? new Address()
             {
                 Street = (String)d.SelectToken("address.street"),

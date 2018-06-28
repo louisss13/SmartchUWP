@@ -25,7 +25,7 @@ namespace smartchUWP.ViewModel
         {
             if (main == null)
                 main = GetMain();
-            
+            main.IsGeneralErrorVisible = true;
             if (e is GetDataException)
             {
                 main.IsGeneralError = true;
@@ -43,9 +43,10 @@ namespace smartchUWP.ViewModel
         {
             await Task.Delay(5000);
             
-                main.IsGeneralError = false;
-                main.ErrorDescription = "";
-            
+            main.IsGeneralError = false;
+            main.ErrorDescription = "";
+            await Task.Delay(3000);
+            main.IsGeneralErrorVisible = false;
         }
         private IAfficheErrorGeneral GetMain()
         {

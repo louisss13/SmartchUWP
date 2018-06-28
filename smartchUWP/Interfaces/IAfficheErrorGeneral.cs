@@ -9,6 +9,7 @@ namespace smartchUWP.Interfaces
     public interface IAfficheErrorGeneral
     {
         Boolean IsGeneralError { get; set; }
+        Boolean IsGeneralErrorVisible { get; set; }
         String ErrorDescription { get; set; }
     }
 }
