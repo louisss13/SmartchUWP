@@ -29,7 +29,7 @@ namespace DataAccess.Dao
         public TournamentListDAO(Tournament tournament )
         {
             Id = tournament.Id;
-            Name = tournament.Name;
+            Name = tournament.NameTournament;
             if(tournament.Club != null)
             ClubId = tournament.Club.ClubId;
 
@@ -69,7 +69,7 @@ namespace DataAccess.Dao
             return new Tournament()
             {
                 Id = Id,
-                Name = Name,
+                NameTournament = Name,
                 BeginDate = BeginDate,
                 EndDate = EndDate,
                 Etat = Etat,

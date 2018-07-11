@@ -15,9 +15,9 @@ namespace smartchUWP.Observable
         { }
         public ObservableTournament(Tournament tournament) : base()
         {
-            Adresse = new ObservableAddress(tournament.Address);
-            base.Address = tournament.Address;
-            base.Address = Adresse;
+            
+            Address = tournament.Address;
+           
             Admins = new ObservableCollection<Account>(tournament.Admins);
             base.Admins = tournament.Admins;
             base.BeginDate = (tournament.BeginDate == null)?new DateTime(): tournament.BeginDate;
@@ -25,12 +25,11 @@ namespace smartchUWP.Observable
             base.EndDate = (tournament.EndDate == null) ? new DateTime() : tournament.EndDate; ;
             base.Etat = tournament.Etat;
             base.Id = tournament.Id;
-            base.Name = tournament.Name;
+            base.NameTournament = tournament.NameTournament;
             Participants = new ObservableCollection<User>(tournament.Participants);
             base.Participants = tournament.Participants;
             
         }
-        private ObservableAddress _address = new ObservableAddress() {};
         private ObservableCollection<User> _participants;
 
         public new ObservableCollection<Account> Admins { get; set; }
@@ -47,16 +46,15 @@ namespace smartchUWP.Observable
                 RaisePropertyChanged("Participants");
             }
         }
-        public ObservableAddress Adresse
+        public Address Adresse
         {
             get
             {
-                return _address;
+                return base.Address;
             }
             set
             {
-                _address = value;
-                Address = _address;
+                Address = value;
                 RaisePropertyChanged("Address");
             }
         }
@@ -64,7 +62,6 @@ namespace smartchUWP.Observable
         public event PropertyChangedEventHandler PropertyChanged;
         protected void RaisePropertyChanged(string name)
         {
-
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }

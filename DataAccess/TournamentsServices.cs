@@ -20,7 +20,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl));
+                var reponse = await wc.GetAsync(await ApiAccess.GetRessource(ApiAccess.URL.TOURNAMENTS));
                 var tournamentDAO = GetResponseService.TraiteResponse(reponse, new TournamentListDAO(), true);
                 return ((List<Object>)tournamentDAO).Cast<Tournament>().ToList();
             }
@@ -35,7 +35,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl + "/" + idTournament ));
+                var reponse = await wc.GetAsync(await ApiAccess.GetRessource(ApiAccess.URL.TOURNAMENTS,idTournament ));
                 return (Tournament) GetResponseService.TraiteResponse(reponse, new TournamentDAO(), false);
             }
             catch (HttpRequestException)
@@ -53,7 +53,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PostAsync(new Uri(ApiAccess.TournamentUrl), postContent);
+                var response = await wc.PostAsync(await ApiAccess.GetRessource(ApiAccess.URL.TOURNAMENTS), postContent);
                 GetResponseService.TraiteResponse(response, new TournamentDAO(), false);
                 return true;
             }
@@ -73,7 +73,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PutAsync(new Uri(ApiAccess.TournamentUrl+"/"+selectedTournament.Id), putContent);
+                var response = await wc.PutAsync(await ApiAccess.GetRessource(ApiAccess.URL.TOURNAMENTS, selectedTournament.Id), putContent);
                 GetResponseService.TraiteResponse(response, new TournamentDAO(), false);
                 return true;
             }
@@ -88,7 +88,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var reponse = await wc.GetAsync(new Uri(ApiAccess.TournamentUrl+"/"+ idTournament+"/participants"));
+                var reponse = await wc.GetAsync(await ApiAccess.GetRessource(ApiAccess.URL.PARTICIPANTS, idTournament));
                 var usersDao = GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
                 return ((List<Object>)usersDao).Cast<User>().ToList();
             }
@@ -107,7 +107,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PutAsync(ApiAccess.GetMatchUrl(tournament.Id, match.Id), putContent);
+                var response = await wc.PutAsync(await ApiAccess.GetRessource(ApiAccess.URL.MATCHS,tournament.Id, match.Id), putContent);
                 GetResponseService.TraiteResponse(response, null, false);
                 return true;
             }
@@ -128,7 +128,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PostAsync(ApiAccess.GetMatchUrl(tournament.Id, match.Id), putContent);
+                var response = await wc.PostAsync(await ApiAccess.GetRessource(ApiAccess.URL.MATCHS, tournament.Id, match.Id), putContent);
                 GetResponseService.TraiteResponse(response, null, false);
                 return true;
             }
@@ -145,7 +145,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.DeleteAsync(ApiAccess.GetMatchPointUrl(id)+"/"+point.Joueur);
+                var response = await wc.DeleteAsync(await ApiAccess.GetRessource(ApiAccess.URL.POINTS,id ,point.Joueur));
                 GetResponseService.TraiteResponse(response, null, false);
                 return true;
             }
@@ -162,7 +162,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PostAsync(ApiAccess.GetMatchPointUrl(matchId), putContent);
+                var response = await wc.PostAsync(await ApiAccess.GetRessource(ApiAccess.URL.POINTS, matchId), putContent);
                 GetResponseService.TraiteResponse(response, null, false);
                 return true;
             }

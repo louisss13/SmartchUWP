@@ -20,7 +20,7 @@
         <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Mon carnet d'adresses" Style="{StaticResource TitleTextBlockStyle}"/>
         <Button Grid.Column="1" HorizontalAlignment="Right" Content="Ajouter" Command="{Binding CmdNavigateAddMembre}"/>
         <Border Grid.Row="1" BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0">
-            <ListView ItemsSource="{Binding Users}" Name="ListeMembre" ItemTemplate="{StaticResource ClubsList}"   Padding="20" Margin="0,30,30,0"/>
+            <ListView ItemsSource="{Binding Users}" Name="ListeMembre" ItemTemplate="{StaticResource UserList}"   Padding="20" Margin="0,30,30,0"/>
         </Border>
         <StackPanel Orientation="Vertical"  Grid.Column="1" Grid.Row="1" DataContext="{Binding ElementName=ListeMembre,Path=SelectedItem}" Padding="20" Margin="0,30,20,0">
             <Grid>

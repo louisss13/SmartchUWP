@@ -31,7 +31,7 @@ namespace DataAccess
         public TournamentDAO(Tournament tournament)
         {
             Id = tournament.Id;
-            Name = tournament.Name;
+            Name = tournament.NameTournament;
             Club = tournament.Club;
             Address = tournament.Address;
             BeginDate = tournament.BeginDate;
@@ -48,7 +48,7 @@ namespace DataAccess
             return new Tournament()
             {
                 Id = Id,
-                Name = Name,
+                NameTournament = Name,
                 Club = Club,
                 Address = Address,
                 BeginDate = BeginDate,

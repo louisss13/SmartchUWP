@@ -38,24 +38,36 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("SelectedTournament");
             }
         }
-
+        public ObservableCollection<Tournament> Tournaments
+        {
+            get
+            {
+                return _tournaments;
+            }
+            set
+            {
+                if (_tournaments == value)
+                {
+                    return;
+                }
+                _tournaments = value;
+                RaisePropertyChanged("Tournaments");
+            }
+        }
 
         public TournamentViewModel(INavigationService navigationService) : base(navigationService)
         {
-
-            
-            NavigateCommand = new RelayCommand(NavigateToAddTournament);
-            CommandNavigateSelect = new RelayCommand(NavigateToSelectTournament, IsSelected);
-            CommandNavigateModification = new RelayCommand(NavigateToSelectTournament);
-
-            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
-
             if (IsInDesignMode)
             {
-                _tournaments = new ObservableCollection<Tournament> { new Tournament() { Name = "Tournois1" }, new Tournament() { Name = "Tounrnois2" } };
+                _tournaments = new ObservableCollection<Tournament> { new Tournament() { NameTournament = "Tournois1" }, new Tournament() { NameTournament = "Tounrnois2" } };
             }
             else
             {
+                NavigateCommand = new RelayCommand(NavigateToAddTournament);
+                CommandNavigateSelect = new RelayCommand(NavigateToSelectTournament, IsSelected);
+                CommandNavigateModification = new RelayCommand(NavigateToSelectTournament);
+
+                MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
                 SetTournaments();
             }
         }
@@ -77,22 +89,7 @@ namespace smartchUWP.ViewModel
             _navigationService.NavigateTo("AddTournament");
 
         }
-        public ObservableCollection<Tournament> Tournaments
-        {
-            get
-            {
-                return _tournaments;
-            }
-            set
-            {
-                if (_tournaments == value)
-                {
-                    return;
-                }
-                _tournaments = value;
-                RaisePropertyChanged("Tournaments");
-            }
-        }
+       
         
         private void MessageReceiver(NotificationMessage message) 
         {

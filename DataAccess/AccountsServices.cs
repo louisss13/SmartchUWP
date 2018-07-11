@@ -24,9 +24,9 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PostAsync(new Uri(ApiAccess.LogInUrl), postContent);
+                var response = await wc.PostAsync(await ApiAccess.GetRessource(ApiAccess.URL.LOGIN), postContent);
                 LoginResponseDAO responseO = (LoginResponseDAO)GetResponseService.TraiteResponse(response, new LoginResponseDAO(), false);
-                ApiAccess.Instance.Token = responseO.AccessToken;
+                AuthHttpClient.Token = responseO.AccessToken;
             }
             catch (HttpRequestException)
             {
@@ -45,7 +45,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PostAsync(new Uri(ApiAccess.AccountUrl), postContent);
+                var response = await wc.PostAsync(await ApiAccess.GetRessource(ApiAccess.URL.ACCOUNT), postContent);
                 GetResponseService.TraiteResponse(response, new AccountDAO(), false);
             }
             catch (HttpRequestException)

@@ -15,9 +15,9 @@ namespace Model
         public string Box { get; set; }
         public string Zipcode { get; set; }
         public Country Country { get; set; }
+
         
 
-            
-        
+
     }
 }

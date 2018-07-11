@@ -33,7 +33,7 @@ namespace smartchUWP.ViewModel
         private bool _isNameTournamentRequired = false;
 
         private ObservableTournament _tournament = new ObservableTournament( new Tournament() { Address = new Address() { Street = "rue de la loi" } });
-        private ObservableCollection<KeyValuePair<TournamentState, string>> _tournamentStates = null;
+        private ObservableCollection<TournamentState> _tournamentStates = null;
 
         public RelayCommand CommandAddTournament { get; private set; }
         public RelayCommand CommandAddMember { get; private set; }
@@ -144,7 +144,7 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public ObservableCollection<KeyValuePair<TournamentState, string>> TournamentStates
+        public ObservableCollection<TournamentState> TournamentStates
         {
             get
             {
@@ -243,15 +243,16 @@ namespace smartchUWP.ViewModel
 
         public AddTournamentViewModel(INavigationService navigationService) : base(navigationService)
         {
-            CommandAddTournament = new RelayCommand(AddTournament);
-            CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
-            CommandDelMember = new RelayCommand(DelMembre, IsParameterDel);
+            
             if (IsInDesignMode)
             {
                 _clubs = new ObservableCollection<Club> { new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
             }
             else
             {
+                CommandAddTournament = new RelayCommand(AddTournament);
+                CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
+                CommandDelMember = new RelayCommand(DelMembre, IsParameterDel);
                 InitializeAsync();
             }
         }
@@ -324,42 +325,22 @@ namespace smartchUWP.ViewModel
            
         }
 
-        public async void InitializeAsync()
+        public void InitializeAsync()
         {
             SetClubList();
-            TournamentStates = GetTournamentState();
+            SetStates();
             SetMembers();
         }
-        //TODO A mettre dans un converter plutot
-        private ObservableCollection<KeyValuePair<TournamentState, string>> GetTournamentState()
+        private void SetStates()
         {
-            var stateDictionary = new ObservableCollection<KeyValuePair<TournamentState, string>>() ;
-            foreach (TournamentState etat in Enum.GetValues(typeof(TournamentState)))
+            List<TournamentState> allTournamentState = new List<TournamentState>();
+            foreach(TournamentState s in Enum.GetValues(typeof(TournamentState)))
             {
-                KeyValuePair<TournamentState, string> cleValeur;
-                
-                switch (etat)
-                {
-                    case TournamentState.EnCours:
-                        cleValeur = new KeyValuePair<TournamentState, string>(etat, "En cours");
-                        break;
-                    case TournamentState.EnPreparation:
-                        cleValeur = new KeyValuePair<TournamentState, string>(etat, "En Préparation"); 
-                        break;
-                    case TournamentState.Fini:
-                        cleValeur = new KeyValuePair<TournamentState, string>(etat, "Fini");
-                        break;
-                    default:
-                        cleValeur = new KeyValuePair<TournamentState, string>(etat, "Valeur non traduite");
-                        break;
-
-                }
-                stateDictionary.Add(cleValeur);
-                
+                allTournamentState.Add(s);
             }
-            
-            return stateDictionary;
+            TournamentStates = new ObservableCollection<TournamentState>(allTournamentState);
         }
+       
 
         private void MessageReceiver(NotificationMessage message)
         {

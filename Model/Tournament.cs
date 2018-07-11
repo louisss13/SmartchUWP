@@ -10,7 +10,7 @@ namespace Model
     {
        
         public long Id { get; set; }
-        public string Name { get; set; }
+        public string NameTournament { get; set; }
         public Club Club { get; set; }
         public Address Address { get; set; }
 

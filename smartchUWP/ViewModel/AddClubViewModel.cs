@@ -40,8 +40,8 @@ namespace smartchUWP.ViewModel
         public RelayCommand CommandDelMember { get; private set; }
         
 
-        public ObservableClub _club = new ObservableClub();
-        public ObservableClub Club
+        public Club _club = new Club();
+        public Club Club
         {
             get
             {

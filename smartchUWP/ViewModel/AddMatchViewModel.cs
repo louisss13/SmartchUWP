@@ -171,11 +171,13 @@ namespace smartchUWP.ViewModel
 
         public AddMatchViewModel(INavigationService navigationService) : base(navigationService)
         {
+            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
             CommandAjouterMatch = new RelayCommand(EnregistrerMatch, CanEnregistrerMatch);
             CommandAddPoint = new RelayCommand(AddPoint, CanAddPoint);
             CommandDelPoint = new RelayCommand(DelPoint, CanAddPoint);
-            InitializeAsync();
             
+            AllArbitre = new ObservableCollection<User>(new List<User>());
+            AllUsers = new ObservableCollection<User>(new List<User>());
         }
         private async void AddPoint()
         {
@@ -281,13 +283,7 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public void InitializeAsync()
-        {
-            AllArbitre = new ObservableCollection<User>(new List<User>());
-            AllUsers = new ObservableCollection<User>(new List<User>());
-            
-            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
-        }
+        
         public async void  ChargeVar()
         {
             UsersServices usersServices = new UsersServices();

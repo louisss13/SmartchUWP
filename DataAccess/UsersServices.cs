@@ -27,7 +27,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PostAsync(new Uri(ApiAccess.UsersUrl), postContent);
+                var response = await wc.PostAsync(await ApiAccess.GetRessource(ApiAccess.URL.USERS), postContent);
                 GetResponseService.TraiteResponse(response, new UserDAO(), false);
                 return true;
             }
@@ -42,7 +42,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var reponse = await wc.GetAsync(new Uri(ApiAccess.UsersUrl));
+                var reponse = await wc.GetAsync(await ApiAccess.GetRessource(ApiAccess.URL.USERS));
                 var usersDao = GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
                 return ((List<Object>)usersDao).Cast<User>().ToList();
             }
@@ -56,7 +56,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var reponse = await wc.GetAsync(new Uri(ApiAccess.UsersAccountUrl));
+                var reponse = await wc.GetAsync(await ApiAccess.GetRessource(ApiAccess.URL.USER_ACCOUNT));
                 var usersDAO = GetResponseService.TraiteResponse(reponse, new UserDAO(), true);
                 return ((List<object>)usersDAO).Cast<User>().ToList();
             }

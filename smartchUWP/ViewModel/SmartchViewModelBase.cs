@@ -26,6 +26,9 @@ namespace smartchUWP.ViewModel
             if (main == null)
                 main = GetMain();
             main.IsGeneralErrorVisible = true;
+            System.Diagnostics.Debug.WriteLine(e.Message);
+            System.Diagnostics.Debug.WriteLine(e.Source);
+            System.Diagnostics.Debug.WriteLine(e.StackTrace);
             if (e is GetDataException)
             {
                 main.IsGeneralError = true;

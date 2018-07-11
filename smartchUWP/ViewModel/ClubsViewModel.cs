@@ -48,16 +48,16 @@ namespace smartchUWP.ViewModel
 
         public ClubsViewModel(INavigationService navigationService) : base(navigationService)
         {
-            CmdNavigateAddClub = new RelayCommand(NavigateToAddClub);
-
-            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
+            
             if (IsInDesignMode)
             {
                 _clubs =   new ObservableCollection<Club>{ new Club() { Name = "Club1" }, new Club() { Name = "club2" } };
             }
             else
             {
-               InitializeAsync();
+                CmdNavigateAddClub = new RelayCommand(NavigateToAddClub);
+                MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
+                SetClubs();
             }
         }
         public ObservableCollection<Club> Clubs
@@ -76,11 +76,7 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("Clubs");
             }
         }
-        public async Task InitializeAsync()
-        {
-            SetClubs();
-            
-        }
+
         private void NavigateToAddClub()
         {
             _navigationService.NavigateTo("AddClub");

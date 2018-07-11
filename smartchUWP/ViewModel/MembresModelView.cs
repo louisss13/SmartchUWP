@@ -22,14 +22,15 @@ namespace smartchUWP.ViewModel
         private ObservableCollection<User> _users = null;
         public MembresModelView(INavigationService navigationService) : base(navigationService)
         {
-            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
-            CmdNavigateAddMembre = new RelayCommand(NavigateToAddMembre);
+            
             if (IsInDesignMode)
             {
                 _users = new ObservableCollection<User> { new User() { Name = "Nom1" }, new User() { Name = "Nm2" } };
             }
             else
             {
+                MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
+                CmdNavigateAddMembre = new RelayCommand(NavigateToAddMembre);
                 SetUsers();
             }
         }

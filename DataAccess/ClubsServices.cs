@@ -20,7 +20,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.GetAsync(new Uri(ApiAccess.ClubUrl));
+                var response = await wc.GetAsync(await ApiAccess.GetRessource(ApiAccess.URL.CLUBS));
                 var clubsDao = GetResponseService.TraiteResponse(response, new ClubDAO(),true);
                 return ((List<object>)clubsDao).Cast<Club>().ToList();
             }
@@ -38,7 +38,7 @@ namespace DataAccess
             var wc = new AuthHttpClient();
             try
             {
-                var response = await wc.PostAsync(new Uri(ApiAccess.ClubUrl), postContent);
+                var response = await wc.PostAsync(await ApiAccess.GetRessource(ApiAccess.URL.CLUBS), postContent);
                 GetResponseService.TraiteResponse(response, new ClubDAO(), false);
                 return true;
             }

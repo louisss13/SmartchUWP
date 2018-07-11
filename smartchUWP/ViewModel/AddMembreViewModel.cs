@@ -20,7 +20,7 @@ namespace smartchUWP.ViewModel
     {
         public RelayCommand CommandAddMember { get; private set; }
 
-        private ObservableUserInfo _user = new ObservableUserInfo();
+        private User _user = new User();
         private bool _isAddressError = false;
         private bool _isAddressRequiredCity = false;
         private bool _isAddressRequiredNumber = false;
@@ -34,7 +34,7 @@ namespace smartchUWP.ViewModel
         private bool _isEmailFormatError = false;
         private bool _isBirtdayRequired = false;
 
-        public ObservableUserInfo User
+        public User User
         {
             get
             {

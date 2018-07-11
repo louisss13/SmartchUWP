@@ -10,10 +10,11 @@ namespace DataAccess
 {
     public class AuthHttpClient : HttpClient
     {
+        public static string Token { get; set; }
 
         public AuthHttpClient() : base() {
-            if(ApiAccess.Instance.Token != null)
-                DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ApiAccess.Instance.Token);
+            if(AuthHttpClient.Token != null)
+                DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthHttpClient.Token);
         }
     }
 }
