@@ -23,7 +23,6 @@ namespace DataAccess
             PARTICIPANTS
         }
 
-        //private static readonly String Url = "http://localhost:49391/api/";
         private static String UrlApi;
         private static String Users;
         private static String UsersAccount;
@@ -34,24 +33,7 @@ namespace DataAccess
         private static String Matchs;
         private static String Points;
         private static String Participants;
-       /* public static readonly String UsersUrl = Url + "userinfo";
-        public static readonly String UsersAccountUrl = Url + "userinfo/account";
-        public static readonly String AccountUrl = Url + "account";
-        public static readonly String LogInUrl = Url + "jwt";
-        public static readonly string ClubUrl = Url + "clubs";
-        public static readonly string TournamentUrl = Url + "tournaments";
-        
-        public static String GetMatchUrl(long tournamentId, long matchId)
-        {
-            if(matchId == 0)
-                return Url + "tournaments/" + tournamentId + "/matchs/";
-            return Url + "tournaments/" + tournamentId + "/matchs/" + matchId;
-        }
-        public static String GetMatchPointUrl( long matchId)
-        {
-            return Url + "matchs/" +  matchId+"/point";
-        }
-*/
+       
         public static async Task<Uri> GetRessource(URL ressource, long id=0)
         {
             if (UrlApi == null)
