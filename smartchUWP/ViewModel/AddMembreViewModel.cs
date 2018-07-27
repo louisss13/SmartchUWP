@@ -196,7 +196,6 @@ namespace smartchUWP.ViewModel
         public AddMembreViewModel(INavigationService navigationService) : base(navigationService)
         {
             CommandAddMember = new RelayCommand(AddMembre);
-            
         }
         
         
@@ -210,7 +209,6 @@ namespace smartchUWP.ViewModel
                 if (response)
                 {
                     _navigationService.NavigateTo("Membres");
-                    MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListUser));
                 }
             }
             catch(BadRequestException e)

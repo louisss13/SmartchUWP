@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
 using smartchUWP.Services;
+using smartchUWP.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddMatchViewModel : SmartchViewModelBase
+    public class AddMatchViewModel : SmartchViewModelBase, INavigable
     {
         private Match _match;
         private User _selectedJoueur1;
@@ -171,7 +172,6 @@ namespace smartchUWP.ViewModel
 
         public AddMatchViewModel(INavigationService navigationService) : base(navigationService)
         {
-            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
             CommandAjouterMatch = new RelayCommand(EnregistrerMatch, CanEnregistrerMatch);
             CommandAddPoint = new RelayCommand(AddPoint, CanAddPoint);
             CommandDelPoint = new RelayCommand(DelPoint, CanAddPoint);
@@ -233,7 +233,17 @@ namespace smartchUWP.ViewModel
             
             if(Match.Id > 0)
             {
-                bool isUpdate = await tournamentsServices.UpdateMatch(Tournament, Match, NumPhase.GetValueOrDefault());
+                try
+                {
+                    if (await tournamentsServices.UpdateMatch(Tournament, Match, NumPhase.GetValueOrDefault()))
+                    {
+                        _navigationService.NavigateTo("SelectTournament", Tournament);
+                    }
+                }
+                catch (Exception e)
+                {
+                    SetGeneralErrorMessage(e);
+                }
             }
             else
             {
@@ -242,7 +252,7 @@ namespace smartchUWP.ViewModel
                     bool response = await tournamentsServices.AddMatch(Tournament, Match, NumPhase.GetValueOrDefault());
                     if (response)
                     {
-                        _navigationService.NavigateTo("Tournaments");
+                        _navigationService.NavigateTo("SelectTournament", Tournament);
                     }
                 }
                 catch(Exception e)
@@ -261,27 +271,7 @@ namespace smartchUWP.ViewModel
             }
             return true;
         }
-        private void MessageReceiver(NotificationMessage message)
-        {
-            switch (message.VariableType)
-            {
-                case NotificationMessageType.AddTournament:
-                    if(message.Variable is List<Object>)
-                    {
-                        List<Object> variables = message.Variable as List<Object>;
-                        Tournament = variables[0] as Tournament;
-                        NumPhase = variables[1] as int?;
-                        if (variables.Count() > 2)
-                            Match = variables[2] as Match;
-                        else
-                            Match = new Match();
-                    }
-                    else
-                        Tournament = message.Variable as Tournament;
-                    ChargeVar();
-                break;
-            }
-        }
+        
 
         
         public async void  ChargeVar()
@@ -319,5 +309,26 @@ namespace smartchUWP.ViewModel
             }
         }
 
+        public void NavigatedTo(object parameter)
+        {
+            if (parameter is List<Object>)
+            {
+                List<Object> variables = parameter as List<Object>;
+                Tournament = variables[0] as Tournament;
+                NumPhase = variables[1] as int?;
+                if (variables.Count() > 2)
+                    Match = variables[2] as Match;
+                else
+                    Match = new Match();
+            }
+            else
+                Tournament = parameter as Tournament;
+            ChargeVar();
+        }
+
+        public void NavigatedFrom(object parameter)
+        {
+            // nothing to do
+        }
     }
 }

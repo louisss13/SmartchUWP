@@ -8,6 +8,7 @@ namespace Model.ModelException
 {
     public class GetDataException : Exception
     {
+        public int Code { get; set; }
         public string Description { get; set; }
 
         public GetDataException() : base("Problème lors de la récupération des données")

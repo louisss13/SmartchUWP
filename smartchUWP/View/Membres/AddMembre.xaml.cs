@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Model;
+using smartchUWP.View.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace smartchUWP.View.Membres
 {
-    public sealed partial class AddMembre : Page
+    public sealed partial class AddMembre : BindablePage
     {
         public AddMembre() {
             this.InitializeComponent(); 

@@ -19,24 +19,30 @@ namespace DataAccess.Dao
         public DateTime Birthday { get; set; }
         public Address Adresse { get; set; }
 
+        public Object test;
+
         public IDaoConvertible ToObjectDao(JToken d)
         {
-            Id = d["id"].Value<long>();
-            Name = d["name"].Value<String>();
-            FirstName = d["firstName"].Value<string>();
-            Email = d["email"].Value<String>();
-            Phone = d["phone"].Value<string>();
-            Birthday = d["birthday"].Value<DateTime>();
-            Adresse = (d["adresse"].Value<Object>() != null) ? new Address()
+            if (d.HasValues)
             {
-                Street = (String)d.SelectToken("adresse.street"),
-                Box = (String)d.SelectToken("adresse.box"),
-                City = (String)d.SelectToken("adresse.city"),
-                //Country = (Country)d.SelectToken("adresse.street"),
-                Number = (String)d.SelectToken("adresse.number"),
-                Zipcode = (String)d.SelectToken("adresse.zipCode"),
+                Id = d["id"].Value<long>();
+                Name = d["name"].Value<String>();
+                FirstName = d["firstName"].Value<string>();
+                Email = d["email"].Value<String>();
+                Phone = d["phone"].Value<string>();
+                Birthday = d["birthday"].Value<DateTime>();
+                test = d["adresse"].Value<Object>();
+                Adresse = (d["adresse"].Value<Object>() != null) ? new Address()
+                {
+                    Street = (String)d.SelectToken("adresse.street"),
+                    Box = (String)d.SelectToken("adresse.box"),
+                    City = (String)d.SelectToken("adresse.city"),
+                    //Country = (Country)d.SelectToken("adresse.street"),
+                    Number = (String)d.SelectToken("adresse.number"),
+                    Zipcode = (String)d.SelectToken("adresse.zipCode"),
 
-            } : null;
+                } : null;
+            }
             return this;
             
         }

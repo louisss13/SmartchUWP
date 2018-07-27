@@ -1,4 +1,5 @@
 ﻿using Model;
+using smartchUWP.View.Pages;
 using smartchUWP.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace smartchUWP.View.Tournaments
 {
-    public sealed partial class Matchs : Page
+    public sealed partial class Matchs : BindablePage
     {
         public Matchs()
         {
@@ -23,9 +24,6 @@ namespace smartchUWP.View.Tournaments
             ListView listView = sender as ListView;
             
             Match selectedMatch = listView.SelectedItem as Match;
-
-
-
             ((MatchsViewModel)DataContext).SelectedMatch = selectedMatch;
 
         }

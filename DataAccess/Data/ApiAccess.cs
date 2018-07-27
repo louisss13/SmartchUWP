@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -81,7 +82,7 @@ namespace DataAccess
             switch (ressource)
             {
                 case URL.MATCHS:
-                    address += Account;
+                    address += Matchs;
                     break;
                 case URL.POINTS:
                     address += Clubs;
@@ -92,7 +93,7 @@ namespace DataAccess
                 default:
                     return null;
             }
-            address.Replace("{id1}", id1.ToString());
+            address = address.Replace("{id1}", id1.ToString());
             if (id2 > 0)
             {
                 address += "/" + id2;
@@ -112,7 +113,7 @@ namespace DataAccess
                 default:
                     return null;
             }
-            address.Replace("{id1}", id1.ToString());
+            address = address.Replace("{id1}", id1.ToString());
             if (id2 > 0)
             {
                 address += "/" + id2;
@@ -121,7 +122,14 @@ namespace DataAccess
         }
         private async static Task SetStaticVar()
         {
-            StorageFile file = await StorageFile.GetFileFromApplicationUriAsync( new Uri("ms-appx:///Assets/ApiAccess.xml"));
+            StorageFile file;
+            #if DEBUG            
+                file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/ApiAccessDebug.xml"));
+            #else
+                file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/ApiAccess.xml"));
+            #endif
+
+            
             var xmlfile = await XmlDocument.LoadFromFileAsync(file);
             UrlApi = xmlfile.DocumentElement.SelectSingleNode("url").InnerText;
             Users = xmlfile.DocumentElement.SelectSingleNode("ressources/users").InnerText;

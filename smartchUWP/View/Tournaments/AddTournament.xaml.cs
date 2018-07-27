@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using GalaSoft.MvvmLight.Command;
 using Model;
+using smartchUWP.View.Pages;
 using smartchUWP.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace smartchUWP.View.Tournaments
 {
-    public sealed partial class AddTournament : Page
+    public sealed partial class AddTournament : BindablePage
     {
         public AddTournament() {
             this.InitializeComponent();          

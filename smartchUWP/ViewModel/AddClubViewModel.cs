@@ -255,7 +255,6 @@ namespace smartchUWP.ViewModel
                 bool response = await clubsServices.AddClub(Club);
                 if (response)
                 {
-                    MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListClub));
                     _navigationService.NavigateTo("Clubs");
                 }
             }

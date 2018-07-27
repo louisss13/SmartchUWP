@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using Model;
 using Newtonsoft.Json.Linq;
+using smartchUWP.View.Pages;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +25,7 @@ namespace smartchUWP.View
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class Register : Page
+    public sealed partial class Register : BindablePage
     {
         public Register()
         {

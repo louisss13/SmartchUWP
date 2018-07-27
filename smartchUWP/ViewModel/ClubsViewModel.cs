@@ -12,10 +12,11 @@ using smartchUWP.Services;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Windows.UI.Notifications;
+using smartchUWP.ViewModel.Interfaces;
 
 namespace smartchUWP.ViewModel
 {
-    public class ClubsViewModel : SmartchViewModelBase
+    public class ClubsViewModel : SmartchViewModelBase, INavigable
     {
         public RelayCommand CmdNavigateAddClub { get; private set; }
 
@@ -56,7 +57,6 @@ namespace smartchUWP.ViewModel
             else
             {
                 CmdNavigateAddClub = new RelayCommand(NavigateToAddClub);
-                MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
                 SetClubs();
             }
         }
@@ -95,16 +95,15 @@ namespace smartchUWP.ViewModel
             }
            
         }
-        private void MessageReceiver(NotificationMessage message)
+     
+        public void NavigatedTo(object parameter)
         {
-            switch (message.VariableType)
-            {
-                case NotificationMessageType.ListClub:
-                    SetClubs();
-                    
-                    break;
-            }
+            SetClubs();
         }
-        
+
+        public void NavigatedFrom(object parameter)
+        {
+            // nothig to do
+        }
     }
 }

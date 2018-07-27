@@ -1,4 +1,5 @@
-﻿using System;
+﻿using smartchUWP.View.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace smartchUWP.View.Membres
 {
-    public sealed partial class Membres : Page
+    public sealed partial class Membres : BindablePage
     {
         public Membres()
         {

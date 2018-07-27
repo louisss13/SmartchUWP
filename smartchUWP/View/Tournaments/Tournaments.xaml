@@ -1,4 +1,5 @@
-﻿<Page
+﻿<common:BindablePage
+    xmlns:common="using:smartchUWP.View.Pages"
     x:Class="smartchUWP.View.Tournaments.Tournaments"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,9 +8,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     DataContext="{Binding Source={StaticResource Locator},Path=Tournaments}"
     mc:Ignorable="d">
-    <Page.Resources>
+    <common:BindablePage.Resources>
         <Thickness  x:Key="paddingListTournament" >20,10,0,10</Thickness>
-    </Page.Resources>
+    </common:BindablePage.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -96,4 +97,4 @@
             
         
     </Grid>
-</Page>
+</common:BindablePage>

@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
 using smartchUWP.Services;
+using smartchUWP.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class MembresModelView : SmartchViewModelBase
+    public class MembresModelView : SmartchViewModelBase, INavigable
     {
         public RelayCommand CmdNavigateAddMembre { get; private set; }
 
@@ -29,7 +30,6 @@ namespace smartchUWP.ViewModel
             }
             else
             {
-                MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
                 CmdNavigateAddMembre = new RelayCommand(NavigateToAddMembre);
                 SetUsers();
             }
@@ -67,19 +67,17 @@ namespace smartchUWP.ViewModel
             {
                 SetGeneralErrorMessage(e);
             }
-            
-                
-            
         }
-        private async void MessageReceiver(NotificationMessage message)
-        {
-            switch (message.VariableType)
-            {
-                case NotificationMessageType.ListUser:
-                    await SetUsers();
+       
 
-                    break;
-            }
+        public void NavigatedTo(object parameter)
+        {
+            SetUsers();
+        }
+
+        public void NavigatedFrom(object parameter)
+        {
+            // nothig to do
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿<Page
+﻿<common:BindablePage
+    xmlns:common="using:smartchUWP.View.Pages"
     x:Class="smartchUWP.View.Clubs.AddClub"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -79,4 +80,4 @@
             </Pivot>
         </StackPanel>
     </Grid>
-</Page>
+</common:BindablePage>

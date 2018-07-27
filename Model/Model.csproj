@@ -114,6 +114,7 @@
     <Compile Include="ErrorObject.cs" />
     <Compile Include="ModelException\BadRequestException.cs" />
     <Compile Include="ModelException\GetDataException.cs" />
+    <Compile Include="ModelException\NotConnectedException.cs" />
     <Compile Include="ModelException\ServerException.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="MatchsPhases.cs" />

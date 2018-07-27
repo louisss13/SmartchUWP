@@ -18,13 +18,16 @@ namespace smartchUWP.ViewModel
         public SmartchViewModelBase(INavigationService navigationService)
         {
             _navigationService = navigationService;
-            
         }
 
         public void SetGeneralErrorMessage(Exception e, IAfficheErrorGeneral main = null)
         {
             if (main == null)
                 main = GetMain();
+            if(e is NotConnectedException)
+            {
+                _navigationService.NavigateTo("Login");
+            }
             main.IsGeneralErrorVisible = true;
             System.Diagnostics.Debug.WriteLine(e.Message);
             System.Diagnostics.Debug.WriteLine(e.Source);

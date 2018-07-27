@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using smartchUWP.View.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace smartchUWP.View.Clubs
 {
-    public sealed partial class Clubs : Page
+    public sealed partial class Clubs : BindablePage
     {
        
         public Clubs()

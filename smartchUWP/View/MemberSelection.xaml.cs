@@ -1,5 +1,6 @@
 ﻿using Model;
 using smartchUWP.Interfaces;
+using smartchUWP.View.Pages;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace smartchUWP.View
 {
-    public sealed partial class MemberSelection : Page
+    public sealed partial class MemberSelection : BindablePage
     {
         public MemberSelection()
         {

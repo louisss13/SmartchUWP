@@ -41,7 +41,10 @@ namespace DataAccess.Dao
 
 
             }
-
+            else if(response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new Model.ModelException.NotConnectedException();
+            }
             else if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 try
@@ -75,7 +78,7 @@ namespace DataAccess.Dao
             }
             else
             {
-                throw new Model.ModelException.ServiceException("Erreur inconnue", "Erreur inconnue (" + response.StatusCode + ")" + response.ReasonPhrase);
+                throw new Model.ModelException.ServiceException("Erreur inconnue (" + response.StatusCode + ")", "Erreur inconnue (" + response.StatusCode + ")" + response.ReasonPhrase);
             }
           
             

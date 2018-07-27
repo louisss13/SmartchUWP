@@ -114,6 +114,7 @@
     <Compile Include="ViewModel\AddClubViewModel.cs" />
     <Compile Include="ViewModel\AddMatchViewModel.cs" />
     <Compile Include="ViewModel\AddTournamentViewModel.cs" />
+    <Compile Include="ViewModel\Interfaces\INavigable.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\MatchsViewModel.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="View\Clubs\Clubs.xaml.cs">
       <DependentUpon>Clubs.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Pages\BindablePage.cs" />
     <Compile Include="View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
@@ -173,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\ApiAccess.xml" />
+    <Content Include="Assets\ApiAccessDebug.xml" />
     <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\BadgeLogo.scale-125.png" />
     <Content Include="Assets\BadgeLogo.scale-150.png" />

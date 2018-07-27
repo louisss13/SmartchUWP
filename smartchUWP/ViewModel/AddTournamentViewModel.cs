@@ -307,7 +307,6 @@ namespace smartchUWP.ViewModel
                 bool response = await tournamentsServices.AddTournamentAsync(tournament);
                 if (response)
                 {
-                    MessengerInstance.Send(new NotificationMessage(NotificationMessageType.ListTournament));
                     _navigationService.NavigateTo("Tournaments");
                 }
             }

@@ -1,4 +1,5 @@
-﻿<Page
+﻿<common:BindablePage
+    xmlns:common="using:smartchUWP.View.Pages"
     x:Class="smartchUWP.View.Login"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -88,8 +89,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Button Content="Me connecter" Margin="0,24" Command="{Binding CommandLogin}" HorizontalAlignment="left"/>
-                <Button Content="Spectateur " Margin="0,24" Command="{Binding CommandLogin}" Grid.Column="1" HorizontalAlignment="Center"/>
-                <Button Content="M'inscrire" Margin="0,24" Command="{Binding CommandNavigateRegister}" Grid.Column="2" HorizontalAlignment="Right"/>
+                <!--<Button Content="Spectateur " Margin="0,24" Command="{Binding CommandLogin}" Grid.Column="1" HorizontalAlignment="Center"/>
+                --><Button Content="M'inscrire" Margin="0,24" Command="{Binding CommandNavigateRegister}" Grid.Column="2" HorizontalAlignment="Right"/>
             </Grid>
            
            
@@ -103,4 +104,4 @@
                    VerticalAlignment="Center"/>
         </Grid>
     </Grid>
-</Page>
+</common:BindablePage>

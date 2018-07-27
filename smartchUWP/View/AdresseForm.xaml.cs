@@ -1,4 +1,5 @@
 ﻿using Model;
+using smartchUWP.View.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace smartchUWP.View
 {
-    public sealed partial class AdresseForm : Page 
+    public sealed partial class AdresseForm : BindablePage 
     {
         public AdresseForm()
         {

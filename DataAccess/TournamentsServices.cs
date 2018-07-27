@@ -171,5 +171,20 @@ namespace DataAccess
                 throw new GetDataException();
             }
         }
+
+        public async Task<bool> DeletaMatchAsync(long idTournament, Match m)
+        {
+            var wc = new AuthHttpClient();
+            try
+            {
+                var response = await wc.DeleteAsync(await ApiAccess.GetRessource(ApiAccess.URL.MATCHS, idTournament, m.Id));
+                GetResponseService.TraiteResponse(response, null, false);
+                return true;
+            }
+            catch (HttpRequestException)
+            {
+                throw new GetDataException();
+            }
+        }
     }
 }

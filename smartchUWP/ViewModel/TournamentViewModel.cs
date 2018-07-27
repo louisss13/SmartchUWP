@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight.Views;
 
 using Model;
 using smartchUWP.Services;
+using smartchUWP.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class TournamentViewModel : SmartchViewModelBase
+    public class TournamentViewModel : SmartchViewModelBase, INavigable
     {
         
         private ObservableCollection<Tournament> _tournaments = null;
@@ -66,8 +67,6 @@ namespace smartchUWP.ViewModel
                 NavigateCommand = new RelayCommand(NavigateToAddTournament);
                 CommandNavigateSelect = new RelayCommand(NavigateToSelectTournament, IsSelected);
                 CommandNavigateModification = new RelayCommand(NavigateToSelectTournament);
-
-                MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
                 SetTournaments();
             }
         }
@@ -78,10 +77,7 @@ namespace smartchUWP.ViewModel
         
         private void NavigateToSelectTournament()
         {
-            
-            _navigationService.NavigateTo("SelectTournament");
-            MessengerInstance.Send(new NotificationMessage(NotificationMessageType.Tournament, SelectedTournament));
-
+            _navigationService.NavigateTo("SelectTournament", SelectedTournament);
         }
         private void NavigateToAddTournament()
         {
@@ -90,16 +86,6 @@ namespace smartchUWP.ViewModel
 
         }
        
-        
-        private void MessageReceiver(NotificationMessage message) 
-        {
-            switch (message.VariableType)
-            {
-                case NotificationMessageType.ListTournament:
-                    SetTournaments();
-                    break;
-            }
-        }
         private async void SetTournaments()
         {
             var service = new TournamentsServices();
@@ -113,6 +99,16 @@ namespace smartchUWP.ViewModel
                 SetGeneralErrorMessage(e);
             }
 
+        }
+
+        public void NavigatedTo(object parameter)
+        {
+            SetTournaments();
+        }
+
+        public void NavigatedFrom(object parameter)
+        {
+            //nothing to do
         }
     }
 }

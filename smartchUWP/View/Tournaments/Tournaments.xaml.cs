@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using smartchUWP.View.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace smartchUWP.View.Tournaments
 {
-    public sealed partial class Tournaments : Page
+    public sealed partial class Tournaments : BindablePage
     {
         public Tournaments()
         {

@@ -1,19 +1,18 @@
 ﻿using DataAccess;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Model;
 using smartchUWP.Services;
+using smartchUWP.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class MatchsViewModel : SmartchViewModelBase
+    public class MatchsViewModel : SmartchViewModelBase, INavigable
     {
        
         
@@ -25,6 +24,7 @@ namespace smartchUWP.ViewModel
         public RelayCommand CommandNavigateAddMatch { get; private set; }
         public RelayCommand CommandGenereMatch { get; private set; }
         public RelayCommand CommandEditMatch { get; private set; }
+        public RelayCommand<Match> CommandDeleteMatch { get; private set; }
         public RelayCommand CommandEnregistrerTournament { get; private set; }
 
         public Tournament SelectedTournament
@@ -83,14 +83,11 @@ namespace smartchUWP.ViewModel
 
         public MatchsViewModel(INavigationService navigationService) : base(navigationService)
         {
-            
-            MessengerInstance.Register<NotificationMessage>(this, MessageReceiver);
-
             CommandNavigateAddMatch = new RelayCommand(NavigateToAddMatch);
             CommandGenereMatch = new RelayCommand(GenereMatches, IsSelectedPhase);
             CommandEditMatch = new RelayCommand(NavigateToEditMatch, IsSelectedMatch);
             CommandEnregistrerTournament = new RelayCommand(RegisterTournamentAsync);
-           
+            CommandDeleteMatch = new RelayCommand<Match>(DeleteMatchAsync);
         }
 
         private void GenereMatches()
@@ -145,15 +142,11 @@ namespace smartchUWP.ViewModel
 
         private void NavigateToEditMatch()
         {
-            _navigationService.NavigateTo("AddMatch");
-            NotificationMessage message = new NotificationMessage(NotificationMessageType.AddTournament, new List<Object>() { SelectedTournament, SelectedPhase.NumPhase, SelectedMatch });
-            MessengerInstance.Send(message);
+            _navigationService.NavigateTo("AddMatch", new List<Object>() { SelectedTournament, SelectedPhase.NumPhase, SelectedMatch });
         }
         private void NavigateToAddMatch()
         {
-            _navigationService.NavigateTo("AddMatch");
-            NotificationMessage message = new NotificationMessage(NotificationMessageType.AddTournament, new List<Object>() { SelectedTournament, SelectedPhase.NumPhase });
-            MessengerInstance.Send(message);
+            _navigationService.NavigateTo("AddMatch", new List<Object>() { SelectedTournament, SelectedPhase.NumPhase });
         }
         
 
@@ -162,7 +155,25 @@ namespace smartchUWP.ViewModel
             TournamentsServices tournamentsServices = new TournamentsServices();
             try
             {
-                await tournamentsServices.UpdateAsync(SelectedTournament);
+                if(await tournamentsServices.UpdateAsync(SelectedTournament))
+                {
+                    InitTournament();
+                }
+            }
+            catch(Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+        }
+        private async void DeleteMatchAsync(Match m)
+        {
+            TournamentsServices tournamentsServices = new TournamentsServices();
+            try
+            {
+                if(await tournamentsServices.DeletaMatchAsync(SelectedTournament.Id, m))
+                {
+                    await InitTournament();
+                }
             }
             catch(Exception e)
             {
@@ -170,19 +181,17 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public async void MessageReceiver(NotificationMessage message)
+       
+        public async Task InitTournament()
         {
-            switch (message.VariableType)
+            
+            TournamentsServices tournamentsServices = new TournamentsServices();
+            try
             {
-                case NotificationMessageType.Tournament:
-                    SelectedTournament = (Tournament)message.Variable;
-                    TournamentsServices tournamentsServices = new TournamentsServices();
-                    try
-                    {
-                        SelectedTournament = await tournamentsServices.GetTournament(SelectedTournament.Id);
-                        if (SelectedTournament.Matches == null || SelectedTournament.Matches.Count() <= 0)
-                        {
-                            SelectedTournament.Matches = new List<MatchsPhase>()
+                SelectedTournament = await tournamentsServices.GetTournament(SelectedTournament.Id);
+                if (SelectedTournament.Matches == null || SelectedTournament.Matches.Count() <= 0)
+                {
+                    SelectedTournament.Matches = new List<MatchsPhase>()
                             {
                                 new MatchsPhase(){
                                     NumPhase = 1,
@@ -190,15 +199,32 @@ namespace smartchUWP.ViewModel
                                 }
                             };
 
-                        }
-                        SelectedPhase = MatchsPhases.Where(m => m.NumPhase == 1).First();
-                    }
-                    catch(Exception e)
-                    {
-                        SetGeneralErrorMessage(e);
-                    }
-               break;
+                }
+                SelectedPhase = MatchsPhases.Where(m => m.NumPhase == 1).First();
             }
+            catch (Exception e)
+            {
+                SetGeneralErrorMessage(e);
+            }
+        }
+
+        public void NavigatedTo(object parameter)
+        {
+            if (parameter is Tournament tournament)
+            {
+                SelectedTournament = tournament;
+                InitTournament();
+            }
+            else
+            {
+                SetGeneralErrorMessage(new Exception("Tournois non trouvé"));
+            }
+
+        }
+
+        public void NavigatedFrom(object parameter)
+        {
+            //nothing to do
         }
     }
 }
