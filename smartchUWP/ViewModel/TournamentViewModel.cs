@@ -67,7 +67,7 @@ namespace smartchUWP.ViewModel
                 NavigateCommand = new RelayCommand(NavigateToAddTournament);
                 CommandNavigateSelect = new RelayCommand(NavigateToSelectTournament, IsSelected);
                 CommandNavigateModification = new RelayCommand(NavigateToSelectTournament);
-                SetTournaments();
+                //SetTournaments();
             }
         }
         private bool IsSelected()
@@ -86,7 +86,7 @@ namespace smartchUWP.ViewModel
 
         }
        
-        private async void SetTournaments()
+        private async Task SetTournaments()
         {
             var service = new TournamentsServices();
             try
@@ -101,9 +101,9 @@ namespace smartchUWP.ViewModel
 
         }
 
-        public void NavigatedTo(object parameter)
+        public async void NavigatedTo(object parameter)
         {
-            SetTournaments();
+            await SetTournaments();
         }
 
         public void NavigatedFrom(object parameter)

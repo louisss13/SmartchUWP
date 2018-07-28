@@ -48,7 +48,7 @@ namespace DataAccess.Dao
                 Id = Id,
                 Player1 = Joueur1 ?? new User() { Id = Joueur1Id },
                 Player2 = Joueur2 ?? new User() { Id = Joueur2Id },
-                Arbitre = Arbitre,
+                Arbitre = Arbitre ?? new User() { Name="Aucun"},
                 Emplacement = Emplacement,
                 State = State,
                 Score = Score,

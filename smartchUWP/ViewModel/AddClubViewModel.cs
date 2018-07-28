@@ -7,6 +7,7 @@ using Model.ModelException;
 using smartchUWP.Interfaces;
 using smartchUWP.Observable;
 using smartchUWP.Services;
+using smartchUWP.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddClubViewModel : SmartchViewModelBase, IListeMembreViewModel, IAddressForm
+    public class AddClubViewModel : SmartchViewModelBase, IListeMembreViewModel, IAddressForm, INavigable
     {
        
         private ObservableCollection<User> _allMembers;
@@ -242,8 +243,6 @@ namespace smartchUWP.ViewModel
             CommandAddClub = new RelayCommand(AddClub);
             CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
             CommandDelMember = new RelayCommand(DelMembre, IsParameterDel);
-            
-            SetMembers();
         }
 
         public async void AddClub()
@@ -293,7 +292,7 @@ namespace smartchUWP.ViewModel
             MembersEntity = new ObservableCollection<User>(MembersEntity.Except(SelectedMembersEntity));
         }
 
-        public async void SetMembers()
+        public async Task SetMembers()
         {
             UsersServices usersServices = new UsersServices();
             try
@@ -369,6 +368,15 @@ namespace smartchUWP.ViewModel
             IsAddClubError = false;
         }
 
-        
+        public async void NavigatedTo(object parameter)
+        {
+            Club = new Club();
+            await SetMembers();
+        }
+
+        public void NavigatedFrom(object parameter)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

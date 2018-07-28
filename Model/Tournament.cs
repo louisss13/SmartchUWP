@@ -12,7 +12,7 @@ namespace Model
         public long Id { get; set; }
         public string NameTournament { get; set; }
         public Club Club { get; set; }
-        public Address Address { get; set; }
+        public Address Address { get; set; } = new Address();
 
         public DateTime BeginDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; } = DateTime.Now;

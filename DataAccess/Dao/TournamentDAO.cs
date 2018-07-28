@@ -65,8 +65,11 @@ namespace DataAccess
             List<MatchsPhase> listMatchphase = new List<MatchsPhase>();
             if (Matches != null)
             {
+                
+                int maxNumPhase = 0;
                 foreach (MatchDAO matchDao in Matches)
                 {
+                    maxNumPhase = Math.Max(maxNumPhase, matchDao.Phase);
                     MatchsPhase matchsPhase = listMatchphase.Find(m => m.NumPhase == matchDao.Phase);
                     if (matchsPhase != null)
                     {
@@ -83,6 +86,14 @@ namespace DataAccess
                     }
 
                 }
+                for(int i= 1; i < maxNumPhase; i++)
+                {
+                    if(listMatchphase.Find(m => m.NumPhase == i) == null)
+                    {
+                        listMatchphase.Add(new MatchsPhase() { NumPhase = i});
+                    }
+                }
+                listMatchphase = listMatchphase.OrderBy(o=>o.NumPhase).ToList();
             }
             return listMatchphase;
         }

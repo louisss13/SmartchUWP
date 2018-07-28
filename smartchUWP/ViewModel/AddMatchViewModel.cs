@@ -175,7 +175,7 @@ namespace smartchUWP.ViewModel
             CommandAjouterMatch = new RelayCommand(EnregistrerMatch, CanEnregistrerMatch);
             CommandAddPoint = new RelayCommand(AddPoint, CanAddPoint);
             CommandDelPoint = new RelayCommand(DelPoint, CanAddPoint);
-            
+            ClearFormulaire();
             AllArbitre = new ObservableCollection<User>(new List<User>());
             AllUsers = new ObservableCollection<User>(new List<User>());
         }
@@ -274,7 +274,7 @@ namespace smartchUWP.ViewModel
         
 
         
-        public async void  ChargeVar()
+        public async Task  ChargeVar()
         {
             UsersServices usersServices = new UsersServices();
             TournamentsServices tournamentsServices = new TournamentsServices();
@@ -294,8 +294,8 @@ namespace smartchUWP.ViewModel
             }
 
             if (allRequestSuccess) { 
-                //if(Match.Arbitre != null)
-                //    SelectedArbitre = AllArbitre.Where(a => a.Id == Match.Arbitre.Id);
+                if(Match.Arbitre != null)
+                    SelectedArbitre = AllArbitre.Where(a => a.Id == Match.Arbitre.Id).DefaultIfEmpty(null).First();
                 if (Match.Player1 != null)
                 {
                     SelectedJoueur1 = AllUsers.Where(u => u.Id == Match.Player1.Id).First();
@@ -309,8 +309,16 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public void NavigatedTo(object parameter)
+        public void ClearFormulaire()
         {
+            SelectedArbitre = null;
+            SelectedJoueur1 = null;
+            SelectedJoueur2 = null;
+            LieuMatch = null;
+        }
+        public async void NavigatedTo(object parameter)
+        {
+            ClearFormulaire();
             if (parameter is List<Object>)
             {
                 List<Object> variables = parameter as List<Object>;
@@ -323,7 +331,7 @@ namespace smartchUWP.ViewModel
             }
             else
                 Tournament = parameter as Tournament;
-            ChargeVar();
+            await ChargeVar();
         }
 
         public void NavigatedFrom(object parameter)

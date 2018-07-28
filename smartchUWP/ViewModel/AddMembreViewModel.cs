@@ -7,6 +7,7 @@ using Model.ModelException;
 using smartchUWP.Interfaces;
 using smartchUWP.Observable;
 using smartchUWP.Services;
+using smartchUWP.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddMembreViewModel : SmartchViewModelBase, IAddressForm
+    public class AddMembreViewModel : SmartchViewModelBase, IAddressForm, INavigable
     {
         public RelayCommand CommandAddMember { get; private set; }
 
@@ -279,6 +280,16 @@ namespace smartchUWP.ViewModel
             IsBirtdayRequired = false;
             IsErrorUser = false;
         }
-        
+
+        public void NavigatedTo(object parameter)
+        {
+            InitError();
+            User = new User();
+        }
+
+        public void NavigatedFrom(object parameter)
+        {
+            
+        }
     }
 }

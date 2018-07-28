@@ -221,7 +221,7 @@ namespace smartchUWP.ViewModel
                     _navigationService.NavigateTo("Home");
                 }
             }
-            catch (BadRequestException)
+            catch (NotConnectedException)
             {
                 IsErrorConnection = true;
             }

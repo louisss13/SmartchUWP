@@ -7,6 +7,7 @@ using Model.ModelException;
 using smartchUWP.Interfaces;
 using smartchUWP.Observable;
 using smartchUWP.Services;
+using smartchUWP.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace smartchUWP.ViewModel
 {
-    public class AddTournamentViewModel : SmartchViewModelBase, IListeMembreViewModel, IAddressForm
+    public class AddTournamentViewModel : SmartchViewModelBase, IListeMembreViewModel, IAddressForm, INavigable
     {
         
         private ObservableCollection<Club> _clubs = null;
@@ -32,14 +33,14 @@ namespace smartchUWP.ViewModel
         private bool _isClubRequired = false;
         private bool _isNameTournamentRequired = false;
 
-        private ObservableTournament _tournament = new ObservableTournament( new Tournament() { Address = new Address() { Street = "rue de la loi" } });
+        private Tournament _tournament;
         private ObservableCollection<TournamentState> _tournamentStates = null;
 
         public RelayCommand CommandAddTournament { get; private set; }
         public RelayCommand CommandAddMember { get; private set; }
         public RelayCommand CommandDelMember { get; private set; }
 
-        public Address Address { get { return OTournament.Address; } set { OTournament.Address = value; RaisePropertyChanged("Address"); } }
+        public Address Address { get { return Tournament.Address; } set { Tournament.Address = value; RaisePropertyChanged("Address"); } }
         public bool IsErrorAdresse
         {
             get
@@ -173,7 +174,7 @@ namespace smartchUWP.ViewModel
                 RaisePropertyChanged("Clubs");
             }
         }
-        public ObservableTournament OTournament
+        public Tournament Tournament
         {
             get
             {
@@ -194,11 +195,11 @@ namespace smartchUWP.ViewModel
         {
             get
             {
-                return new ObservableCollection<User>(OTournament.Participants);
+                return new ObservableCollection<User>(Tournament.Participants);
             }
             set
             {
-                OTournament.Participants = value;
+                Tournament.Participants = value;
                 RaisePropertyChanged("MembersEntity");
             }
         }
@@ -253,7 +254,7 @@ namespace smartchUWP.ViewModel
                 CommandAddTournament = new RelayCommand(AddTournament);
                 CommandAddMember = new RelayCommand(AddMembre, IsParameterAdd);
                 CommandDelMember = new RelayCommand(DelMembre, IsParameterDel);
-                InitializeAsync();
+                
             }
         }
 
@@ -278,14 +279,14 @@ namespace smartchUWP.ViewModel
             MembersEntity = new ObservableCollection<User>(MembersEntity.Except(SelectedMembersEntity));
         }
 
-        public async void SetMembers()
+        public async Task SetMembers()
         {
             UsersServices usersServices = new UsersServices();
             try
             {
                 List<User> users = await usersServices.GetUsers();
-                AllMembers = new ObservableCollection<User>(users.Except(OTournament.Participants));
-                MembersEntity = new ObservableCollection<User>(OTournament.Participants);
+                AllMembers = new ObservableCollection<User>(users.Except(Tournament.Participants));
+                MembersEntity = new ObservableCollection<User>(Tournament.Participants);
             }
             catch (Exception e)
             {
@@ -297,14 +298,14 @@ namespace smartchUWP.ViewModel
         public async void AddTournament()
         {
             InitError();
-            Tournament tournament = OTournament;
-            tournament.Admins = null;
+           
+            Tournament.Admins = null;
             //tournament.Club = null;
 
             TournamentsServices tournamentsServices = new TournamentsServices();
             try
             {
-                bool response = await tournamentsServices.AddTournamentAsync(tournament);
+                bool response = await tournamentsServices.AddTournamentAsync(Tournament);
                 if (response)
                 {
                     _navigationService.NavigateTo("Tournaments");
@@ -324,11 +325,11 @@ namespace smartchUWP.ViewModel
            
         }
 
-        public void InitializeAsync()
+        public async Task InitializeAsync()
         {
-            SetClubList();
+            await SetClubList();
             SetStates();
-            SetMembers();
+            await SetMembers();
         }
         private void SetStates()
         {
@@ -341,16 +342,8 @@ namespace smartchUWP.ViewModel
         }
        
 
-        private void MessageReceiver(NotificationMessage message)
-        {
-            switch (message.VariableType)
-            {
-                case NotificationMessageType.ListTournament:
-                    SetClubList();
-                    break;
-            }
-        }
-        private async void SetClubList()
+
+        private async Task SetClubList()
         {
             var service = new ClubsServices();
             try
@@ -372,6 +365,9 @@ namespace smartchUWP.ViewModel
             switch (error.Code)
             {
                 case "ErrorAdresse":
+                    IsErrorAdresse = true;
+                    break;
+                case "AddressRequired":
                     IsErrorAdresse = true;
                     break;
                 case "AddressRequiredCity":
@@ -410,6 +406,17 @@ namespace smartchUWP.ViewModel
 
             IsTournamentError = false;
             
+        }
+
+        public async void NavigatedTo(object parameter)
+        {
+            Tournament = new Tournament();
+            await InitializeAsync();
+        }
+
+        public void NavigatedFrom(object parameter)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

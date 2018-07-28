@@ -19,9 +19,11 @@ namespace smartchUWP.ViewModel
         private Tournament _selectedTournament = null;
         private MatchsPhase _selectedPhase;
         private Match _selectedMatch;
+        private ObservableCollection<MatchsPhase> _matchPhases = new ObservableCollection<MatchsPhase>(new List<MatchsPhase>());
 
 
         public RelayCommand CommandNavigateAddMatch { get; private set; }
+        public RelayCommand AddPivot { get; private set; }
         public RelayCommand CommandGenereMatch { get; private set; }
         public RelayCommand CommandEditMatch { get; private set; }
         public RelayCommand<Match> CommandDeleteMatch { get; private set; }
@@ -70,12 +72,19 @@ namespace smartchUWP.ViewModel
         {
             get
             {
-                if(SelectedTournament != null && SelectedTournament.Matches != null) 
-                    return new ObservableCollection<MatchsPhase>(SelectedTournament.Matches);
-                return new ObservableCollection<MatchsPhase>(new List<MatchsPhase>());
+                if(_matchPhases.Count <= 0)
+                {
+                    if (SelectedTournament != null && SelectedTournament.Matches != null)
+                        _matchPhases = new ObservableCollection<MatchsPhase>(SelectedTournament.Matches);
+                    
+                    
+                }
+                
+                return _matchPhases;  
             }
             set
             {
+                _matchPhases = value;
                 SelectedTournament.Matches = value;
                 RaisePropertyChanged("MatchsPhases");
             }
@@ -88,6 +97,7 @@ namespace smartchUWP.ViewModel
             CommandEditMatch = new RelayCommand(NavigateToEditMatch, IsSelectedMatch);
             CommandEnregistrerTournament = new RelayCommand(RegisterTournamentAsync);
             CommandDeleteMatch = new RelayCommand<Match>(DeleteMatchAsync);
+            AddPivot = new RelayCommand(AddPivotItem);
         }
 
         private void GenereMatches()
@@ -96,6 +106,11 @@ namespace smartchUWP.ViewModel
         }
         private void GenereFirstPhase()
         {
+            int selectedNumPhase = 1;
+            if(SelectedPhase != null)
+            {
+                selectedNumPhase = SelectedPhase.NumPhase;
+            }
             List<User> users = new List<User>(SelectedTournament.Participants);
             List<Match> matchs = new List<Match>();
             Random rand = new Random();
@@ -118,17 +133,21 @@ namespace smartchUWP.ViewModel
             {
                 MatchsPhases.Add(new MatchsPhase()
                 {
-                    NumPhase = 1,
+                    NumPhase = selectedNumPhase,
                     Matchs = new List<Match>()
                 });
             }
-            MatchsPhases.Where(m => m.NumPhase == 1).First().Matchs = matchs;
-            MatchsPhases.Add(new MatchsPhase()
+
+            MatchsPhase selectedPhase = SelectedTournament.Matches.Where(m => m.NumPhase == selectedNumPhase).DefaultIfEmpty(null).First();
+            if(selectedPhase == null)
             {
-                NumPhase = 2,
-                Matchs = new List<Match>()
-            });
-            RaisePropertyChanged("MatchsPhases");
+                selectedPhase = new MatchsPhase() { NumPhase = selectedNumPhase };
+            }
+            selectedPhase.Matchs = matchs;
+            SelectedPhase = selectedPhase;
+            MatchsPhases = new ObservableCollection<MatchsPhase>(SelectedTournament.Matches);
+            
+           
             
         }
         private bool IsSelectedPhase()
@@ -148,7 +167,15 @@ namespace smartchUWP.ViewModel
         {
             _navigationService.NavigateTo("AddMatch", new List<Object>() { SelectedTournament, SelectedPhase.NumPhase });
         }
-        
+
+        public void AddPivotItem()
+        {
+
+                
+            MatchsPhases.Add(new MatchsPhase() { NumPhase = SelectedTournament.Matches.Count+1 });
+            RaisePropertyChanged("MatchsPhases");
+
+        }
 
         private async void RegisterTournamentAsync()
         {
@@ -157,7 +184,7 @@ namespace smartchUWP.ViewModel
             {
                 if(await tournamentsServices.UpdateAsync(SelectedTournament))
                 {
-                    InitTournament();
+                    await InitTournament();
                 }
             }
             catch(Exception e)
@@ -200,7 +227,8 @@ namespace smartchUWP.ViewModel
                             };
 
                 }
-                SelectedPhase = MatchsPhases.Where(m => m.NumPhase == 1).First();
+                SelectedPhase = MatchsPhases.Where(m => m.NumPhase == 1).DefaultIfEmpty(null).First();
+                MatchsPhases = new ObservableCollection<MatchsPhase>(SelectedTournament.Matches);
             }
             catch (Exception e)
             {
@@ -208,12 +236,12 @@ namespace smartchUWP.ViewModel
             }
         }
 
-        public void NavigatedTo(object parameter)
+        public async void  NavigatedTo(object parameter)
         {
             if (parameter is Tournament tournament)
             {
                 SelectedTournament = tournament;
-                InitTournament();
+                await InitTournament();
             }
             else
             {

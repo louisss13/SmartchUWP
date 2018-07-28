@@ -30,7 +30,7 @@ namespace smartchUWP.Observable
             base.Participants = tournament.Participants;
             
         }
-        private ObservableCollection<User> _participants;
+        private ObservableCollection<User> _participants = new ObservableCollection<User>();
 
         public new ObservableCollection<Account> Admins { get; set; }
         public new ObservableCollection<User> Participants

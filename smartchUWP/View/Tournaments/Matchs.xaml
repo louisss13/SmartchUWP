@@ -16,8 +16,8 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="pivot "/>
-                <TextBlock Text="{Binding NumPhase}" Grid.Column="1"/>
+                <TextBlock Text="Phase "/>
+                <TextBlock Text="{Binding NumPhase, Mode=TwoWay}" Grid.Column="1"/>
             </Grid>
             
         </DataTemplate>
@@ -95,7 +95,7 @@
                 </Grid.ColumnDefinitions>
                 <Border  BorderBrush="{StaticResource border}" BorderThickness="0,0,2,0" >
                     <ListView Header="Matchs" 
-                              ItemsSource="{Binding Matchs}"  
+                              ItemsSource="{Binding Matchs, Mode=TwoWay}"  
                               SelectionChanged="MatchsListView_SelectionChanged"
                               ScrollViewer.IsVerticalRailEnabled="True"
                               ItemTemplate="{StaticResource ListMatchTemplate}" 
@@ -125,13 +125,16 @@
                 Content="Générer aléatoirement les matchs"
                 Grid.Row="0"/>
         <CommandBar Grid.Row="1">
+            <AppBarButton Icon="Add" Label="Add Pivot" Command="{Binding AddPivot}"/>
             <AppBarButton Icon="Add" Label="Ajouter" Command="{Binding CommandNavigateAddMatch}"/>
             <AppBarButton Icon="Edit" Label="Edit" Command="{Binding CommandEditMatch}" />
             <AppBarButton Icon="Save" Label="Save" Command="{Binding CommandEnregistrerTournament}"/>
         </CommandBar>
-        <Pivot ItemsSource="{Binding MatchsPhases, Mode=TwoWay}"  
+        <Pivot  x:Name="MatchPhasePivot" 
+                ItemsSource="{Binding MatchsPhases, Mode=TwoWay}"  
                HeaderTemplate="{StaticResource HeaderTemplatePivot}" 
                SelectedItem="{Binding SelectedPhase, Mode=TwoWay}"
+                SelectionChanged="MatchesPhases_SelectionChanged"
                ItemTemplate="{StaticResource PivotTemplate}"
                Grid.Row="2"/>
     </Grid>

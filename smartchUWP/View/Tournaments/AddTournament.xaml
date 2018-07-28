@@ -41,17 +41,17 @@
                     <StackPanel Grid.Row="1"
                                 VerticalAlignment="Top"
                                 Margin="20">
-                        <TextBox Name="NameTournament" Header="Nom du tournois" Text="{Binding OTournament.NameTournament, Mode=TwoWay}"/>
-                        <DatePicker Name="DateDebut" Header="Date de début" Date="{Binding OTournament.BeginDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
-                        <DatePicker Name="DateFin" Header="Date de Fin" Date="{Binding OTournament.EndDate, Mode=TwoWay , Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
-                        <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" SelectedItem="{Binding OTournament.Etat, Mode=TwoWay}">
+                        <TextBox Name="NameTournament" Header="Nom du tournois" Text="{Binding Tournament.NameTournament, Mode=TwoWay}"/>
+                        <DatePicker Name="DateDebut" Header="Date de début" Date="{Binding Tournament.BeginDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
+                        <DatePicker Name="DateFin" Header="Date de Fin" Date="{Binding Tournament.EndDate, Mode=TwoWay , Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
+                        <ComboBox Header="Etat" ItemsSource="{Binding TournamentStates}" SelectedItem="{Binding Tournament.Etat, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Converter={StaticResource StateToStringConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="ClubId" SelectedItem="{Binding OTournament.Club, Mode=TwoWay}" />
+                        <ComboBox Header="Club" ItemsSource="{Binding Clubs}" DisplayMemberPath="Name" SelectedValuePath="ClubId" SelectedItem="{Binding Tournament.Club, Mode=TwoWay}" />
 
                     </StackPanel>
                 </Grid>
@@ -70,7 +70,12 @@
                         VerticalAlignment="Top"
                         Margin="20"/>
             </PivotItem>
-            <PivotItem Header="Participants"  >
+            <PivotItem>
+                <PivotItem.Header>
+                    <Border>
+                        <TextBlock Text="Participants" Margin="10,0,10,0"/>
+                    </Border>
+                </PivotItem.Header>
                 <Frame  SourcePageType="view:MemberSelection" DataContext="{Binding Source={StaticResource Locator}, Path=AddTournament}"/>
             </PivotItem>
             
